@@ -56,12 +56,4 @@ This dataset contains habitat data such as plant coverage, plant height, and per
 | Avg%PeriphytonCover | % | number (real) | Average percent periphyton cover | Missing value = -9999 |
 | AvgPeriphytonVolume | mL | number (real) | Average periphyton volume | Missing value = -9999|
 | AvgWaterDepth | cm | number (real) | Average water depth | Missing value = -9999 |
-| Comments | NA | text | Sampling comments | HELCOP= Helicopter was used to access sites. Only five throws taken
-NODATA= No data were collected for this sample
-NODEPT= No depth data was recorded for the sample
-NOPTHT= No plant height was recorded for this sample
-NOPVOL= No Periphyton Volume was recorded for the sample
-NOPVPC= No periphyton volume or periphyton cover were recorded for the sample
-NPHPLC= No plant height or plant cover were recorded for the sample
-NPLTCV= No plant cover was recorded for the sample
-SITDRY= Site was visited but too dry to sample (depth < 0.5cm)|
+| Comments | NA | text | Sampling comments | HELCOP= Helicopter was used to access sites. Only five throws taken  NODATA= No data were collected for this sample  NODEPT= No depth data was recorded for the sample  NOPTHT= No plant height was recorded for this sample  NOPVOL= No Periphyton Volume was recorded for the sample  NOPVPC= No periphyton volume or periphyton cover were recorded for the sample  NPHPLC= No plant height or plant cover were recorded for the sample  NPLTCV= No plant cover was recorded for the sample  SITDRY= Site was visited but too dry to sample (depth < 0.5cm)|
