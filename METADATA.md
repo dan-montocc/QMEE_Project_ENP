@@ -4,7 +4,8 @@ __Authors:__ Megan Ridgway and Danielle Montocchio
 __Last Update:__ March 11, 2021
 
 _ENP_FishData.csv_
-This dataset contains the total fish weight and biomass of fish captured in trawling nets in ENP grouped by fish species.
+
+This dataset contains the total fish weight and biomass of fish captured in trap nets in ENP grouped by fish species.
 
 | Variable | Unit | Storage Type| Description | Code Meaning |
 | -------- | ---- | ------------ | ------------ | ----|
@@ -18,5 +19,5 @@ This dataset contains the total fish weight and biomass of fish captured in traw
 | SpeciesName | NA | text | Genus and species name | 1 = dry (not sampled) |
 | TotalSpeciesWeight | gram | number (real) | Total species weight | Missing value = -9999 |
 | NumofThrowTraps | NA | number (count/integer) | number of throw traps | Missing value = -9999|
-| SpeciesBiomass | g/m^2 | number (real) | Species biomass | Missing value = -9999 |
+| SpeciesBiomass | g/m<sup>2<sup> | number (real) | Species biomass | Missing value = -9999 |
 

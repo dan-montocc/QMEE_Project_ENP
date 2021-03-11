@@ -23,7 +23,12 @@ _Plant coverage, TP, and DO impact on periphyton_
 Periphyton is a critical food resource for many fish species, particularly herbivorous and omnivorous species. Periphyton coverage has been found to be linked to nutrient loading (particularly TP) and other water quality parameters, such as DO (Kannavillil and Kurissery, 2013). Periphyton also requires a hard substrate to attach to and grow, such as rocks, logs, and aquatic plants. We predict that as plant coverage/density increases, periphyton coverage should also increase. With regards to water quality parameters, we predict that as TP increases, and as DO decreases, periphyton coverage should increase.
 
 _Periphyton coverage and its impact on fish_
-Since many fish species eat periphyton, we predict that as periphyton coverage increases, so too should net fish biomass. This is because we predict that increasing amounts of periphyton provides more food, particularly for species that are herbivorous and omnivorous in nature. Therefore, changes in periphyton coverage is predicted to have a stronger effect on these groups of fish species, more so than piscivore or apex carnivore species. We do however predict some effect of periphyton coverage on piscivore and carnivore fish species, due to a bottom-up effect through the food web.
+Since many fish species eat periphyton, we predict that as periphyton coverage increases, so too should net fish biomass (van Dam et al., 2002). This is because we predict that increasing amounts of periphyton provides more food, particularly for species that are herbivorous and omnivorous in nature. Therefore, changes in periphyton coverage is predicted to have a stronger effect on these groups of fish species, more so than piscivore or apex carnivore species. We do however predict some effect of periphyton coverage on piscivore and carnivore fish species, due to a bottom-up effect through the food web.
 
 __Proposed Statistics:__
 We likely will be testing these hypotheses by using methods such as linear regressions (or generalized linear regression models) and/or ANOVA analyses.
+
+__References:__
+Kanavillil, N., and Kurissery, S. (2013) Temporal variation of periphyton communities: A 3-year study from northwest Lake Simcoe, Ontario, Canada. _Inland Waters._ __3__, 473-486.
+
+van Dam, A., Beveridge, M., Azim, E., and Verdegem, M. (2002) The potential of fish production based on periphyton. _Reviews in Fish Biology and Fisheries._ __12__, 1-31.
