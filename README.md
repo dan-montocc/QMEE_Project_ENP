@@ -9,9 +9,9 @@ __Data Source:__ Florida Coastal Everglades Long Term Ecological Research Networ
 
 __Data Link:__ https://fcelter.fiu.edu/data/index.html
 
-__Metadata File:__
+__Metadata File:__ 'METADATA.md'
 
-__Data Description:__ Data ranges from the years of 1996 to 2008 for various abiotic and biotic variables collected in Shark River Slough, Everglades National Park (ENP) in the southern tip of Florida's coast. Specifically, we have chosen data that contains species presence/absence for fish, plants, amphibians, and macroinvertebrates, as well as their abundance, and biomass where applicable. Habitat data consists of plant cover, plant height, and periphyton cover. Environmental variables consist of water temperature, water depth, salinity, pH, dissolved oxygen (DO), total phosphorus (TP) concentrations in sediment and water. Further details can be found in the metadata file, '_______'.
+__Data Description:__ Data ranges from the years of 1996 to 2008 for various abiotic and biotic variables collected in Shark River Slough, Everglades National Park (ENP) in the southern tip of Florida's coast. Specifically, we have chosen data that contains species presence/absence for fish, plants, amphibians, and macroinvertebrates, as well as their abundance, and biomass where applicable. Habitat data consists of plant cover, plant height, and periphyton cover. Environmental variables consist of water temperature, water depth, salinity, pH, dissolved oxygen (DO), total phosphorus (TP) concentrations in sediment and water. Further details can be found in the metadata file, 'METADATA.md'.
 
 __Biological Questions:__ We have predominately three areas of interest in which we would like to evaluate the effect of abiotic conditions on fish and/or plant species and diversity. Firstly, we would like to explore what impact water temperature and dissolved oxygen (DO) has on fish biomass, and fish diversity, both as a net impact and/or species specific impact? Secondly, we would like to determine whether average periphyton cover impacts plant diversity and/or density? Additionally, whether plant coverage, TP in sedmient, and DO impacts average periphyton coverage? Thirdly, does periphyton coverage impact fish biomass, and/or composition of fish functional groups (i.e.: benthivore, predator, piscivore, herbivore, etc...)?
 
