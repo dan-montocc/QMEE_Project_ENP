@@ -33,6 +33,7 @@ __Proposed Statistics:__
 We likely will be testing these hypotheses by using methods such as linear regressions (or generalized linear regression models) and/or ANOVA analyses.
 
 __References:__
+
 Farwell, M., Fox, M.G., Moyes, C.D., and Burness, G. (2006) Can hypoxia tolerance explain differences in distribution of two co-occuring north temperate sunfishes? _Environmental Biology of Fishes._ __78__, 83-90. 
 
 Kanavillil, N., and Kurissery, S. (2013) Temporal variation of periphyton communities: A 3-year study from northwest Lake Simcoe, Ontario, Canada. _Inland Waters._ __3__, 473-486.
