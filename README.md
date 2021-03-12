@@ -19,7 +19,7 @@ __Hypotheses:__
 
 _Temperature and DO effects on fish_
 
-With regards to water temperature and DO, we predict that as water temperature increase, and DO decreases, fish net biomass should decrease, as well as the overall fish diversity should decrease. This is because, higher temperatures and lower DO tends to decrease the carrying capacity of an aquatic environment to support a larger fish community. In terms of diversity, overall fish species diversity should decrease with increasing temperatures as more sensitive species would leave the area, and only hypoxic-resistant species should remain.
+With regards to water temperature and DO, we predict that as water temperatures increase, and DO decreases, fish net biomass should decrease, as well as the overall fish diversity should decrease. This is because, higher temperatures and lower DO tends to decrease the carrying capacity of an aquatic environment to support a larger fish community. In terms of diversity, overall fish species diversity should decrease with increasing temperatures and decreased DO, as more sensitive species would no longer be able to inhabit the area, and only hypoxic-resistant species would remain (Farwell et al., 2006).
 
 _Plant coverage, TP, and DO impact on periphyton_
 
@@ -33,6 +33,7 @@ __Proposed Statistics:__
 We likely will be testing these hypotheses by using methods such as linear regressions (or generalized linear regression models) and/or ANOVA analyses.
 
 __References:__
+Farwell, M., Fox, M.G., Moyes, C.D., and Burness, G. (2006) Can hypoxia tolerance explain differences in distribution of two co-occuring north temperate sunfishes? _Environmental Biology of Fishes._ __78__, 83-90. 
 
 Kanavillil, N., and Kurissery, S. (2013) Temporal variation of periphyton communities: A 3-year study from northwest Lake Simcoe, Ontario, Canada. _Inland Waters._ __3__, 473-486.
 
