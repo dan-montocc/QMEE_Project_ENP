@@ -1,0 +1,1 @@
+## Journal file for keeping data analysis notes such as diagnostic results
