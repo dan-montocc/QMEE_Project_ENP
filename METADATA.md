@@ -57,3 +57,53 @@ This dataset contains habitat data such as plant coverage, plant height, and per
 | AvgPeriphytonVolume | mL | number (real) | Average periphyton volume | Missing value = -9999|
 | AvgWaterDepth | cm | number (real) | Average water depth | Missing value = -9999 |
 | Comments | NA | text | Sampling comments | HELCOP= Helicopter was used to access sites. Only five throws taken  NODATA= No data were collected for this sample  NODEPT= No depth data was recorded for the sample  NOPTHT= No plant height was recorded for this sample  NOPVOL= No Periphyton Volume was recorded for the sample  NOPVPC= No periphyton volume or periphyton cover were recorded for the sample  NPHPLC= No plant height or plant cover were recorded for the sample  NPLTCV= No plant cover was recorded for the sample  SITDRY= Site was visited but too dry to sample (depth < 0.5cm)|
+
+_ENP_pH_TP_OM_Data.csv_
+
+This dataset contains each site's physical characteristics such as water depth, pH and temperature (ranging from 2006 to 2008).
+
+| Variable | Unit | Storage Type| Description | Code Meaning |
+| -------- | ---- | ------------ | ------------ | ----|
+| REGION | NA | text | Project descriptor | NA |
+| Site_ID | NA | ordinal | Collection site ID number | NA |
+| Replicate | NA | ordinal | Replicate ID number (3 replicates taken per site) | Missing value = -9999 |
+| SampleType | NA | text | Type of sample collected | NA |
+| SDI | NA | data | Incremental soil depth from surface for given sample | Missing value = -9999 |
+| SAMID | NA | text | Concatination of sample descriptors to produce sample ID | NA |
+| Date | NA | datetime | Date sample was collected | NA |
+| TIME | NA | datetime | Time collect | NA |
+| Water_Depth | centimeters | data | Water depth as measured in field with meter stick | Missing value = -9999 |
+| Water_Temperature | Celsius | data | Water temperature | Missing value = -9999 |
+| WPH | NA | data | Water pH as measured in the field | Missing value = -9999 |
+| WPH_Notes | NA | text | Notes regarding pH value | NA |
+| CDEP | centimeter | data | Average soild core depth | Missing value = -9999 |
+| SPH | NA | data | pH as measured in 1:1 soil slurry | Missing value = -9999 |
+| SH2O | percent | data | Water content as percentage of wet weight soil | Missing value = -9999 |
+| ASH | percent | data | Percent Ash in dry samples after ashing at 550 C | Missing value = -9999 |
+| OM | percent | data | Percent organic matter (OM) as difference between dry weight - Ash | Missing value = -9999 |
+| FBD | grams per cubic centimeter | data | Field bulk density | Missing value = -9999 |
+| FBGTPs | micrograms per gram | data | Total P in soils as ug TP/g dw solid analyzed by Freshwater Biogeochemistry Laboratory | Missing value = -9999 |
+| TP | grams per square meter | data | Total P in soils on an area basis. Uses core depth, FBD, and FBGTPs to calculate | Missing value = -9999 |
+| TC | milligrams per gram | data | Total carbon in soil/floc sample as determined by SERC lab - conducted on 1/3 samples | Missing value = -9999 |
+| TN | milligrams per gram | data | Total nitrogen in soil/floc sample as determined by SERC lab - conducted on 1/3 samples | Missing value = -9999 |
+| SRECTPs | micrograms per gram | data | Total P in soils as ug TP/g dw solid analyzed by Southeast Environmental Research Center | Missing value = -9999 |
+| FBGTPw | micrograms per liter | data | Surface water Total P as ug/L analyzed by Freshwater Biogeochemistry Group | Missing value = -9999 |
+| SRECTPw | micrograms per liter | data | Surface water Total P as ug/L analyzed by Southeast Environmental Research Center | Missing value = -9999 |
+
+_ENP_Temp_Sal_DO_Data.csv_
+
+This dataset contains information on the environmental conditions in the Shark River Slough including dissolved oxygen, water temperature and salinity (ranging from 2005 to 2014).
+
+| Variable | Unit | Storage Type| Description | Code Meaning |
+| -------- | ---- | ------------ | ------------ | ----|
+| Date | NA | datetime | Collection date | NA |
+| Year | NA | NA | Year of sample collection | NA |
+| DayofYear | NA | NA | Day of year sample collected | NA |
+| Time | NA | datetime | Time of day sample collected | NA |
+| LatitudeDD | NA | coordinate | Latitude | Missing value = -9999 |
+| LongitudeDD | NA | coordinate | Longitude | Missing value = -9999 |
+| WaterTemp | Celsius | data | Water temperature | Missing value = -9999 |
+| Salinity | parts per thousand | data | Water salinity | Missing value = -9999 |
+| DO | milligrams per liter | data | Water dissolved oxygen | Missing value = -9999 |
+| DO% | percent | data | Percent saturation of dissolved oxygen | Missing value = -9999 |
+| AirTemp | Celsius | data | Air temperature | Missing value = -9999 |
