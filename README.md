@@ -46,7 +46,7 @@ __Proposed Initial Steps in Data Processing:__
 __Questions:__
 
  * What are thresholds we can set for model diagnostic and fit before evaluating the data? 
-    * i.e. a minimum R-squared value to be considered a reasonable model, etc...
+    * i.e. interpretation of diagnostics to be considered a reasonable model, etc...
     * do not want to bias this after model creation
 
 __References:__
