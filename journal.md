@@ -26,6 +26,6 @@ https://www.andrew.cmu.edu/user/achoulde/94842/homework/regression_diagnostics.h
 
 https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/R/R5_Correlation-Regression/R5_Correlation-Regression7.html
 
-https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/R/R5_Correlation-Regression/R5_Correlation-Regression7.html
+https://stats.idre.ucla.edu/stata/webbooks/reg/chapter2/stata-webbooksregressionwith-statachapter-2-regression-diagnostics/
 
 _(Danielle Montocchio)_
