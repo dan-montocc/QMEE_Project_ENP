@@ -29,3 +29,15 @@ https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/R/R5_Correlation-Regression/R5_Co
 https://stats.idre.ucla.edu/stata/webbooks/reg/chapter2/stata-webbooksregressionwith-statachapter-2-regression-diagnostics/
 
 _(Danielle Montocchio)_
+
+__Data joining and cleaning (and a lot of troubleshooting)__
+
+_April 6, 2021_
+
+Since the data we chose was split up over multiple data files, the data needed to be synthesized before any comparisons between explanatory variables could be made. 
+
+We created a join.R file, where we can consolidate all of our data into manageable data sets. We started with a file which assigned the appropriate "area" (meaning either the Taylor Slough or Shark River) for each study site, then created a join file to incorporate the area into the larger water quality data set. We had a small issue with 83 observations being eliminated when making the join file, which ended up being a repeated spelling error for one of the site names. When the incorrectly spelled data points were replaced with the correct spelling, we had a merged water quality data file which included area names. 
+
+Next, we had to merge the two fish data sets, which ranged from 1996-2000 and 2000-2005 into one larger data set in order to join the fish data with the water quality data. This was more complicated than we expected since the files needed to be join by date and area, but of course, the dates weren't formatted the same way. After switching them both to day-month-year format, the files still didn't want to join together, so instead we jumped ahead and began pairing down the data sets individually first. All unnecessary columns were removed and aggregated the total species weight and fish biomass data by month level for year, site and fish species. Duplicate values (i.e observations of the same species over the course of one month) were averaged. The water quality data was then aggregated the same way, where water depth, various nutrient parameters, salinity, temperature, turbidity and dissolved oxygen were aggregated for by month, year and area. 
+
+The water quality data file was then merged with the fish data file, giving us a complete data set which can now be used to test our first hypothesis (see README.R file).  
