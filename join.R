@@ -44,10 +44,6 @@ write.csv(fishdat96_05, file = "ENP_FishFunctionalGrp_1996to2005.csv")
 #join WQ to fish
 fishdat96_05 <- read.csv("ENP_FishFunctionalGrp_1996to2005.csv")
 
-#convert -9999 to na
-lbrary(naniar)
-
-
 ##aggregate to month level for year, site, and fish species
 #new fish aggregated dataset
 
@@ -58,5 +54,11 @@ fish_merge <- merge(fishdat96_05_AggBiomass, fishdat96_05_AggWeight)
 
 #new wq aggregated dataset
 wq_96_05 <- read.csv("ENP_WQ_1996to2005_AreaAdd.csv")
-wq_96_05_merge <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
-which(is.na(wq_fish$Plot))
+#convert -9999 to na
+##library(naniar)
+##wq_96_05 <- replace_with_na_all(data = wq_96_05,
+                    ##condition = ~.x == -9999)
+wq_96_05_mean <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
+
+fish_wq_merge <- merge(fish_merge, wq_96_05_mean, all=TRUE)
+##check merge for accuracy....
