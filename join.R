@@ -27,7 +27,7 @@ levels(enp_wq$SITE)
 ##Ponce de Leon Bay MISSPELLED!
 #fixed
 
-write.csv(wq_merge, file = "ENP_WQ_1996to2000_AreaAdd.csv")
+write.csv(wq_merge, file = "ENP_WQ_1996to2005_AreaAdd.csv")
 
 ##appending 2000 to 2005 fish to 1996 file
 fishdat96 <- read.csv("ENP_FishData_1996to2000.csv", header = TRUE)
@@ -44,8 +44,19 @@ write.csv(fishdat96_05, file = "ENP_FishFunctionalGrp_1996to2005.csv")
 #join WQ to fish
 fishdat96_05 <- read.csv("ENP_FishFunctionalGrp_1996to2005.csv")
 
+#convert -9999 to na
+lbrary(naniar)
+
+
 ##aggregate to month level for year, site, and fish species
-library("data.table")
-keys <- colnames(fishdat96_05)[!grep1()]
-wq_fish <- merge(fishdat96_05,wq_merge, all.y=TRUE)
+#new fish aggregated dataset
+
+fishdat96_05_AggWeight <- aggregate(TotalSpeciesWeight ~ Month + Year + Area + SpeciesName , fishdat96_05 , mean)
+fishdat96_05_AggBiomass <- aggregate(SpeciesBiomass ~ Month + Year + Area + SpeciesName , fishdat96_05 , mean)
+
+fish_merge <- merge(fishdat96_05_AggBiomass, fishdat96_05_AggWeight)
+
+#new wq aggregated dataset
+wq_96_05 <- read.csv("ENP_WQ_1996to2005_AreaAdd.csv")
+wq_96_05_merge <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
 which(is.na(wq_fish$Plot))
