@@ -60,5 +60,11 @@ wq_96_05 <- read.csv("ENP_WQ_1996to2005_AreaAdd.csv")
                     ##condition = ~.x == -9999)
 wq_96_05_mean <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
 
-fish_wq_merge <- merge(fish_merge, wq_96_05_mean, all=TRUE)
+fish_wq_merge <- merge(fish_merge, wq_96_05_mean, all.x=TRUE)
 ##check merge for accuracy....
+which(is.na(fish_wq_merge$DO))
+
+#create and move file to finalized data folder
+library(here)
+write.csv(fish_wq_merge, file = here("Joined_Cleaned_Data/FishJoinWQ_1996to2005.csv"))
+
