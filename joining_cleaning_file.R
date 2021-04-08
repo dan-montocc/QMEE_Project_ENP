@@ -54,17 +54,54 @@ fish_merge <- merge(fishdat96_05_AggBiomass, fishdat96_05_AggWeight)
 
 #new wq aggregated dataset
 wq_96_05 <- read.csv("ENP_WQ_1996to2005_AreaAdd.csv")
-#convert -9999 to na
-##library(naniar)
-##wq_96_05 <- replace_with_na_all(data = wq_96_05,
-                    ##condition = ~.x == -9999)
 wq_96_05_mean <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
 
 fish_wq_merge <- merge(fish_merge, wq_96_05_mean, all.x=TRUE)
 ##check merge for accuracy....
+
 which(is.na(fish_wq_merge$DO))
+summary(fish_wq_merge$TotalSpeciesWeight)
+
+#convert -9999 to na
+library(naniar)
+fish_wq_merge <- replace_with_na_all(data = fish_wq_merge, condition = ~.x == -9999)
+summary(fish_wq_merge$TotalSpeciesWeight)
+summary(fish_wq_merge$SpeciesBiomass)
+summary(fish_wq_merge$DO_S)
+summary(fish_wq_merge$TEMP_B)
+summary(fish_wq_merge$pH)
 
 #create and move file to finalized data folder
 library(here)
 write.csv(fish_wq_merge, file = here("Joined_Cleaned_Data/FishJoinWQ_1996to2005.csv"))
 
+
+
+#aggregate to all fish by month and year
+library(tidyverse)
+ALL_fish_wq <- subset(fish_wq_merge, select = -c(SpeciesName)) #drop species
+library(data.table)
+DT <- data.table(ALL_fish_wq)
+ALL_fish_wq <- DT[, list(TotalWeight = sum(TotalSpeciesWeight,na.rm=TRUE), TotalBiomass = sum(SpeciesBiomass,na.rm=TRUE),
+          Depth = mean(DEPTH,na.rm=TRUE), NOX = mean(NOX,na.rm=TRUE), NO3 = mean(NO3,na.rm=TRUE),
+          NO2 = mean(NO2,na.rm=TRUE),NH4 = mean(NH4,na.rm=TRUE), TN = mean(TN,na.rm=TRUE), 
+          DIN= mean(DIN,na.rm=TRUE), TON=mean(TON,na.rm=TRUE), TP=mean(TP,na.rm=TRUE),
+          SRP=mean(SRP,na.rm=TRUE), ChlA=mean(CHLA,na.rm=TRUE),TOC=mean(TOC,na.rm=TRUE),
+          Sal_S=mean(SAL_S,na.rm=TRUE), Sal_B=mean(SAL_B,na.rm=TRUE),Temp_S=mean(TEMP_S,na.rm=TRUE),
+          Temp_B=mean(TEMP_B,na.rm=TRUE), DO_S=mean(DO_S,na.rm=TRUE),DO_B=mean(DO_B,na.rm=TRUE),
+          Turb=mean(TURB,na.rm=TRUE),pH=mean(pH,na.rm=TRUE)), by = list(Month,Year,Area)]##not elegant, but works
+
+#remove NaN's
+is.nan.data.frame <- function(x)
+  do.call(cbind, lapply(x, is.nan))
+
+ALL_fish_wq[is.nan(ALL_fish_wq)] <- NA
+
+#create species richness column for month, year, area
+fish_SpeciesRichness <- count(fish_wq_merge, Year, Month, Area)
+
+ALL_fish_wq_richness <- merge(ALL_fish_wq,fish_SpeciesRichness)
+ALL_fish_wq_richness <- ALL_fish_wq_richness %>% rename(SpeciesRichness = n) #rename added column
+ALL_fish_wq_richness <- ALL_fish_wq_richness[-c(18,20,21,22),] #removes rows with no WQ data
+
+write.csv(ALL_fish_wq, file = here("Joined_Cleaned_Data/ALL_FishJoinWQ_1996to2005.csv"))
