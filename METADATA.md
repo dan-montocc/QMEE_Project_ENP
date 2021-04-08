@@ -4,6 +4,8 @@ __Authors:__ Megan Ridgway and Danielle Montocchio
 
 __Last Update:__ March 23, 2021
 
+__NB:__ Some columns may be missing in files due to data cleaning in Excel.
+
 _ENP_FishData_1996to2000.csv and ENP_FishData_2000to2005.csv_
 
 These datasets contain the total fish weight and biomass of fish captured in trap nets in ENP grouped by fish species (ranging from 1996 to 2000 and 2000 to 2005, respectively).
