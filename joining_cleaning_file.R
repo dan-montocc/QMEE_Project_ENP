@@ -1,5 +1,5 @@
 ###re-run code from start to finish to clean up appending 1995 to 2000 and functional and thermal guild column join
-
+library(tidyverse)
 ##fish functional group variable add
 funcgrps <- read.csv("fish_func_therm_groups.csv", header = TRUE)
 funcgrps <- funcgrps %>% rename(SpeciesName = ï..SpeciesName) #rename column (why the added characters???)
@@ -22,11 +22,18 @@ summary(comparedf(func96_05, fishdat96_05))##??????????
 
 ##aggregate to month level for year, site, and fish species
 #new fish aggregated dataset
+#remove unnecessary columns
+fishdat96_05_sub1 <- func96_05[,-c(3,5,9,10,11,13)]
 
-fishdat96_05_Agg <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName, func96_05 , mean)
+fishdat96_05_Agg1 <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName, fishdat96_05_sub1 , mean)
 
-write.csv(fishdat96_05_Agg, file = "ENP_FishFunctionalGrp_1996to2005.csv")
+write.csv(fishdat96_05_Agg1, file = "ENP_FishThermalGuild_1996to2005.csv")
 
+fishdat96_05_sub2 <- func96_05[,-c(4,5,9,10,11,13)]
+
+fishdat96_05_Agg2 <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName, fishdat96_05_sub2 , mean)
+
+write.csv(fishdat96_05_Agg1, file = "ENP_FishFuncGrp_1996to2005.csv")
 
 ##water quality site name to area join
 enp_wq <- read.csv("ENP_WQ_1996to2005.csv", header = TRUE)
@@ -50,7 +57,9 @@ write.csv(wq_merge, file = "ENP_WQ_1996to2005_AreaAdd.csv")
 #join WQ to fish
 
 #new wq aggregated dataset
-wq_96_05_mean <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_merge , mean)
+##cleaned in excel for month add
+wq_96_05 <- read.csv("ENP_WQ_1996to2005_MonthAdd.csv")
+wq_96_05_mean <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
 
 fish_wq_merge <- merge(fishdat96_05_Agg, wq_96_05_mean, all.x=TRUE)
 ##check merge for accuracy....
