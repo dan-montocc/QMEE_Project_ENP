@@ -44,6 +44,6 @@ Next, we had to merge the two fish data sets, which ranged from 1996-2000 and 20
 
 The water quality data file was then merged with the fish data file, giving us a complete data set which can now be used to test our first hypothesis (see README.R file). 
 
-Considering our fish data had 38 unique fish species, we also created a further aggregated dataset, totaling biomass and species weight by month, year and area. We ten also generated a species richness column, which counted the number of unique species collected by month, year and area. Once NA rows were removed, this aggregated dataset contained 89 observations.
+Considering our fish data had 38 unique fish species, we also created a further aggregated dataset, totaling biomass and species weight by month, year and area. We then also generated a species richness column, which counted the number of unique species collected by month, year and area. Once NA rows were removed, this aggregated dataset contained 89 observations.
 
 _(Megan Ridgway and Danielle Montocchio)_

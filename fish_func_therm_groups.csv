@@ -1,23 +1,23 @@
 ﻿SpeciesName,CommonName,FunctionalGroup,ThermalGuild
-Ameiurus natalis,Yellow bullhead,invertivore,
-Ameiurus nebulosus,Brown bullhead,invertivore,
-Amia calva,Bowfin,piscivore,
-Astronotus ocellatus,Oscar,omnivore,
-Belonesox belizanus,Pike topminnow,piscivore,
-Cichlasoma bimaculatum,Black acara,invertivore,
-Cichlasoma urophthalmus,Mayan cichlid,detrivore,
-Clarias batrachus,Walking catfish,detrivore,
-Cyprinodon variegatus,Sheepshed minnow,omnivore,
-Elassoma evergladei,Everglades pygmy sunfish,invertivore,
-Enneacanthus gloriosus,Blue spotted sunfish,planktivore,
-Erimyzon sucetta,Lake chubsucker,invertivore,
-Esox americanus,American pickerel,piscivore,
-Esox niger,Chain pickerel,piscivore,
-Fundulus chrysotus,Golden topminnow,invertivore,
-Fundulus confluentus,Marsh killifish,invertivore,
-Fundulus seminolis,Seminole killifish,invertivore,
-Fundulus similis,Longnose killifish,invertivore,
-Gambusia holbrooki,Eastern mosquitofish,invertivore,
+Ameiurus natalis,Yellow bullhead,invertivore,warm
+Ameiurus nebulosus,Brown bullhead,invertivore,warm
+Amia calva,Bowfin,piscivore,warm
+Astronotus ocellatus,Oscar,omnivore,warm
+Belonesox belizanus,Pike topminnow,piscivore,warm
+Cichlasoma bimaculatum,Black acara,invertivore,cool/warm
+Cichlasoma urophthalmus,Mayan cichlid,detrivore,warm
+Clarias batrachus,Walking catfish,detrivore,warm
+Cyprinodon variegatus,Sheepshed minnow,omnivore,cool
+Elassoma evergladei,Everglades pygmy sunfish,invertivore,cold/warm
+Enneacanthus gloriosus,Blue spotted sunfish,planktivore,cold/warm
+Erimyzon sucetta,Lake chubsucker,invertivore,warm
+Esox americanus,American pickerel,piscivore,warm
+Esox niger,Chain pickerel,piscivore,warm
+Fundulus chrysotus,Golden topminnow,invertivore,cool
+Fundulus confluentus,Marsh killifish,invertivore,cold/warm
+Fundulus seminolis,Seminole killifish,invertivore,cold/warm
+Fundulus similis,Longnose killifish,invertivore,warm
+Gambusia holbrooki,Eastern mosquitofish,invertivore,warm
 Hemichromis bimaculatus,African jewelfish,piscivore,warm
 Heterandria formosa,Least killifish,invertivore,cool/warm
 Jordanella floridae,Flagfish,invertivore,cool
