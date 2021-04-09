@@ -78,7 +78,7 @@ summary(fish_wq_merge$pH)
 
 #create and move file to finalized data folder
 library(here)
-write.csv(fish_wq_merge, file = here("Joined_Cleaned_Data/FishJoinWQ_1996to2005.csv"))
+write.csv(fish_wq_merge, file = here("Joined_Cleaned_Data/Hypothesis_1/FishSpecies_Join_WQ_1996to2005.csv"))
 
 
 #aggregate to functional group level
@@ -99,7 +99,7 @@ is.nan.data.frame <- function(x)
 
 func_fish_wq[is.nan(func_fish_wq)] <- NA
 
-write.csv(func_fish_wq, file = here("Joined_Cleaned_Data/FishFuncGrp_Join_WQ_1996to2005.csv"))
+write.csv(func_fish_wq, file = here("Joined_Cleaned_Data/Hypothesis_3/FishFuncGrp_Join_WQ_1996to2005.csv"))
 
 #aggregate to thermal guild level
 fish_wq_merge2 <- merge(fishdat96_05_Agg1, wq_96_05_mean, all.x=TRUE)
@@ -120,7 +120,7 @@ is.nan.data.frame <- function(x)
 
 therm_fish_wq[is.nan(therm_fish_wq)] <- NA
 
-write.csv(therm_fish_wq, file = here("Joined_Cleaned_Data/FishThermGuild_Join_WQ_1996to2005.csv"))
+write.csv(therm_fish_wq, file = here("Joined_Cleaned_Data/Hypothesis_1/FishThermGuild_Join_WQ_1996to2005.csv"))
 
 
 #aggregate to all fish by month and year
@@ -148,8 +148,9 @@ fish_SpeciesRichness <- count(fish_wq_merge, Year, Month, Area)
 ALL_fish_wq_richness <- merge(ALL_fish_wq,fish_SpeciesRichness)
 ALL_fish_wq_richness <- ALL_fish_wq_richness %>% rename(SpeciesRichness = n) #rename added column
 ALL_fish_wq_richness <- ALL_fish_wq_richness[-c(18,20,21,22),] #removes rows with no WQ data
+ALL_fish_wq_richness <- replace_with_na_all(data = ALL_fish_wq_richness, condition = ~.x == -9999)
 
-write.csv(ALL_fish_wq, file = here("Joined_Cleaned_Data/ALL_FishJoinWQ_1996to2005.csv"))
+write.csv(ALL_fish_wq_richness, file = here("Joined_Cleaned_Data/Hypothesis_1/ALL_FishJoinWQ_1996to2005.csv"))
 
 
 
@@ -163,7 +164,7 @@ Peri_dat <- aggregate(cbind(Avg.PlantCover,AvgPlantHeight,Avg.PeriphytonCover,Av
 ##merge WQ to habitat
 Peri_wq <- merge(Peri_dat, wq_96_05_mean,all.x=TRUE)
 Peri_wq <- replace_with_na_all(data = Peri_wq, condition = ~.x == -9999)
-write.csv(Peri_wq, file = here("Joined_Cleaned_Data/ENP_Peri_WQ_1995to2005_Join.csv"))
+write.csv(Peri_wq, file = here("Joined_Cleaned_Data/Hypothesis_2/ENP_Peri_WQ_1995to2005_Join.csv"))
 
 ##merge fish to peri??
 #suggest we may omit this hypothesis
@@ -172,4 +173,4 @@ Peri_fish_wq <- merge(Peri_dat, func_fish_wq,all.x=TRUE)
 
 Peri_fish_wq <- replace_with_na_all(data = Peri_fish_wq, condition = ~.x == -9999)
 
-write.csv(Peri_fish_wq, file = here("Joined_Cleaned_Data/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
+write.csv(Peri_fish_wq, file = here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
