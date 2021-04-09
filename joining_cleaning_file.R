@@ -25,15 +25,15 @@ summary(comparedf(func96_05, fishdat96_05))##??????????
 #remove unnecessary columns
 fishdat96_05_sub1 <- func96_05[,-c(3,5,9,10,11,13)]
 
-fishdat96_05_Agg1 <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName, fishdat96_05_sub1 , mean)
+fishdat96_05_Agg1 <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName + CommonName + ThermalGuild, fishdat96_05_sub1 , mean)
 
 write.csv(fishdat96_05_Agg1, file = "ENP_FishThermalGuild_1996to2005.csv")
 
 fishdat96_05_sub2 <- func96_05[,-c(4,5,9,10,11,13)]
 
-fishdat96_05_Agg2 <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName, fishdat96_05_sub2 , mean)
+fishdat96_05_Agg2 <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName + CommonName + FunctionalGroup, fishdat96_05_sub2 , mean)
 
-write.csv(fishdat96_05_Agg1, file = "ENP_FishFuncGrp_1996to2005.csv")
+write.csv(fishdat96_05_Agg2, file = "ENP_FishFuncGrp_1996to2005.csv")
 
 ##water quality site name to area join
 enp_wq <- read.csv("ENP_WQ_1996to2005.csv", header = TRUE)
@@ -61,7 +61,7 @@ write.csv(wq_merge, file = "ENP_WQ_1996to2005_AreaAdd.csv")
 wq_96_05 <- read.csv("ENP_WQ_1996to2005_MonthAdd.csv")
 wq_96_05_mean <- aggregate(cbind(DEPTH, NOX, NO3, NO2,NH4, TN, DIN, TON, TP, SRP, CHLA,TOC,SAL_S, SAL_B, TEMP_S,TEMP_B, DO_S,DO_B,TURB,pH) ~ Month + Year + Area, wq_96_05 , mean)
 
-fish_wq_merge <- merge(fishdat96_05_Agg, wq_96_05_mean, all.x=TRUE)
+fish_wq_merge <- merge(fishdat96_05_Agg2, wq_96_05_mean, all.x=TRUE)
 ##check merge for accuracy....
 
 which(is.na(fish_wq_merge$DO))
@@ -81,11 +81,51 @@ library(here)
 write.csv(fish_wq_merge, file = here("Joined_Cleaned_Data/FishJoinWQ_1996to2005.csv"))
 
 
+#aggregate to functional group level
+library(data.table)
+
+DT <- data.table(fish_wq_merge)
+func_fish_wq <- DT[, list(TotalWeight = sum(TotalSpeciesWeight,na.rm=TRUE), TotalBiomass = sum(SpeciesBiomass,na.rm=TRUE),
+                         Depth = mean(DEPTH,na.rm=TRUE), NOX = mean(NOX,na.rm=TRUE), NO3 = mean(NO3,na.rm=TRUE),
+                         NO2 = mean(NO2,na.rm=TRUE),NH4 = mean(NH4,na.rm=TRUE), TN = mean(TN,na.rm=TRUE), 
+                         DIN= mean(DIN,na.rm=TRUE), TON=mean(TON,na.rm=TRUE), TP=mean(TP,na.rm=TRUE),
+                         SRP=mean(SRP,na.rm=TRUE), ChlA=mean(CHLA,na.rm=TRUE),TOC=mean(TOC,na.rm=TRUE),
+                         Sal_S=mean(SAL_S,na.rm=TRUE), Sal_B=mean(SAL_B,na.rm=TRUE),Temp_S=mean(TEMP_S,na.rm=TRUE),
+                         Temp_B=mean(TEMP_B,na.rm=TRUE), DO_S=mean(DO_S,na.rm=TRUE),DO_B=mean(DO_B,na.rm=TRUE),
+                         Turb=mean(TURB,na.rm=TRUE),pH=mean(pH,na.rm=TRUE)), by = list(Month,Year,Area,FunctionalGroup)]##not elegant, but works
+#remove NaN's
+is.nan.data.frame <- function(x)
+  do.call(cbind, lapply(x, is.nan))
+
+func_fish_wq[is.nan(func_fish_wq)] <- NA
+
+write.csv(func_fish_wq, file = here("Joined_Cleaned_Data/FishFuncGrp_Join_WQ_1996to2005.csv"))
+
+#aggregate to thermal guild level
+fish_wq_merge2 <- merge(fishdat96_05_Agg1, wq_96_05_mean, all.x=TRUE)
+fish_wq_merge2 <- replace_with_na_all(data = fish_wq_merge2, condition = ~.x == -9999)
+
+DT <- data.table(fish_wq_merge2)
+therm_fish_wq <- DT[, list(TotalWeight = sum(TotalSpeciesWeight,na.rm=TRUE), TotalBiomass = sum(SpeciesBiomass,na.rm=TRUE),
+                          Depth = mean(DEPTH,na.rm=TRUE), NOX = mean(NOX,na.rm=TRUE), NO3 = mean(NO3,na.rm=TRUE),
+                          NO2 = mean(NO2,na.rm=TRUE),NH4 = mean(NH4,na.rm=TRUE), TN = mean(TN,na.rm=TRUE), 
+                          DIN= mean(DIN,na.rm=TRUE), TON=mean(TON,na.rm=TRUE), TP=mean(TP,na.rm=TRUE),
+                          SRP=mean(SRP,na.rm=TRUE), ChlA=mean(CHLA,na.rm=TRUE),TOC=mean(TOC,na.rm=TRUE),
+                          Sal_S=mean(SAL_S,na.rm=TRUE), Sal_B=mean(SAL_B,na.rm=TRUE),Temp_S=mean(TEMP_S,na.rm=TRUE),
+                          Temp_B=mean(TEMP_B,na.rm=TRUE), DO_S=mean(DO_S,na.rm=TRUE),DO_B=mean(DO_B,na.rm=TRUE),
+                          Turb=mean(TURB,na.rm=TRUE),pH=mean(pH,na.rm=TRUE)), by = list(Month,Year,Area,ThermalGuild)]##not elegant, but works
+#remove NaN's
+is.nan.data.frame <- function(x)
+  do.call(cbind, lapply(x, is.nan))
+
+therm_fish_wq[is.nan(therm_fish_wq)] <- NA
+
+write.csv(therm_fish_wq, file = here("Joined_Cleaned_Data/FishFuncGrp_Join_WQ_1996to2005.csv"))
+
 
 #aggregate to all fish by month and year
-library(tidyverse)
-ALL_fish_wq <- subset(fish_wq_merge, select = -c(SpeciesName,FunctionalGroup,ThermalGuild)) #drop species specific fields
-library(data.table)
+ALL_fish_wq <- subset(fish_wq_merge, select = -c(SpeciesName,FunctionalGroup, CommonName)) #drop species specific fields
+
 DT <- data.table(ALL_fish_wq)
 ALL_fish_wq <- DT[, list(TotalWeight = sum(TotalSpeciesWeight,na.rm=TRUE), TotalBiomass = sum(SpeciesBiomass,na.rm=TRUE),
           Depth = mean(DEPTH,na.rm=TRUE), NOX = mean(NOX,na.rm=TRUE), NO3 = mean(NO3,na.rm=TRUE),
