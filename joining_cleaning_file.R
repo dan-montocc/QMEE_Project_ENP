@@ -120,7 +120,7 @@ is.nan.data.frame <- function(x)
 
 therm_fish_wq[is.nan(therm_fish_wq)] <- NA
 
-write.csv(therm_fish_wq, file = here("Joined_Cleaned_Data/FishFuncGrp_Join_WQ_1996to2005.csv"))
+write.csv(therm_fish_wq, file = here("Joined_Cleaned_Data/FishThermGuild_Join_WQ_1996to2005.csv"))
 
 
 #aggregate to all fish by month and year
@@ -156,18 +156,20 @@ write.csv(ALL_fish_wq, file = here("Joined_Cleaned_Data/ALL_FishJoinWQ_1996to200
 
 ##data joining and cleaning for hypotheses 2 and 3
 Peri_dat <- read.csv("ENP_HabitatData.csv")
+Peri_dat <- replace_with_na_all(data = Peri_dat, condition = ~.x == -9999)
 Peri_dat <- aggregate(cbind(Avg.PlantCover,AvgPlantHeight,Avg.PeriphytonCover,AvgPeriphytonVolume,AvgWaterDepth) ~ Month + Year + Area, Peri_dat , mean)
 
-##checking for NAs
-which(Peri_dat == -9999)
 
 ##merge WQ to habitat
 Peri_wq <- merge(Peri_dat, wq_96_05_mean,all.x=TRUE)
-#remove NAs
 Peri_wq <- replace_with_na_all(data = Peri_wq, condition = ~.x == -9999)
-
 write.csv(Peri_wq, file = here("Joined_Cleaned_Data/ENP_Peri_WQ_1995to2005_Join.csv"))
 
 ##merge fish to peri??
 #suggest we may omit this hypothesis
 #alright by me! -M
+Peri_fish_wq <- merge(Peri_dat, func_fish_wq,all.x=TRUE)
+
+Peri_fish_wq <- replace_with_na_all(data = Peri_fish_wq, condition = ~.x == -9999)
+
+write.csv(Peri_fish_wq, file = here("Joined_Cleaned_Data/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
