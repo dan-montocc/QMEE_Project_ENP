@@ -189,3 +189,79 @@ coef(Fish_step.model$finalModel, 3)
 #do Not include depth
 Fish_mod2 <- lm(logBiomass ~ DO_B + Temp_B + Sal_B, all_fish_sub2)
 ggPredict(Fish_mod2,interactive = TRUE)
+
+#try with 2 variables max
+coef(Fish_step.model$finalModel, 2)
+Fish_mod3 <- lm(logBiomass ~ DO_B + Depth, all_fish_sub2)
+ggPredict(Fish_mod3,interactive = FALSE)
+
+##creating stepwise GLM for all fish and species richness
+#species richness is count data --> use Poisson distribution
+fullmod <- glm(SpeciesRichness ~ DO_B + Temp_B + Sal_B + Depth, data = all_fish_sub1, family=poisson)
+backwards = step(fullmod)
+formula(backwards)
+
+nothingmod <- glm(SpeciesRichness ~ 1, family=poisson, all_fish_sub1)
+forwards = step(nothingmod,
+                scope=list(lower=formula(nothingmod),upper=formula(fullmod)), direction="forward")
+formula(forwards)
+
+bothways = step(nothingmod, list(lower=formula(nothingmod),upper=formula(fullmod)),
+         direction="both",trace=0)
+formula(bothways)
+summary(bothways)
+
+#salinity is the best fit for species richness
+SpRich_mod1 <- glm(SpeciesRichness ~ Sal_B, all_fish_sub1,family=poisson)
+plot(SpRich_mod1)
+summary(SpRich_mod1)
+SpRich_mod2 <- glm(SpeciesRichness ~ DO_B + Depth, all_fish_sub1, family=poisson)##same variables as total biomass
+plot(SpRich_mod2)
+summary(SpRich_mod2)
+##slight overdispersion
+SpRich_mod3 <- glm(SpeciesRichness ~ DO_B + Depth, all_fish_sub1, family=quasipoisson)
+plot(SpRich_mod3)
+summary(SpRich_mod3)
+
+
+
+##plotting
+#code referenced from The Analysis factor
+##https://www.theanalysisfactor.com/glm-r-overdispersion-count-regression/
+
+summary(all_fish_sub1$Sal_B)
+Salsmooth <- seq(3,42,length.out=391)
+Y <- predict(SpRich_mod1, list(Sal_B = Salsmooth))
+plot(all_fish_sub1$Sal_B, all_fish_sub1$SpeciesRichness, xlab="Salinity (bottom)", 
+     ylab = "Species Richness", pch=16)
+lines(Salsmooth, exp(Y), lwd = 2, col="blue")
+
+ggPredict(SpRich_mod1, "Sal_B") %>% plot(rawdata = TRUE, jitter = .01)
+
+summary(all_fish_sub1$DO_B)
+DO_B_smooth <- seq(1,9, length.out = 88)
+Depth_smooth <- seq(1,3,length.out = 88)
+Y2 <- predict(SpRich_mod3, list(DO_B = DO_B_smooth, Depth = Depth_smooth))
+
+ggplot(all_fish_sub1,aes(y=SpeciesRichness,x=DO_B,color=Depth)) + geom_point() +
+  geom_line(aes(x = DO_B_smooth, y = exp(Y2)), linetype=1, colour="darkgreen", size =0.5)
+
+##one more model
+SpRich_mod4 <- glm(SpeciesRichness ~ DO_B + Sal_B, all_fish_sub1,family=poisson)
+plot(SpRich_mod4)
+summary(SpRich_mod4)
+Y3 <- predict(SpRich_mod4, list(DO_B = DO_B_smooth,Sal_B = Salsmooth))
+ggplot(all_fish_sub1,aes(y=SpeciesRichness,x=Sal_B,color=DO_B)) + geom_point() +
+  geom_line(aes(x = Salsmooth, y = exp(Y3)), linetype=1, colour="darkgreen", size =0.5)
+
+ggplot(all_fish_sub1,aes(y=SpeciesRichness,x=DO_B,color=Sal_B)) + geom_point() +
+  geom_line(aes(x = DO_B_smooth, y = exp(Y3)), linetype=1, colour="darkgreen", size =0.5)
+
+
+#single plot with DO
+SpRich_mod5 <- glm(SpeciesRichness ~ DO_B, all_fish_sub1,family=poisson)
+DO_B_smooth2 <- seq(1,9,length.out=391)
+Y4 <- predict(SpRich_mod5, list(DO_B = DO_B_smooth2))
+plot(all_fish_sub1$DO_B, all_fish_sub1$SpeciesRichness, xlab="DO (bottom)", 
+     ylab = "Species Richness", pch=16)
+lines(DO_B_smooth2, exp(Y4), lwd = 2, col="darkblue")

@@ -1,4 +1,4 @@
-__Regression Outputs Summary File__
+##Regression Outputs Summary File##
 
 Call:
 lm(formula = logBiomass ~ DO_B + Depth, data = fish_therm_sub3)
