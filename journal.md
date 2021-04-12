@@ -47,3 +47,34 @@ The water quality data file was then merged with the fish data file, giving us a
 Considering our fish data had 38 unique fish species, we also created a further aggregated dataset, totaling biomass and species weight by month, year and area. We then also generated a species richness column, which counted the number of unique species collected by month, year and area. Once NA rows were removed, this aggregated dataset contained 89 observations.
 
 _(Megan Ridgway and Danielle Montocchio)_
+
+__Hypothesis 1 Data Analysis Steps__
+
+_March 9,2021_
+
+Before model construction to view diagnostic plots, a subset list of the predicted explanatory variables was made and compared with a correlation matrix. The results of which showed that both the surface and bottom temperature and DO measurements were nearly 100% correlated (Pearson correlation coefficient of ~1). This would make sense due to the shallow water depths of the river sloughs in the study area. Since a majority of our fish species are expected to occupy the bottom for longer periods of time than the surface, this measurement was used.
+
+Temperature and DO were found to be highly correlated with one another, yet negatively, which makes sense given the effect that temperature has on the capacity for oxygen to remain dissolved in liquids.
+
+All the following steps were repeated for the three levels of aggregated datasets, going from highest resolution to lowest (i.e. species-level --> thermal guild-level --> all fish):
+
+ 1. Check variable distributions for approximate normality
+        * explanatory variables were roughly normal
+        * Biomass (one of the response variables) was not
+            * this was log-transformed
+ 2. Remove all NA's and 0's (same thing in this dataset) as these had no biological meaning for the variables (such as 0 depth and biomass = dry site/not sampled)
+ 3. A full model with all explanatory variables was created for the species-level dataset
+  1. residuals of this model were evaluated with boxplots broken up into potentially influential categorical variables
+    1. i.e. Area, Month, Year --> all were found to have no differential effect on the residuals
+      1. March appeared to be an outlier, this was determined to be because there was only one observation in this category
+  2. residuals with thermal guild-level dataset were evaluated
+    1. thermal guild was evaluated to have an effect
+ 4. Afterwards stepwise linear regressions (performed backwards and forwards) was performed
+  1. diagnostic plots were evaluated
+    1. species-level data results indicated model assumption violations
+    2. thermal-guild level --> DO (bottom), depth, and guild was found to be significant
+    3. all fish --> DO (bottom) and depth was the best fitted model for logBiomass
+    4. all fish --> salinity (bottom) was best fit for species richness
+      1. this was a generalized linear model with a Poisson error distribution and a logarithmic link function
+
+_(Danielle Montocchio)_

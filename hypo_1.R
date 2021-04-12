@@ -138,7 +138,7 @@ library(ggiraphExtra)
 library(plyr)
 
 #graph one - DO and Depth
-ggPredict(Guild_mod,interactive = TRUE)
+ggPredict(Guild_mod,interactive = FALSE)
 
 #interaction with guild
 Guild_mod2 <- lm(logBiomass ~ DO_B*Depth*ThermalGuild, fish_therm_sub3)
@@ -201,6 +201,8 @@ fullmod <- glm(SpeciesRichness ~ DO_B + Temp_B + Sal_B + Depth, data = all_fish_
 backwards = step(fullmod)
 formula(backwards)
 
+backwards = step(fullmod)
+formula(backwards)
 nothingmod <- glm(SpeciesRichness ~ 1, family=poisson, all_fish_sub1)
 forwards = step(nothingmod,
                 scope=list(lower=formula(nothingmod),upper=formula(fullmod)), direction="forward")
@@ -258,10 +260,17 @@ ggplot(all_fish_sub1,aes(y=SpeciesRichness,x=DO_B,color=Sal_B)) + geom_point() +
   geom_line(aes(x = DO_B_smooth, y = exp(Y3)), linetype=1, colour="darkgreen", size =0.5)
 
 
-#single plot with DO
+#single plots with DO and Temp
 SpRich_mod5 <- glm(SpeciesRichness ~ DO_B, all_fish_sub1,family=poisson)
 DO_B_smooth2 <- seq(1,9,length.out=391)
 Y4 <- predict(SpRich_mod5, list(DO_B = DO_B_smooth2))
 plot(all_fish_sub1$DO_B, all_fish_sub1$SpeciesRichness, xlab="DO (bottom)", 
      ylab = "Species Richness", pch=16)
 lines(DO_B_smooth2, exp(Y4), lwd = 2, col="darkblue")
+
+SpRich_mod6 <- glm(SpeciesRichness ~ Temp_B, all_fish_sub1,family=poisson)
+Tempsmooth <- seq(15,33,length.out=391)
+Y5 <- predict(SpRich_mod6, list(Temp_B = Tempsmooth))
+plot(all_fish_sub1$Temp_B, all_fish_sub1$SpeciesRichness, xlab="Temperature (bottom)", 
+     ylab = "Species Richness", pch=16)
+lines(Tempsmooth, exp(Y5), lwd = 2, col="orange")
