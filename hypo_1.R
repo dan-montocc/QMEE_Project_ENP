@@ -141,8 +141,9 @@ library(plyr)
 ggPredict(Guild_mod,interactive = FALSE)
 
 #interaction with guild
-Guild_mod2 <- lm(logBiomass ~ DO_B*Depth*ThermalGuild, fish_therm_sub3)
+Guild_mod2 <- lm(logBiomass ~ DO_B + Depth + ThermalGuild, fish_therm_sub3)
 plot(Guild_mod2)
+summary(Guild_mod2)
 
 #remove rows with leverage of 1 and 0.5 (only one obs)
 fish_therm_sub4 <- fish_therm_sub3[-c(104,192),]
@@ -192,7 +193,9 @@ ggPredict(Fish_mod2,interactive = TRUE)
 
 #try with 2 variables max
 coef(Fish_step.model$finalModel, 2)
-Fish_mod3 <- lm(logBiomass ~ DO_B + Depth, all_fish_sub2)
+all_fish_sub3 <- all_fish_sub2[-c(63),]
+Fish_mod3 <- lm(logBiomass ~ DO_B + Depth, all_fish_sub3)
+plot(Fish_mod3)
 ggPredict(Fish_mod3,interactive = FALSE)
 
 ##creating stepwise GLM for all fish and species richness
@@ -221,7 +224,7 @@ SpRich_mod2 <- glm(SpeciesRichness ~ DO_B + Depth, all_fish_sub1, family=poisson
 plot(SpRich_mod2)
 summary(SpRich_mod2)
 ##slight overdispersion
-SpRich_mod3 <- glm(SpeciesRichness ~ DO_B + Depth, all_fish_sub1, family=quasipoisson)
+SpRich_mod3 <- glm(SpeciesRichness ~ DO_B, all_fish_sub1, family=poisson)
 plot(SpRich_mod3)
 summary(SpRich_mod3)
 
@@ -243,9 +246,9 @@ ggPredict(SpRich_mod1, "Sal_B") %>% plot(rawdata = TRUE, jitter = .01)
 summary(all_fish_sub1$DO_B)
 DO_B_smooth <- seq(1,9, length.out = 88)
 Depth_smooth <- seq(1,3,length.out = 88)
-Y2 <- predict(SpRich_mod3, list(DO_B = DO_B_smooth, Depth = Depth_smooth))
+Y2 <- predict(SpRich_mod3, list(DO_B = DO_B_smooth))
 
-ggplot(all_fish_sub1,aes(y=SpeciesRichness,x=DO_B,color=Depth)) + geom_point() +
+ggplot(all_fish_sub1,aes(y=SpeciesRichness,x=DO_B)) + geom_point() +
   geom_line(aes(x = DO_B_smooth, y = exp(Y2)), linetype=1, colour="darkgreen", size =0.5)
 
 ##one more model
