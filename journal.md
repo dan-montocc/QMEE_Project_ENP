@@ -67,10 +67,10 @@ All the following steps were repeated for the three levels of aggregated dataset
  
   3. A full model with all explanatory variables was created for the species-level dataset
       1. residuals of this model were evaluated with boxplots broken up into potentially influential categorical variables
-          1. i.e. Area, Month, Year --> all were found to have no differential effect on the residuals
-              1. March appeared to be an outlier, this was determined to be because there was only one observation in this category
+          * i.e. Area, Month, Year --> all were found to have no differential effect on the residuals
+              * March appeared to be an outlier, this was determined to be because there was only one observation in this category
       2. residuals with thermal guild-level dataset were evaluated
-          1. thermal guild was evaluated to have an effect
+          * thermal guild was evaluated to have an effect
 
   4. Afterwards stepwise linear regressions (performed backwards and forwards) was performed
       1. diagnostic plots were evaluated
@@ -78,6 +78,6 @@ All the following steps were repeated for the three levels of aggregated dataset
           2. thermal-guild level --> DO (bottom), depth, and guild was found to be significant
           3. all fish --> DO (bottom) and depth was the best fitted model for logBiomass
           4. all fish --> salinity (bottom) was best fit for species richness
-              1. this was a generalized linear model with a Poisson error distribution and a logarithmic link function
+              * this was a generalized linear model with a Poisson error distribution and a logarithmic link function
 
 _(Danielle Montocchio)_
