@@ -84,7 +84,7 @@ Peri_sub1$logTURB <- log10(Peri_sub1$TURB)
 #check for influence of Area, Month, and/or Year
 fullPeriMod <- lm(Avg.PeriphytonCover ~ logPlantCover + AvgWaterDepth + 
                     sqrtNO3 + sqrtTN + logTP + logSRP + logTOC + TEMP_B +
-                    logTURB, Peri_sub1)
+                    DO_B + logTURB, Peri_sub1)
 nothingPeriMod <- lm(Avg.PeriphytonCover ~ 1, Peri_sub1)
 boxplot(residuals(fullPeriMod) ~ Peri_sub1$Area) #no effect
 boxplot(residuals(fullPeriMod) ~ Peri_sub1$Month) 
@@ -93,7 +93,7 @@ boxplot(residuals(fullPeriMod) ~ Peri_sub1$Year) #maybe include??
 Peri_sub1$Year <- as.factor(Peri_sub1$Year)
 fullPeriMod <- lm(Avg.PeriphytonCover ~ logPlantCover + AvgWaterDepth + 
                     sqrtNO3 + sqrtTN + logTP + logSRP + logTOC + TEMP_B +
-                    logTURB + Year, Peri_sub1)
+                    + DO_B + logTURB + Year, Peri_sub1)
 
 backwards = step(fullPeriMod)
 formula(backwards)
