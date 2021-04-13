@@ -82,8 +82,40 @@ Peri_sub1$logTURB <- log10(Peri_sub1$TURB)
 
 
 #check for influence of Area, Month, and/or Year
-Peri_testMod <- lm(Avg.PeriphytonCover ~ 1, Peri_sub1)
-boxplot(residuals(Peri_testMod) ~ Peri_sub1$Area) #no effect
-boxplot(residuals(Peri_testMod) ~ Peri_sub1$Month) 
+fullPeriMod <- lm(Avg.PeriphytonCover ~ logPlantCover + AvgWaterDepth + 
+                    sqrtNO3 + sqrtTN + logTP + logSRP + logTOC + TEMP_B +
+                    logTURB, Peri_sub1)
+nothingPeriMod <- lm(Avg.PeriphytonCover ~ 1, Peri_sub1)
+boxplot(residuals(fullPeriMod) ~ Peri_sub1$Area) #no effect
+boxplot(residuals(fullPeriMod) ~ Peri_sub1$Month) 
 summary(Peri_sub1$Month == "June") #two obs
-boxplot(residuals(Peri_testMod) ~ Peri_sub1$Year) #maybe include??
+boxplot(residuals(fullPeriMod) ~ Peri_sub1$Year) #maybe include??
+Peri_sub1$Year <- as.factor(Peri_sub1$Year)
+fullPeriMod <- lm(Avg.PeriphytonCover ~ logPlantCover + AvgWaterDepth + 
+                    sqrtNO3 + sqrtTN + logTP + logSRP + logTOC + TEMP_B +
+                    logTURB + Year, Peri_sub1)
+
+backwards = step(fullPeriMod)
+formula(backwards)
+forwards = step(nothingPeriMod,
+                scope=list(lower=formula(nothingPeriMod),upper=formula(fullPeriMod)), direction="forward")
+formula(forwards)
+bothways = step(nothingPeriMod, list(lower=formula(nothingPeriMod),upper=formula(fullPeriMod)),
+                direction="both",trace=0)
+formula(bothways)
+
+PeriStepMod <- lm(Avg.PeriphytonCover ~ Year + logPlantCover + AvgWaterDepth +
+                    sqrtTN + logTOC + logTURB + logSRP, data = Peri_sub1)
+plot(PeriStepMod)
+
+#plot sub model to visualize
+
+library(ggplot2); theme_set(theme_bw())
+#knitr::opts_chunk$set(echo=FALSE,
+#dev.args = list(png = list(type = "cairo")))
+library(ggiraph)
+library(ggiraphExtra)
+library(plyr)
+
+PeriSubMod <- lm(Avg.PeriphytonCover ~ logPlantCover + logSRP, Peri_sub1)
+ggPredict(PeriSubMod,interactive=TRUE)
