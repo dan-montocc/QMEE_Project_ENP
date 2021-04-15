@@ -2,7 +2,7 @@
 
 __Authors:__ Megan Ridgway and Danielle Montocchio
 
-__Last Update:__ March 23, 2021
+__Last Update:__ April 15, 2021
 
 __NB:__ Some columns may be missing in files due to data cleaning in Excel.
 
@@ -24,23 +24,6 @@ These datasets contain the total fish weight and biomass of fish captured in tra
 | NumofThrowTraps | NA | number (count/integer) | number of throw traps | Missing value = -9999|
 | SpeciesBiomass | g/m<sup>2<sup> | number (real) | Species biomass | Missing value = -9999 |
 
-_ENP_FPOData.csv_
-
-This dataset contains the species count and density of fish, plants and other fauna captured in trap nets in ENP grouped by species (ranging from 2000 to 2005).
-
-| Variable | Unit | Storage Type| Description | Code Meaning |
-| -------- | ---- | ------------ | ------------ | ----|
-| Date | NA | date | Sample collection date | NA |
-| Month | NA | text | Sample collection month | NA |
-| Year | NA | date | Sample collection year | NA |
-| Area | NA | text | Sample collection area descriptor | NA |
-| SITENAME | NA | text | Name of collection site | NA |
-| FPO | NA | text | Type of sample collected (fish, plant or other) | NA |
-| Plot | NA | text | Plot ID number | NA |
-| SpeciesName | NA | text | Genus and species name | 1 = dry (not sampled) |
-| SpeciesCount | NA | number (count/integer) | Total species count | Missing value = -9999 |
-| NumofThrowTraps | NA | number (count/integer) | number of throw traps | Missing value = -9999|
-| SpeciesDensity | # of individuals/m<sup>2<sup> | number (real) | Species density | Missing value = -9999 |
 
 _ENP_HabitatData.csv_
 
@@ -60,52 +43,45 @@ This dataset contains habitat data such as plant coverage, plant height, and per
 | AvgWaterDepth | cm | number (real) | Average water depth | Missing value = -9999 |
 | Comments | NA | text | Sampling comments | HELCOP= Helicopter was used to access sites. Only five throws taken  NODATA= No data were collected for this sample  NODEPT= No depth data was recorded for the sample  NOPTHT= No plant height was recorded for this sample  NOPVOL= No Periphyton Volume was recorded for the sample  NOPVPC= No periphyton volume or periphyton cover were recorded for the sample  NPHPLC= No plant height or plant cover were recorded for the sample  NPLTCV= No plant cover was recorded for the sample  SITDRY= Site was visited but too dry to sample (depth < 0.5cm)|
 
-_ENP_pH_TP_OM_Data.csv_
+_ENP_WQ_1996to2005.csv_
 
-This dataset contains each site's physical characteristics such as water depth, pH and temperature (ranging from 2006 to 2008).
-
-| Variable | Unit | Storage Type| Description | Code Meaning |
-| -------- | ---- | ------------ | ------------ | ----|
-| REGION | NA | text | Project descriptor | NA |
-| Site_ID | NA | ordinal | Collection site ID number | NA |
-| Replicate | NA | ordinal | Replicate ID number (3 replicates taken per site) | Missing value = -9999 |
-| SampleType | NA | text | Type of sample collected | NA |
-| SDI | NA | data | Incremental soil depth from surface for given sample | Missing value = -9999 |
-| SAMID | NA | text | Concatination of sample descriptors to produce sample ID | NA |
-| Date | NA | datetime | Date sample was collected | NA |
-| TIME | NA | datetime | Time collect | NA |
-| Water_Depth | centimeters | data | Water depth as measured in field with meter stick | Missing value = -9999 |
-| Water_Temperature | Celsius | data | Water temperature | Missing value = -9999 |
-| WPH | NA | data | Water pH as measured in the field | Missing value = -9999 |
-| WPH_Notes | NA | text | Notes regarding pH value | NA |
-| CDEP | centimeter | data | Average soild core depth | Missing value = -9999 |
-| SPH | NA | data | pH as measured in 1:1 soil slurry | Missing value = -9999 |
-| SH2O | percent | data | Water content as percentage of wet weight soil | Missing value = -9999 |
-| ASH | percent | data | Percent Ash in dry samples after ashing at 550 C | Missing value = -9999 |
-| OM | percent | data | Percent organic matter (OM) as difference between dry weight - Ash | Missing value = -9999 |
-| FBD | grams per cubic centimeter | data | Field bulk density | Missing value = -9999 |
-| FBGTPs | micrograms per gram | data | Total P in soils as ug TP/g dw solid analyzed by Freshwater Biogeochemistry Laboratory | Missing value = -9999 |
-| TP | grams per square meter | data | Total P in soils on an area basis. Uses core depth, FBD, and FBGTPs to calculate | Missing value = -9999 |
-| TC | milligrams per gram | data | Total carbon in soil/floc sample as determined by SERC lab - conducted on 1/3 samples | Missing value = -9999 |
-| TN | milligrams per gram | data | Total nitrogen in soil/floc sample as determined by SERC lab - conducted on 1/3 samples | Missing value = -9999 |
-| SRECTPs | micrograms per gram | data | Total P in soils as ug TP/g dw solid analyzed by Southeast Environmental Research Center | Missing value = -9999 |
-| FBGTPw | micrograms per liter | data | Surface water Total P as ug/L analyzed by Freshwater Biogeochemistry Group | Missing value = -9999 |
-| SRECTPw | micrograms per liter | data | Surface water Total P as ug/L analyzed by Southeast Environmental Research Center | Missing value = -9999 |
-
-_ENP_Temp_Sal_DO_Data.csv_
-
-This dataset contains information on the environmental conditions in the Shark River Slough including dissolved oxygen, water temperature and salinity (ranging from 2005 to 2014).
+This dataset contains surface water quality data in South Florida Coastal Waters (ranging from 1996 to 2005).
 
 | Variable | Unit | Storage Type| Description | Code Meaning |
 | -------- | ---- | ------------ | ------------ | ----|
-| Date | NA | datetime | Collection date | NA |
-| Year | NA | NA | Year of sample collection | NA |
-| DayofYear | NA | NA | Day of year sample collected | NA |
-| Time | NA | datetime | Time of day sample collected | NA |
-| LatitudeDD | NA | coordinate | Latitude | Missing value = -9999 |
-| LongitudeDD | NA | coordinate | Longitude | Missing value = -9999 |
-| WaterTemp | Celsius | data | Water temperature | Missing value = -9999 |
-| Salinity | parts per thousand | data | Water salinity | Missing value = -9999 |
-| DO | milligrams per liter | data | Water dissolved oxygen | Missing value = -9999 |
-| DO% | percent | data | Percent saturation of dissolved oxygen | Missing value = -9999 |
-| AirTemp | Celsius | data | Air temperature | Missing value = -9999 |
+| SURV | NA | ordinal | Survey number | NA |
+| Date | NA | datetime | Date of sampling | Missing value = -9999 |
+| TIME | NA | NA | Time of sample collection | Missing value = -9999 |
+| STA | NA | ordinal | WQM station ID where samples collected | NA |
+| SITE | NA | text | Name of station collection site | NA |
+| LATDEC | degree | coordinate | Decimal latitude | NA |
+| LONDEC | degree | coordinate | Decimal longitude | NA |
+| DEPTH | meter | data | Station depth | NA |
+| BAY | FB = Florida Bay, WWB = White Water Bay | text | Accronym of Bay where samples are collected | NA |
+| NOX | micromoles/L | data | Nitrate + Nitrite | Missing value = -9999 |
+| NO3 | micromoles/L | data | Nitrate | Missing value = -9999 |
+| NO2 | micromoles/L | data | Nitrite | Missing value = -9999 |
+| NH4 | micromoles/L | data | Ammonium | Missing value = -9999 |
+| TN | micromoles/L | data | Total nitrogen | Missing value = -9999 |
+| DIN | micromoles/L | data | Dissolved inorganic nitrogen | Missing value = -9999 |
+| TON | micromoles/L | data | Total organic nitrogen | Missing value = -9999 |
+| TP | micromoles/L | data | Total phosphorus | Missing value = -9999 |
+| SRP | micromoles/L | data | Soluble reactive phosphorus | Missing value = -9999 |
+| APA | micromoles/L | data | Alkaline phosphatase activity | Missing value = -9999 |
+| CHLA | micrograms/L | data | Chlorophyll a | Missing value = -9999 |
+| TOC | micromoles/L | data | Total organic carbon | Missing value = -9999 |
+| SiO2 | micromoles/L | data | Silicon dioxide in water | Missing value = -9999 |
+| SAL_S | PSU | data | Surface salinity | Missing value = -9999 |
+| SAL_B | PSU | data | Bottom salinity | Missing value = -9999 |
+| TEMP_S | celcius | data | Surface water temperature | Missing value = -9999 |
+| TEMP_B | celcius | data | Bottom water temperature | Missing value = -9999 |
+| DO_S | mg/L | data | Surface dissolved oxygen | Missing value = -9999 |
+| DO_B | mg/L | data | Bottom dissolved oxygen | Missing value = -9999 |
+| TURB | NTU | data | Turbidity | Missing value = -9999 |
+| Kd | /m | data | Diffuse light attenuation coefficient | Missing value = -9999 |
+| TN_TP | dimensionless | data | Surface total nitrogen to total phosphorus ratio | Missing value = -9999 |
+| N_P | dimensionless | data | Surface Din to SRP ratio | Missing value = -9999 |
+| DIN_TP | dimensionless | data | Dissolved inorganic nitrogen to total phosphorus ratio | Missing value = -9999 |
+| DSIGT | kg/cubic meter | data | Delta Sigma-T | Missing value = -9999 |
+| Si_DIN | dimensionless | data | Silicate to dissolved inorganic nitrogen ratio | Missing value = -9999 |
+
