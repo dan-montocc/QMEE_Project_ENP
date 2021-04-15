@@ -81,3 +81,23 @@ All the following steps were repeated for the three levels of aggregated dataset
               * this was a generalized linear model with a Poisson error distribution and a logarithmic link function
 
 _(Danielle Montocchio)_
+
+__Implementing post-presentation changes__
+
+_April 15, 2021_
+
+Following the feedback from our progress presentation, we changed our course of action for our project. We are no longer doing step-wise regressions, and instead we are going to build a model based on the variables we believe are biologically relevant to our hypothesis including temperature and dissolved oxygen (full model), then build a subset of this model with all the same variables except temperature and DO, which we will compare using an ANOVA to determine the effect size of temperature and DO. 
+
+For the full fish model, we chose the following variables: surface and bottom temperature, DO and salinity, water depth, ammonia, total nitrogen, chlorophyll-a and turbidity as our predictor variables and fish biomass as our response variable. 
+
+First, we tested the colinearity of the predictor variables with a correlation matrix and found the surface and bottom measurements were highly correlated and we will therefore use only the bottom measurements (more biologically relevant since more fish will be present at the bottom). NH4 and depth, ChlA and depth, and NH4 and turbidity were weakly correlated. 
+
+Then, we looked at categorical variable effect size on residuals (using boxplots) for months, years, and areas. No one area or year had a larger effect size. Two months (March and May) looked slightly different than the rest, but this was due to the fact that each only had 1 observation.
+
+Next, we looked at diagnostic plots for the model, and found that we needed to log-transform biomass (due to a lack of normality). Observations 79 and 80 had high leverage and they were omitted to further improve the diagnostic plots. 
+
+We made the second (subset) model with all the same variable, except temperature and DO, then plotted them both using a coefficient plot. The coefficient plot showed that depth has the largest effect on fish biomass, but also has the  highest variance of all variables. THe next largest effect was from NH4, followed by DO and ChlA. 
+
+Finally, we compared the two models using an ANOVA and found that temperature and DO had little effect on fish biomass. 
+
+_(Megan Ridgway)_
