@@ -57,6 +57,7 @@ library(dotwhisker)
 library(broom)
 
 ov <- names(sort(coef(fullfishmod),decreasing=TRUE))
+ov
 
 dwplot(fullfishmod, order_vars = ovlist) %>%
   relabel_predictors(c(Depth = "Depth",
@@ -70,4 +71,68 @@ dwplot(fullfishmod, order_vars = ovlist) %>%
   geom_vline(xintercept=0,lty=2)
 ##only plotting two of 7??
 
+dwplot(fullfishmod) %>%
+  relabel_predictors(c(Depth = "Depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Sal_B = "Salinity",
+                       Temp_B = "Temperature",
+                       ChlA = "Chlorophyll-a",
+                       NH4 = "NH4")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
+  geom_vline(xintercept=0,lty=2)
+
+
 #build model without DO and temp to assess effect size of these two
+subfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_sub1)
+subfishmod2 <- lm(logBiomass ~ Depth + DO_B + NH4 + ChlA + Sal_B + Turb, all_fish_sub1)
+
+dwplot(list(fullfishmod,subfishmod)) %>%
+  relabel_predictors(c(Depth = "Depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Sal_B = "Salinity",
+                       Temp_B = "Temperature",
+                       ChlA = "Chlorophyll-a",
+                       NH4 = "NH4")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
+
+anova(fullfishmod,subfishmod)
+
+dwplot(list(fullfishmod,subfishmod2)) %>%
+  relabel_predictors(c(Depth = "Depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Sal_B = "Salinity",
+                       Temp_B = "Temperature",
+                       ChlA = "Chlorophyll-a",
+                       NH4 = "NH4")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
+
+anova(fullfishmod,subfishmod2)
+
+subfishmod3 <- lm(logBiomass ~ Depth + Temp_B + NH4 + ChlA + Sal_B + Turb, all_fish_sub1)
+
+dwplot(list(fullfishmod,subfishmod3)) %>%
+  relabel_predictors(c(Depth = "Depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Sal_B = "Salinity",
+                       Temp_B = "Temperature",
+                       ChlA = "Chlorophyll-a",
+                       NH4 = "NH4")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
+
+anova(fullfishmod,subfishmod3)

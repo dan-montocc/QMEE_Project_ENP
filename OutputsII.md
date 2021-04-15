@@ -27,3 +27,12 @@ Residual standard error: 0.3781 on 79 degrees of freedom
 Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071 
 F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06`
 
+`Analysis of Variance Table
+
+Model 1: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + DO_B + Turb
+Model 2: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb
+  Res.Df    RSS Df Sum of Sq      F  Pr(>F)  
+1     79 11.293                              
+2     81 12.070 -2  -0.77729 2.7188 0.07213 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1`
