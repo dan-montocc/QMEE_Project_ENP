@@ -28,7 +28,7 @@ all_fish_xsub <- all_fish[,c("Temp_S", "Temp_B","DO_S","DO_B","Depth","Sal_S","S
 rquery.cormat(all_fish_xsub)
 
 
-#build model all fish level
+#ALL FISH MODEL 
 all_fish$logBiomass <- log10(all_fish$TotalBiomass)
 fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                     Temp_B + DO_B + Turb, all_fish)
@@ -59,7 +59,7 @@ library(broom)
 ov <- names(sort(coef(fullfishmod),decreasing=TRUE))
 ov
 
-dwplot(fullfishmod, order_vars = ovlist) %>%
+dwplot(fullfishmod, order_vars = ov) %>%
   relabel_predictors(c(Depth = "Depth",
                        DO_B = "Dissolved oxygen",
                        Turb = "Turbidity",
@@ -136,3 +136,66 @@ dwplot(list(fullfishmod,subfishmod3)) %>%
         legend.title = element_blank()) 
 
 anova(fullfishmod,subfishmod3)
+
+#THERMAL GUILD MODEL
+
+#data cleaning
+summary(fish_therm)
+fish_therm_sub1 <- filter(fish_therm, TotalBiomass != 0)
+fish_therm_sub1$logBiomass <- log10(fish_therm_sub1$TotalBiomass)
+fish_therm_sub1 <- filter(fish_therm_sub1, SRP > 0)
+fish_therm_sub1 <- filter(fish_therm_sub1, Sal_B > 0)
+fish_therm_sub1 <- filter(fish_therm_sub1, TOC > 0)
+fish_therm_sub1 <- fish_therm_sub1 %>% filter(!is.na(DO_B))
+summary(fish_therm_sub1)
+fish_therm_sub1$Area <- as.factor(fish_therm_sub1$Area)
+fish_therm_sub1$Month <- as.factor(fish_therm_sub1$Month)
+fish_therm_sub1$Year <- as.factor(fish_therm_sub1$Year)
+fish_therm_sub1$ThermalGuild <- as.factor(fish_therm_sub1$ThermalGuild)
+summary(fish_therm_sub1)
+
+#build full model with thermal guild interaction
+fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
+                      Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub1)
+plot(fishthermmod)
+
+#remove obs with leverage of 1 = 4, 101, 235, 240
+fish_therm_sub2 <- fish_therm_sub1[-c(4,101,235,240),]
+fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
+                                    Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub2)
+plot(fishthermmod)
+summary(fishthermmod)
+
+#creating faceted coefficient plot for thermal guild data
+library(coefplot)
+
+modelCI <- coefplot:::buildModelCI(fishthermmod)
+ov2 <- names(sort(coef(fishthermmod),decreasing=TRUE))
+ov2
+coefname <- list("Warm guild","Depth:Cool/warm guild","Depth", "Depth:Warm guild",
+                 "Dissolved oxygen","Chlorophyll-a:Warm guild", "Turbidity:Cool/warm guild",
+                 "Turbidity:Warm guild", "Temperature", "Salinity:Cool/warm guild",
+                 "Turbidity", "Salinity", "Chlorophyll-a", "Salinity:Warm guild",
+                 "NH4", "Temperature:Cool/warm guild", "NH4:Warm guild", "Chlorophyll-a:Cool/warm guild",
+                 "NH4:Cool/warm guild", "Temperature:Warm guild", "Dissolved oxygen:Cool/warm guild",
+                 "Dissolved oxygen:Warm guild", "Cool/warm guild")
+
+coefplot:::buildPlotting.default(
+  modelCI, ylab = "", title = NULL, xlab = "Coefficient estimate", color = "indianred",
+  cex = 0.8, textAngle = 0, numberAngle = 0, shape = 16, linetype = 1, outerCI = 2,
+  innerCI = 1, multi = FALSE, zeroColor = "grey", zeroLWD = 1, zeroType = 2, numeric = FALSE,
+  fillColor = "grey", alpha = 1/2, horizontal = FALSE, facet = TRUE, scales = "free",
+  value = "Coefficient estimate", coefficient = "coefname", errorHeight = 0, dodgeHeight = 1,
+  interactive = TRUE)
+
+#attempt 2
+dwplot(fishthermmod) %>%
+  relabel_predictors(c(Depth = "Depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Sal_B = "Salinity",
+                       Temp_B = "Temperature",
+                       ChlA = "Chlorophyll-a",
+                       NH4 = "NH4")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
+  geom_vline(xintercept=0,lty=2) + facet_wrap(~ThermalGuld)
