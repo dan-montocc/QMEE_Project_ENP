@@ -199,3 +199,31 @@ dwplot(fishthermmod) %>%
                        NH4 = "NH4")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
   geom_vline(xintercept=0,lty=2) + facet_wrap(~ThermalGuld)
+
+
+dwplot(fishthermmod) %>%
+  relabel_predictors(c("ThermalGuildwarm" = "Warm guild",
+                       "Depth:ThermalGuildcool/warm" = "Depth:Cool/warm guild",
+                       "Depth" = "Depth", 
+                       "Depth:ThermalGuildwarm" = "Depth:Warm guild",
+                       "DO_B" = "Dissolved oxygen",
+                       "ChlA:ThermalGuildwarm" = "Chlorophyll-a:Warm guild", 
+                       "Turb:ThermalGuildcool/warm" = "Turbidity:Cool/warm guild",
+                       "Turb:ThermalGuildwarm" = "Turbidity:Warm guild", 
+                       "Temp_B" = "Temperature", 
+                       "Sal_B:ThermalGuildcool/warm" = "Salinity:Cool/warm guild",
+                       "Turb" = "Turbidity", 
+                       "Sal_B" = "Salinity", 
+                       "ChlA" = "Chlorophyll-a", 
+                       "Sal_B:ThermalGuildwarm" = "Salinity:Warm guild",
+                       NH4 = "NH4", 
+                       "Temp_B:ThermalGuildcool/warm" = "Temperature:Cool/warm guild", 
+                       "NH4:ThernalGuildwarm" = "NH4:Warm guild", 
+                       "ChlA:ThermalGuildcool/warm" = "Chlorophyll-a:Cool/warm guild",
+                       "NH4:ThermalGuildcool/warm" = "NH4:Cool/warm guild", 
+                       "Temp_B:ThernalGuildwarm" = "Temperature:Warm guild", 
+                       "DO_B:ThermalGuildcool/warm" = "Dissolved oxygen:Cool/warm guild",
+                       "DO_B:ThermalGuildwarm" = "Dissolved oxygen:Warm guild", 
+                       "ThermalGuildcool/warm" = "Cool/warm guild")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
+  geom_vline(xintercept=0,lty=2)
