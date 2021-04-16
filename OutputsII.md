@@ -84,3 +84,47 @@ Multiple R-squared:  0.3509,	Adjusted R-squared:  0.2839
 F-statistic: 5.241 on 23 and 223 DF,  p-value: 1.066e-11
 ```
 
+_Hypothesis 2_
+
+```{r}
+Call:
+lm(formula = Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + 
+    CHLA + TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth + 
+    Avg.PlantCover + Year, data = Peri_dat_sub1)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.673 -10.199  -0.743   9.491  42.556 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(>|t|)    
+(Intercept)    -17.041414  34.485610  -0.494 0.622299    
+TEMP_B           0.266006   0.586884   0.453 0.651370    
+DO_B             2.461000   1.638217   1.502 0.136250    
+SAL_B            0.689923   0.397941   1.734 0.086111 .  
+NO3              1.776569   3.704057   0.480 0.632561    
+CHLA            -2.137329   1.490255  -1.434 0.154697    
+TURB            -1.074207   0.622823  -1.725 0.087727 .  
+TN               0.392956   0.208567   1.884 0.062519 .  
+DIN             -1.193383   1.168861  -1.021 0.309778    
+TP               8.851792   9.961133   0.889 0.376376    
+SRP             81.181587  48.800435   1.664 0.099399 .  
+TOC              0.001369   0.013395   0.102 0.918807    
+AvgWaterDepth    0.043413   0.175267   0.248 0.804888    
+Avg.PlantCover  -0.325437   0.185204  -1.757 0.082011 .  
+Year1997         6.131414   8.156695   0.752 0.454031    
+Year1998        25.582604   8.628689   2.965 0.003803 ** 
+Year1999         7.526895  10.081066   0.747 0.457070    
+Year2000        -0.028180   9.797933  -0.003 0.997711    
+Year2001        -3.737746   9.233531  -0.405 0.686506    
+Year2002        26.874893  10.076226   2.667 0.008951 ** 
+Year2003        26.229981   9.369928   2.799 0.006167 ** 
+Year2004        36.206725   9.646633   3.753 0.000296 ***
+Year2005        17.138690  10.256774   1.671 0.097920 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 17.53 on 98 degrees of freedom
+Multiple R-squared:  0.4545,	Adjusted R-squared:  0.3321 
+F-statistic: 3.712 on 22 and 98 DF,  p-value: 3.892e-06
+```
