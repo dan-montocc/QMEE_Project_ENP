@@ -258,6 +258,11 @@ rename_term <- function(x) {
 ## (REALLY need to scale vars if you're going to draw a coefficient plot for effects with different units!
 fish_therm_scale <- fish_therm_sub2 %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
 
+## this formula is admittedly a little bit inscrutable but is what is needed to get separate
+## estimates for each guild.
+## alternatively you *could* fit each guild separately (this is a slightly different model, and
+## wouldn't allow you to test interactions [differences among guilds])
+## you could probably also do this with 'effects' or 'emmeans' packages
 fishthermmod_sep <- lm (logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb):ThermalGuild, fish_therm_scale)
 
