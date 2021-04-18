@@ -31,23 +31,30 @@ rquery.cormat(all_fish_xsub)
 #ALL FISH MODEL 
 all_fish$logBiomass <- log10(all_fish$TotalBiomass)
 fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
-                    Temp_B + DO_B + Turb, all_fish)
+                      Temp_B + DO_B + Turb, all_fish)
+
+## set 2x2 format to avoid pause when running non-interactively
+op <- par(mfrow=c(2,2))
 plot(fullfishmod)
 
 #79 and 80 obs have high leverage
 ##removed
 all_fish_sub1 <- all_fish[-c(79,80),]
 fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
-                    Temp_B + DO_B + Turb, all_fish_sub1)
+                      Temp_B + DO_B + Turb, all_fish_sub1,
+                  ## make sure NAs are included in residuals where appropriate
+                  na.action=na.exclude)
 plot(fullfishmod)
 
+par(op) ## restore original graphical params
+
 #look at categorical variable effect size on residuals
-boxplot(residuals(fullfishmod) ~ all_fish$Area) #area does not seem to effect the residuals disproportionately 
-boxplot(residuals(fullfishmod) ~ all_fish$Month)#March different
+boxplot(residuals(fullfishmod) ~ all_fish_sub1$Area) #area does not seem to affect the residuals disproportionately 
+boxplot(residuals(fullfishmod) ~ all_fish_sub1$Month)#March different
 summary(all_fish$Month == "March")# only one obs 
 summary(all_fish$Month == "May")
 ##since study area is Florida, seasons are not as pronounced as they are in north
-boxplot(residuals(fullfishmod) ~ all_fish$Year) #no specific Year stands out
+boxplot(residuals(fullfishmod) ~ all_fish_sub1$Year) #no specific Year stands out
 
 ##looks good
 summary(fullfishmod)
@@ -227,3 +234,65 @@ dwplot(fishthermmod) %>%
                        "ThermalGuildcool/warm" = "Cool/warm guild")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
   geom_vline(xintercept=0,lty=2)
+
+## attempt 3 (BMB)
+
+## first tidy
+
+
+## this automates most of the name changes
+rename_term <- function(x) {
+    return(x
+        %>% str_replace("DO_B","Dissolved oxygen")
+        %>% str_replace("Turb","Turbidity")
+        %>% str_replace("Sal_B","Salinity")
+        %>% str_replace("ChlA","Chlorophyll-A")
+        ## replace "ThermalGuildcold/warm" (e.g.) with "warm/cold guild"
+        %>% str_replace("ThermalGuild([[:alpha:]/]+)","\\1 guild")
+        ## uppercase first letter in string, and first letter following a colon
+        %>% str_replace_all("(^|:)[[:alpha:]]",toupper) 
+    )
+}
+
+## scale all numeric variables except the response
+## (REALLY need to scale vars if you're going to draw a coefficient plot for effects with different units!
+fish_therm_scale <- fish_therm_sub2 %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
+
+fishthermmod_sep <- lm (logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + ChlA + Sal_B +
+                                    Temp_B + DO_B + Turb):ThermalGuild, fish_therm_scale)
+
+tt <- (broom::tidy(fishthermmod_sep, conf.int=TRUE)
+    ## add "(Intercept)" to intercept terms
+    %>% mutate(across(term,~ifelse(grepl("(cool|warm)$",.),paste(.,"(Intercept)",sep=":"), .)))
+    ## split into guild + environmental covariate
+    %>% separate(term,into=c("thermal_guild","term"),sep=":")
+    ## don't need prefix
+    %>% mutate(across(thermal_guild,~str_remove(.,"ThermalGuild")))
+    ## fix names
+    %>% mutate(across(term, rename_term))
+    ## generally not interested in intercept, and messes up axes
+    %>% filter(term!="(Intercept)")  
+    ## order terms by average estimate (across guilds)
+    ## (guilds differ slightly, but this still works pretty well)
+    %>% mutate(across(term, ~reorder(factor(.), estimate)))
+)
+
+gg0 <- (ggplot(tt, aes(estimate, term))
+    + geom_pointrange(aes(xmin=conf.low, xmax=conf.high))
+    + geom_vline(xintercept=0, lty=2)
+)
+
+print(gg0 + facet_wrap(~thermal_guild, labeller=label_both))
+
+## or (this is more compact, and better if you want to compare guilds)
+
+library(colorspace)
+print(ggplot(tt, aes(estimate, term))
+    + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,
+                          colour=thermal_guild),
+                      position=position_dodge(width=0.25))
+    + geom_vline(xintercept=0, lty=2)
+    + scale_color_discrete_qualitative()
+    )
+
+
