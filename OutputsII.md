@@ -161,3 +161,19 @@ AvgWaterDepth    0.5319     2.6294   0.202
 Avg.PlantCover  -2.8348     1.9365  -1.464
 
 ```
+
+_ANOVA of full and subset model_
+
+```{r}
+Data: Peri_dat_scale
+Models:
+Perisubmod: Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA + TURB + TN + 
+Perisubmod:     DIN + TP + SRP + TOC + AvgWaterDepth + (1 | Year)
+Perifullmod: Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA + TURB + 
+Perifullmod:     TN + DIN + TP + SRP + TOC + AvgWaterDepth + Avg.PlantCover + 
+Perifullmod:     (1 | Year)
+            npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+Perisubmod    14 1073.5 1112.7 -522.76   1045.5                     
+Perifullmod   16 1073.3 1118.0 -520.66   1041.3 4.2016  2     0.1224
+
+```

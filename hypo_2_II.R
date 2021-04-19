@@ -98,9 +98,8 @@ Perisubmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA +
                       TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth
                    + (1|Year),data = Peri_dat_scale)
 
-library(lmerTest)
+anova(Perifullmod,Perisubmod)
 
-anova::lmerTest(Perifullmod,Perisubmod)
 #plotting coefficients
 library(dotwhisker)
 library(broom.mixed)

@@ -131,7 +131,12 @@ Peri_all_dat_sub1$Area <- as.factor(Peri_all_dat_sub1$Area)
 Peri_all_dat_sub1$Month <- as.factor(Peri_all_dat_sub1$Month)
 Peri_all_dat_sub1$Year <- as.factor(Peri_all_dat_sub1$Year)
 
+#create full model
+Fish_Peri_dat_scale <- Peri_all_dat_sub1 %>% mutate(across(where(is.numeric) & !logBiomass & !SpeciesRichness, ~drop(scale(.))))
 Peri_allfishfullmod <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
+                                  Turb + AvgWaterDepth + Avg.PeriphytonCover +
+                                  + Avg.PlantCover,Peri_all_dat_sub1)
+Peri_allfishfullmod_scale <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
                          Turb + AvgWaterDepth + Avg.PeriphytonCover +
-                         + Avg.PlantCover,Peri_all_dat_sub1)
-plot()
+                         + Avg.PlantCover,Fish_Peri_dat_scale)
+plot(Peri_allfishfullmod)

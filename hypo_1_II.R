@@ -46,7 +46,7 @@ fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                   ## make sure NAs are included in residuals where appropriate
                   na.action=na.exclude)
 plot(fullfishmod)
-
+summary(fullfishmod)
 par(op) ## restore original graphical params
 
 #look at categorical variable effect size on residuals
