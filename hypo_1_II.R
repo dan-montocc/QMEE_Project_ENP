@@ -40,6 +40,7 @@ plot(fullfishmod)
 #79 and 80 obs have high leverage
 ##removed
 all_fish_sub1 <- all_fish[-c(79,80),]
+all_fish_scale <- all_fish_sub1 %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
 fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                       Temp_B + DO_B + Turb, all_fish_sub1,
                   ## make sure NAs are included in residuals where appropriate
@@ -62,11 +63,14 @@ summary(fullfishmod)
 #coefficient plot
 library(dotwhisker)
 library(broom)
-
-ov <- names(sort(coef(fullfishmod),decreasing=TRUE))
+fullfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
+                    Temp_B + DO_B + Turb, all_fish_scale,
+                  ## make sure NAs are included in residuals where appropriate
+                  na.action=na.exclude)
+ov <- names(sort(coef(fullfishmod_scaled),decreasing=TRUE))
 ov
 
-dwplot(fullfishmod, order_vars = ov) %>%
+dwplot(fullfishmod_scaled, order_vars = ov) %>%
   relabel_predictors(c(Depth = "Depth",
                        DO_B = "Dissolved oxygen",
                        Turb = "Turbidity",
@@ -78,7 +82,7 @@ dwplot(fullfishmod, order_vars = ov) %>%
   geom_vline(xintercept=0,lty=2)
 ##only plotting two of 7??
 
-dwplot(fullfishmod) %>%
+dwplot(fullfishmod_scaled) %>%
   relabel_predictors(c(Depth = "Depth",
                        DO_B = "Dissolved oxygen",
                        Turb = "Turbidity",
@@ -91,10 +95,12 @@ dwplot(fullfishmod) %>%
 
 
 #build model without DO and temp to assess effect size of these two
-subfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_sub1)
+subfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_scale,
+                                                                    na.action=na.exclude)
 subfishmod2 <- lm(logBiomass ~ Depth + DO_B + NH4 + ChlA + Sal_B + Turb, all_fish_sub1)
 
-dwplot(list(fullfishmod,subfishmod)) %>%
+subfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_scale)
+dwplot(list(fullfishmod_scaled,subfishmod_scaled)) %>%
   relabel_predictors(c(Depth = "Depth",
                        DO_B = "Dissolved oxygen",
                        Turb = "Turbidity",
@@ -104,11 +110,10 @@ dwplot(list(fullfishmod,subfishmod)) %>%
                        NH4 = "NH4")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + 
   geom_vline(xintercept=0,lty=2) + 
-  theme(legend.justification = c(0, 0),
-        legend.background = element_rect(colour="grey80"),
+  theme(legend.background = element_rect(colour="white"),
         legend.title = element_blank()) 
 
-anova(fullfishmod,subfishmod)
+anova(fullfishmod_scaled,subfishmod_scaled)
 
 dwplot(list(fullfishmod,subfishmod2)) %>%
   relabel_predictors(c(Depth = "Depth",
@@ -205,7 +210,7 @@ dwplot(fishthermmod) %>%
                        ChlA = "Chlorophyll-a",
                        NH4 = "NH4")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
-  geom_vline(xintercept=0,lty=2) + facet_wrap(~ThermalGuld)
+  geom_vline(xintercept=0,lty=2) + facet_wrap(~ThermalGuild)
 
 
 dwplot(fishthermmod) %>%
@@ -241,7 +246,7 @@ dwplot(fishthermmod) %>%
 
 
 ## this automates most of the name changes
-rename_term <- function(x) {
+rename_term1 <- function(x) {
     return(x
         %>% str_replace("DO_B","Dissolved oxygen")
         %>% str_replace("Turb","Turbidity")
@@ -265,8 +270,9 @@ fish_therm_scale <- fish_therm_sub2 %>% mutate(across(where(is.numeric) & !logBi
 ## you could probably also do this with 'effects' or 'emmeans' packages
 fishthermmod_sep <- lm (logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb):ThermalGuild, fish_therm_scale)
+plot(fishthermmod_sep)
 
-tt <- (broom::tidy(fishthermmod_sep, conf.int=TRUE)
+tt1 <- (broom::tidy(fishthermmod_sep, conf.int=TRUE)
     ## add "(Intercept)" to intercept terms
     %>% mutate(across(term,~ifelse(grepl("(cool|warm)$",.),paste(.,"(Intercept)",sep=":"), .)))
     ## split into guild + environmental covariate
@@ -274,7 +280,7 @@ tt <- (broom::tidy(fishthermmod_sep, conf.int=TRUE)
     ## don't need prefix
     %>% mutate(across(thermal_guild,~str_remove(.,"ThermalGuild")))
     ## fix names
-    %>% mutate(across(term, rename_term))
+    %>% mutate(across(term, rename_term1))
     ## generally not interested in intercept, and messes up axes
     %>% filter(term!="(Intercept)")  
     ## order terms by average estimate (across guilds)
@@ -297,7 +303,49 @@ print(ggplot(tt, aes(estimate, term))
                           colour=thermal_guild),
                       position=position_dodge(width=0.25))
     + geom_vline(xintercept=0, lty=2)
-    + scale_color_discrete_qualitative()
+    + scale_color_discrete_qualitative() +
+      theme_bw() + xlab("Coefficient estimate") + ylab("") + labs(color='Thermal Guild') 
     )
 
+##SPECIES RICHNESS MODEL
+all_fish_scale <- all_fish %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
+SpRich_mod1 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
+                     DO_B + Temp_B + Turb, all_fish,family=poisson)
+plot(SpRich_mod1)
+#remove obs 80 and 79
+all_fish_sub2 <- all_fish[-c(79,80),]
+SpRich_mod1 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
+                     DO_B + Temp_B + Turb, all_fish_sub2,family=poisson)
+plot(SpRich_mod1)
+summary(SpRich_mod1)
 
+SpRich_mod2 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
+                     Turb, all_fish_sub2,family=poisson)
+
+ov3 <- names(sort(coef(SpRich_mod1),decreasing=TRUE))
+ov3
+
+dwplot(list(SpRich_mod1,SpRich_mod2)) %>%
+  relabel_predictors(c(DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Temp_B = "Temperature",
+                       NH4 = "NH4",
+                       "ChlA" = "Chlorophyll-a",
+                       Sal_B = "Salinity",
+                       Depth = "Depth")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.background = element_rect(colour="white"),
+        legend.title = element_blank()) 
+
+dwplot(SpRich_mod1) %>%
+  relabel_predictors(c(DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Temp_B = "Temperature",
+                       NH4 = "NH4",
+                       "ChlA" = "Chlorophyll-a",
+                       Sal_B = "Salinity",
+                       Depth = "Depth")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.position = "none") 

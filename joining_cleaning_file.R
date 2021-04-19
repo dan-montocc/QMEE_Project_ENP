@@ -174,3 +174,36 @@ Peri_fish_wq <- merge(Peri_dat, func_fish_wq,all.x=TRUE)
 Peri_fish_wq <- replace_with_na_all(data = Peri_fish_wq, condition = ~.x == -9999)
 
 write.csv(Peri_fish_wq, file = here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
+
+
+#aggregate to all fish level
+All_fish_Sp_Agg <- aggregate(cbind(TotalSpeciesWeight,SpeciesBiomass) ~ Month + Year + Area + SpeciesName + CommonName, func96_05 , mean)
+All_fish_Sp_Agg <- filter(All_fish_Sp_Agg, SpeciesBiomass > 0)
+Peri_fish_wq <- merge(Peri_wq, All_fish_Sp_Agg,all.x=TRUE)
+library(data.table)
+DT <- data.table(Peri_fish_wq)
+
+ALL_fish_Peri <- DT[, list(TotalWeight = sum(TotalSpeciesWeight,na.rm=TRUE), TotalBiomass = sum(SpeciesBiomass,na.rm=TRUE),
+                           Depth = mean(DEPTH,na.rm=TRUE), NOX = mean(NOX,na.rm=TRUE), NO3 = mean(NO3,na.rm=TRUE),
+                           NO2 = mean(NO2,na.rm=TRUE),NH4 = mean(NH4,na.rm=TRUE), TN = mean(TN,na.rm=TRUE), 
+                           DIN= mean(DIN,na.rm=TRUE), TON=mean(TON,na.rm=TRUE), TP=mean(TP,na.rm=TRUE),
+                           SRP=mean(SRP,na.rm=TRUE), ChlA=mean(CHLA,na.rm=TRUE),TOC=mean(TOC,na.rm=TRUE),
+                           Sal_S=mean(SAL_S,na.rm=TRUE), Sal_B=mean(SAL_B,na.rm=TRUE),Temp_S=mean(TEMP_S,na.rm=TRUE),
+                           Temp_B=mean(TEMP_B,na.rm=TRUE), DO_S=mean(DO_S,na.rm=TRUE),DO_B=mean(DO_B,na.rm=TRUE),
+                           Turb=mean(TURB,na.rm=TRUE),pH=mean(pH,na.rm=TRUE),
+                           Avg.PeriphytonCover=mean(Avg.PeriphytonCover,na.rm=TRUE),
+                           Avg.PlantCover=mean(Avg.PlantCover,na.rm=TRUE),
+                           AvgWaterDepth=mean(AvgWaterDepth,na.rm=TRUE)),by = list(Month,Year,Area)]##not elegant, but works
+
+#remove NaN's
+is.nan.data.frame <- function(x)
+  do.call(cbind, lapply(x, is.nan))
+
+ALL_fish_Peri[is.nan(ALL_fish_Peri)] <- NA
+ALL_fish_Peri <- ALL_fish_Peri %>% filter(!is.na(Depth))
+fish_SpeciesRichness <- count(All_fish_Sp_Agg, Year, Month, Area)
+
+ALL_fish_Peri_richness <- merge(ALL_fish_Peri,fish_SpeciesRichness)
+ALL_fish_Peri_richness <- ALL_fish_Peri_richness %>% rename(SpeciesRichness = n) #rename added column
+
+write.csv(ALL_fish_Peri_richness, file = here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishRichness_1995to2005_Join.csv"))

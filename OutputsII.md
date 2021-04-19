@@ -1,33 +1,36 @@
-__Linear regression model output summary tables__
+# Linear regression model output summary tables #
 
-_Hypothesis 1_
+__Hypothesis 1__
 
 ```{r}
+
 Call:
 lm(formula = logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + 
-    DO_B + Turb, data = all_fish_sub1)
+    DO_B + Turb, data = all_fish_scale, na.action = na.exclude)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--0.93566 -0.13590  0.00273  0.19784  0.92413 
+-0.95139 -0.19852 -0.00666  0.21802  0.92347 
 
 Coefficients:
-             Estimate Std. Error t value Pr(>|t|)  
-(Intercept) -1.052827   1.144031  -0.920   0.3602  
-Depth        0.624799   0.343769   1.817   0.0729 .
-NH4         -0.106421   0.042302  -2.516   0.0139 *
-ChlA        -0.059200   0.038080  -1.555   0.1240  
-Sal_B       -0.009440   0.007028  -1.343   0.1831  
-Temp_B      -0.009908   0.014331  -0.691   0.4914  
-DO_B         0.066180   0.042601   1.553   0.1243  
-Turb         0.013928   0.013579   1.026   0.3082  
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.10606    0.04067   2.608   0.0108 *  
+Depth        0.25727    0.06128   4.198 6.86e-05 ***
+NH4         -0.07526    0.05019  -1.500   0.1376    
+ChlA        -0.07085    0.05591  -1.267   0.2087    
+Sal_B       -0.01600    0.04216  -0.380   0.7052    
+Temp_B      -0.05232    0.05052  -1.036   0.3035    
+DO_B         0.08389    0.05173   1.622   0.1088    
+Turb         0.04697    0.05378   0.873   0.3851    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.3781 on 79 degrees of freedom
-Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071 
-F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06
+Residual standard error: 0.3836 on 81 degrees of freedom
+Multiple R-squared:  0.3432,	Adjusted R-squared:  0.2864 
+F-statistic: 6.046 on 7 and 81 DF,  p-value: 1.093e-05
 ```
+
+_Full model comparison with "key" variables of interest missing_
 
 ```{r}
 Analysis of Variance Table
@@ -35,11 +38,13 @@ Analysis of Variance Table
 Model 1: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + DO_B + Turb
 Model 2: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb
   Res.Df    RSS Df Sum of Sq      F  Pr(>F)  
-1     79 11.293                              
-2     81 12.070 -2  -0.77729 2.7188 0.07213 .
+1     81 11.922                              
+2     83 13.075 -2   -1.1531 3.9171 0.02378 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
+
+_Thermal Guild separated Model_
 
 ```{r}
 Call:
@@ -83,48 +88,76 @@ Residual standard error: 0.4274 on 223 degrees of freedom
 Multiple R-squared:  0.3509,	Adjusted R-squared:  0.2839 
 F-statistic: 5.241 on 23 and 223 DF,  p-value: 1.066e-11
 ```
-
-_Hypothesis 2_
+_Species Richness Model_
 
 ```{r}
 Call:
-lm(formula = Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + 
-    CHLA + TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth + 
-    Avg.PlantCover + Year, data = Peri_dat_sub1)
+glm(formula = SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B + 
+    DO_B + Temp_B + Turb, family = poisson, data = all_fish_sub2)
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--46.673 -10.199  -0.743   9.491  42.556 
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-4.6817  -0.4612   0.0930   0.6894   1.6574  
 
 Coefficients:
-                 Estimate Std. Error t value Pr(>|t|)    
-(Intercept)    -17.041414  34.485610  -0.494 0.622299    
-TEMP_B           0.266006   0.586884   0.453 0.651370    
-DO_B             2.461000   1.638217   1.502 0.136250    
-SAL_B            0.689923   0.397941   1.734 0.086111 .  
-NO3              1.776569   3.704057   0.480 0.632561    
-CHLA            -2.137329   1.490255  -1.434 0.154697    
-TURB            -1.074207   0.622823  -1.725 0.087727 .  
-TN               0.392956   0.208567   1.884 0.062519 .  
-DIN             -1.193383   1.168861  -1.021 0.309778    
-TP               8.851792   9.961133   0.889 0.376376    
-SRP             81.181587  48.800435   1.664 0.099399 .  
-TOC              0.001369   0.013395   0.102 0.918807    
-AvgWaterDepth    0.043413   0.175267   0.248 0.804888    
-Avg.PlantCover  -0.325437   0.185204  -1.757 0.082011 .  
-Year1997         6.131414   8.156695   0.752 0.454031    
-Year1998        25.582604   8.628689   2.965 0.003803 ** 
-Year1999         7.526895  10.081066   0.747 0.457070    
-Year2000        -0.028180   9.797933  -0.003 0.997711    
-Year2001        -3.737746   9.233531  -0.405 0.686506    
-Year2002        26.874893  10.076226   2.667 0.008951 ** 
-Year2003        26.229981   9.369928   2.799 0.006167 ** 
-Year2004        36.206725   9.646633   3.753 0.000296 ***
-Year2005        17.138690  10.256774   1.671 0.097920 .  
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.2962178  0.8070284   4.084 4.42e-05 ***
+Depth       -0.1922647  0.2444736  -0.786   0.4316    
+NH4          0.0009230  0.0299149   0.031   0.9754    
+ChlA        -0.0005773  0.0268672  -0.021   0.9829    
+Sal_B       -0.0129301  0.0050714  -2.550   0.0108 *  
+DO_B         0.0031180  0.0296853   0.105   0.9163    
+Temp_B       0.0009588  0.0100481   0.095   0.9240    
+Turb         0.0025901  0.0094676   0.274   0.7844    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 17.53 on 98 degrees of freedom
-Multiple R-squared:  0.4545,	Adjusted R-squared:  0.3321 
-F-statistic: 3.712 on 22 and 98 DF,  p-value: 3.892e-06
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 91.713  on 86  degrees of freedom
+Residual deviance: 81.927  on 79  degrees of freedom
+AIC: 484.75
+
+Number of Fisher Scoring iterations: 4
+```
+
+__Hypothesis 2__
+
+_Full model with Year as random effect_
+
+```{r}
+Linear mixed model fit by REML ['lmerMod']
+Formula: Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA + TURB +  
+    TN + DIN + TP + SRP + TOC + AvgWaterDepth + Avg.PlantCover +      (1 | Year)
+   Data: Peri_dat_scale
+
+REML criterion at convergence: 995
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.55811 -0.55563 -0.04887  0.55552  2.30851 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ Year     (Intercept) 161.6    12.71   
+ Residual             307.2    17.53   
+Number of obs: 121, groups:  Year, 10
+
+Fixed effects:
+               Estimate Std. Error t value
+(Intercept)     43.1660     4.3427   9.940
+TEMP_B           0.8737     2.1581   0.405
+DO_B             2.9536     2.0643   1.431
+SAL_B            5.5155     3.5790   1.541
+NO3              1.2521     2.7302   0.459
+CHLA            -3.4005     2.3209  -1.465
+TURB            -4.2639     2.3397  -1.822
+TN               4.0761     2.4289   1.678
+DIN             -2.7623     2.5730  -1.074
+TP               1.4679     2.0461   0.717
+SRP              3.7112     2.0270   1.831
+TOC             -0.4470     3.3654  -0.133
+AvgWaterDepth    0.5319     2.6294   0.202
+Avg.PlantCover  -2.8348     1.9365  -1.464
+
 ```
