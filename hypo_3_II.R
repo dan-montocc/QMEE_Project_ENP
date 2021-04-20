@@ -59,7 +59,10 @@ rename_term <- function(x) {
          %>% str_replace("AvgWaterDepth","Water depth")
          %>% str_replace("Avg.PlantCover","% Plant Cover")
          %>% str_replace("Avg.PeriphytonCover","% Periphyton Cover")
-         %>% str_replace("FunctionalGroup([[:alpha:]/]+)")
+         ## BMB: we have to specify a **replacement** value, in this
+         ## case it's whatever alphabetic (or slash) characters come after
+         ## "FunctionalGroup"
+         %>% str_replace("FunctionalGroup([[:alpha:]/]+)","\\1")
          ## uppercase first letter in string, and first letter following a colon
          %>% str_replace_all("(^|:)[[:alpha:]]",toupper) 
   )
@@ -77,24 +80,33 @@ Peri_fish_scale <- Peri_fish_dat_sub1 %>% mutate(across(where(is.numeric) & !log
 Peri_fish_sep <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
                                                             Avg.PlantCover + Avg.PeriphytonCover +
                                                             Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
+
+op <- par(mfrow=c(2,2))  ## BMB avoid interactive pauses
 plot(Peri_fish_sep)
+par(op)
 
 Peri_fish_full <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B + Avg.PlantCover + Avg.PeriphytonCover +
-                                                            Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
-tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
-       ## add "(Intercept)" to intercept terms
-       %>% mutate(across(term,~ifelse(grepl("(detrivore|invertivore)$",.),paste(.,"(Intercept)",sep=":"), .)))
-       ## split into guild + environmental covariate
-       %>% separate(term,into=c("Functional_Group","term"),sep=":")
-       ## don't need prefix
-       %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
-       ## fix names
-       %>% mutate(across(term, rename_term))
-       ## generally not interested in intercept, and messes up axes
-       %>% filter(term!="(Intercept)")  
-       ## order terms by average estimate (across guilds)
-       ## (guilds differ slightly, but this still works pretty well)
-       %>% mutate(across(term, ~reorder(factor(.), estimate)))
+                                    Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
+
+tt0 <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
+    ## add "(Intercept)" to intercept terms
+    %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
+    ## split into guild + environmental covariate
+    %>% separate(term,into=c("Functional_Group","term"),sep=":")
+    ## don't need prefix
+    %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
+)
+## break pipe in the middle so we can check what's going on.
+rename_term(tt0$term)
+
+tt <- (tt0 
+    ## fix names
+    %>% mutate(across(term, rename_term))
+    ## generally not interested in intercept, and messes up axes
+    %>% filter(term!="(Intercept)")  
+    ## order terms by average estimate (across guilds)
+    ## (guilds differ slightly, but this still works pretty well)
+    %>% mutate(across(term, ~reorder(factor(.), estimate)))
 )
 
 gg0 <- (ggplot(tt, aes(estimate, term))
