@@ -33,7 +33,7 @@ fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                       Temp_B + DO_B + Turb, all_fish)
 
 ## set 2x2 format to avoid pause when running non-interactively
-op <- par(mfrow=c(2,2))
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(fullfishmod)
 
 #79 and 80 obs have high leverage
@@ -44,8 +44,8 @@ fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                       Temp_B + DO_B + Turb, all_fish_sub1,
                   ## make sure NAs are included in residuals where appropriate
                   na.action=na.exclude)
-plot(fullfishmod)
 
+plot(fullfishmod)
 par(op) ## restore original graphical params
 
 #look at categorical variable effect size on residuals
@@ -65,8 +65,12 @@ fullfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                            Temp_B + DO_B + Turb, all_fish_scale,
                          ## make sure NAs are included in residuals where appropriate
                          na.action=na.exclude)
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(fullfishmod_scaled)
+par(op)
+
 summary(fullfishmod_scaled)
+
 #coefficient plot
 library(dotwhisker)
 library(broom)
@@ -153,6 +157,7 @@ summary(fish_therm_sub1)
 #build full model with thermal guild interaction
 fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
                       Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub1)
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(fishthermmod)
 
 #remove obs with leverage of 1 = 4, 101, 235, 240
@@ -160,6 +165,8 @@ fish_therm_sub2 <- fish_therm_sub1[-c(4,101,235,240),]
 fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub2)
 plot(fishthermmod)
+par(op)
+
 summary(fishthermmod)
 
 #creating faceted coefficient plot for thermal guild data
@@ -190,7 +197,10 @@ fish_therm_scale <- fish_therm_sub2 %>% mutate(across(where(is.numeric) & !logBi
 ## you could probably also do this with 'effects' or 'emmeans' packages
 fishthermmod_sep <- lm (logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb):ThermalGuild, fish_therm_scale)
+
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(fishthermmod_sep)
+par(op)
 
 tt1 <- (broom::tidy(fishthermmod_sep, conf.int=TRUE)
     ## add "(Intercept)" to intercept terms
@@ -233,12 +243,20 @@ print(ggplot(tt, aes(estimate, term))
 #NOT Scaled Full Model
 SpRich_mod1 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
                      DO_B + Temp_B + Turb, all_fish,family=poisson)
+
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(SpRich_mod1)
+par(op)
+
 #remove obs 80 and 79
 all_fish_sub2 <- all_fish[-c(79,80),]
 SpRich_mod1 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
                      DO_B + Temp_B + Turb, all_fish_sub2,family=poisson)
+
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(SpRich_mod1)
+par(op)
+
 summary(SpRich_mod1)
 
 #Scaled Full Model
@@ -246,7 +264,11 @@ Rich_fish_scale <- all_fish_sub2 %>% mutate(across(where(is.numeric) & !SpeciesR
 
 SpRich_mod_scale <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
                      DO_B + Temp_B + Turb, Rich_fish_scale,family=poisson)
+
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(SpRich_mod_scale)
+par(op)
+
 summary(SpRich_mod_scale)
 
 #NOT Scaled Subset Model

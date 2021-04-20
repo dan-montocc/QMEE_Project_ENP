@@ -54,6 +54,7 @@ rename_term <- function(x) {
   return(x
          %>% str_replace("DO_B","Dissolved oxygen")
          %>% str_replace("Turb","Turbidity")
+         %>% str_replace("Temp_B","Temperature")
          %>% str_replace("Sal_B","Salinity")
          %>% str_replace("ChlA","Chlorophyll-A")
          %>% str_replace("AvgWaterDepth","Water depth")
@@ -81,26 +82,20 @@ Peri_fish_sep <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA +
                                                             Avg.PlantCover + Avg.PeriphytonCover +
                                                             Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
 
-op <- par(mfrow=c(2,2))  ## BMB avoid interactive pauses
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))  ## BMB avoid interactive pauses
 plot(Peri_fish_sep)
 par(op)
 
 Peri_fish_full <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B + Avg.PlantCover + Avg.PeriphytonCover +
                                     Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
 
-tt0 <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
+tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
     ## add "(Intercept)" to intercept terms
     %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
     ## split into guild + environmental covariate
     %>% separate(term,into=c("Functional_Group","term"),sep=":")
     ## don't need prefix
     %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
-)
-## break pipe in the middle so we can check what's going on.
-rename_term(tt0$term)
-
-tt <- (tt0 
-    ## fix names
     %>% mutate(across(term, rename_term))
     ## generally not interested in intercept, and messes up axes
     %>% filter(term!="(Intercept)")  
@@ -122,7 +117,7 @@ library(colorspace)
 print(ggplot(tt, aes(estimate, term))
       + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,
                             colour=Functional_Group),
-                        position=position_dodge(width=0.25))
+                        position=position_dodge(width=0.5))
       + geom_vline(xintercept=0, lty=2)
       + scale_color_discrete_qualitative() +
         theme_bw() + xlab("Coefficient estimate") + ylab("") + labs(color='Functional Group') 
