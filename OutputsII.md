@@ -30,7 +30,7 @@ Multiple R-squared:  0.3432,	Adjusted R-squared:  0.2864
 F-statistic: 6.046 on 7 and 81 DF,  p-value: 1.093e-05
 ```
 
-_Full model comparison with "key" variables of interest missing_
+_ANOVA: Full model comparison with "key" variables of interest missing_
 
 ```{r}
 Analysis of Variance Table
@@ -162,7 +162,7 @@ Avg.PlantCover  -2.8348     1.9365  -1.464
 
 ```
 
-_ANOVA of full and subset model_
+_ANOVA: Full and subset model comparison_
 
 ```{r}
 Data: Peri_dat_scale

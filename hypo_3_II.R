@@ -1,11 +1,13 @@
-#Hypothesis 3 analysis
+###Hypothesis 3 analysis
 
+#load-in libraries...
 library(here)
 library(ggplot2)
 library(tidyverse)
 library(corrplot)
 library(dotwhisker)
 library(broom)
+library(colorspace)
 
 #load in data and cleaning
 Peri_fish_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
@@ -48,7 +50,7 @@ boxplot(residuals(Peri_fishfullmod) ~ Peri_fish_dat_sub1$Year)
 boxplot(residuals(Peri_fishfullmod) ~ Peri_fish_dat_sub1$FunctionalGroup) #include as categorical
 summary(Peri_fish_dat_sub1$FunctionalGroup)
 
-#FUNCTIONAL GROUP BIOMASS
+#FUNCTIONAL GROUP BIOMASS MODEL
 ## this automates most of the name changes
 rename_term <- function(x) {
   return(x
@@ -69,26 +71,45 @@ rename_term <- function(x) {
   )
 }
 
+#Scaled Full Functional Group Model
 ## scale all numeric variables except the response
 ## (REALLY need to scale vars if you're going to draw a coefficient plot for effects with different units!
 Peri_fish_scale <- Peri_fish_dat_sub1 %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
 
-## this formula is admittedly a little bit inscrutable but is what is needed to get separate
-## estimates for each guild.
-## alternatively you *could* fit each guild separately (this is a slightly different model, and
-## wouldn't allow you to test interactions [differences among guilds])
-## you could probably also do this with 'effects' or 'emmeans' packages
+#Separated by Group model
 Peri_fish_sep <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
                                                             Avg.PlantCover + Avg.PeriphytonCover +
                                                             Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
-
-op <- par(mar=c(2,2,2,2),mfrow=c(2,2))  ## BMB avoid interactive pauses
+#diagnostics
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(Peri_fish_sep)
 par(op)
 
+#NOT Scaled Functional Group Full Model (simplified interpretation)
 Peri_fish_full <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B + Avg.PlantCover + Avg.PeriphytonCover +
-                                    Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
+                                      Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
+#diagnostics
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
+plot(Peri_fish_sep)
+par(op)
 
+#Scaled Subset Model - no peri or plant cover
+#Separated by Group model
+Peri_fish_sep_sub <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
+                                                            Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
+
+#NOT Scaled Functional Group Subset Model (simplified interpretation)
+Peri_fish_full_sub <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B +
+                                      Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
+
+#ANOVA of NOT Scaled Models (Full and Sub)
+anova(Peri_fish_full,Peri_fish_full_sub)
+
+#ANOVA of Scaled Models (Full and Sub)
+anova(Peri_fish_sep,Peri_fish_sep_sub)
+
+
+#Scaled Full Model Coefficient Plot
 tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
     ## add "(Intercept)" to intercept terms
     %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
@@ -104,16 +125,6 @@ tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
     %>% mutate(across(term, ~reorder(factor(.), estimate)))
 )
 
-gg0 <- (ggplot(tt, aes(estimate, term))
-        + geom_pointrange(aes(xmin=conf.low, xmax=conf.high))
-        + geom_vline(xintercept=0, lty=2)
-)
-
-print(gg0 + facet_wrap(~Functional_Group, labeller=label_both))
-
-## or (this is more compact, and better if you want to compare guilds)
-
-library(colorspace)
 print(ggplot(tt, aes(estimate, term))
       + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,
                             colour=Functional_Group),
@@ -123,7 +134,44 @@ print(ggplot(tt, aes(estimate, term))
         theme_bw() + xlab("Coefficient estimate") + ylab("") + labs(color='Functional Group') 
 )
 
+#Scaled Full AND Subset Coefficient Plot
+tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
+       %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
+       %>% separate(term,into=c("Functional_Group","term"),sep=":")
+       %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
+       %>% mutate(across(term, rename_term))
+       %>% filter(term!="(Intercept)")  
+       %>% mutate(across(term, ~reorder(factor(.), estimate)))
+)
+
+tt$model <- "Model 1"
+
+tt2 <- (broom::tidy(Peri_fish_sep_sub, conf.int=TRUE)
+        %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
+        %>% separate(term,into=c("Functional_Group","term"),sep=":")
+        %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
+        %>% mutate(across(term, rename_term))
+        %>% filter(term!="(Intercept)")  
+        %>% mutate(across(term, ~reorder(factor(.), estimate)))
+)
+
+tt2$model <- "Model 2"
+
+mod_combine <- rbind(tt,tt2)
+
+gg0 <- (ggplot(mod_combine, aes(estimate, term,group=model))
+        + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,colour=factor(model)))
+        + geom_vline(xintercept=0, lty=2) +
+          theme_bw() + xlab("Coefficient estimate") + ylab("") +
+          theme(legend.title = element_blank())
+)
+
+#SUMMARY...selected model output
+
+
 ##ALL Fish Model
+
+#load-in and cleaning...
 Peri_all_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishRichness_1995to2005_Join.csv"))
 Peri_all_dat <- Peri_all_dat[,-c(1)]
 summary(Peri_all_dat)
@@ -138,12 +186,193 @@ Peri_all_dat_sub1$Area <- as.factor(Peri_all_dat_sub1$Area)
 Peri_all_dat_sub1$Month <- as.factor(Peri_all_dat_sub1$Month)
 Peri_all_dat_sub1$Year <- as.factor(Peri_all_dat_sub1$Year)
 
-#create full model
+#Scaled Full Model
 Fish_Peri_dat_scale <- Peri_all_dat_sub1 %>% mutate(across(where(is.numeric) & !logBiomass & !SpeciesRichness, ~drop(scale(.))))
-Peri_allfishfullmod <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
-                                  Turb + AvgWaterDepth + Avg.PeriphytonCover +
-                                  + Avg.PlantCover,Peri_all_dat_sub1)
+
 Peri_allfishfullmod_scale <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
                          Turb + AvgWaterDepth + Avg.PeriphytonCover +
                          + Avg.PlantCover,Fish_Peri_dat_scale)
+#diagnostics
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
+plot(Peri_allfishfullmod_scale)
+
+#NOT Scaled Full Model
+Peri_allfishfullmod <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
+                            Turb + AvgWaterDepth + Avg.PeriphytonCover +
+                            + Avg.PlantCover,Peri_all_dat_sub1)
+#diagnostics
 plot(Peri_allfishfullmod)
+par(op)
+
+#Scaled Subset Model - missing plant and peri cover
+Peri_allfishfullmod_scale_sub <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
+                                  Turb + AvgWaterDepth,Fish_Peri_dat_scale)
+
+#NOT Scaled Subset Model
+Peri_allfishfullmod_sub <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
+                            Turb + AvgWaterDepth,Peri_all_dat_sub1)
+
+#ANOVA of NOT Scaled Models (Full and Sub)
+anova(Peri_allfishfullmod,Peri_allfishfullmod_sub)
+
+#ANOVA of Scaled Models (Full and Sub)
+anova(Peri_allfishfullmod_scale,Peri_allfishfullmod_scale_sub)
+
+
+#Scaled Full Model Coefficient Plot
+tt <- (broom::tidy(Peri_allfishfullmod_scale, conf.int=TRUE)
+       ## add "(Intercept)" to intercept terms
+       %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
+       ## split into guild + environmental covariate
+       %>% separate(term,into=c("Functional_Group","term"),sep=":")
+       ## don't need prefix
+       %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
+       %>% mutate(across(term, rename_term))
+       ## generally not interested in intercept, and messes up axes
+       %>% filter(term!="(Intercept)")  
+       ## order terms by average estimate (across guilds)
+       ## (guilds differ slightly, but this still works pretty well)
+       %>% mutate(across(term, ~reorder(factor(.), estimate)))
+)
+
+print(ggplot(tt, aes(estimate, term))
+      + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,
+                            colour=Functional_Group),
+                        position=position_dodge(width=0.5))
+      + geom_vline(xintercept=0, lty=2)
+      + scale_color_discrete_qualitative() +
+        theme_bw() + xlab("Coefficient estimate") + ylab("") + labs(color='Functional Group') 
+)
+
+#Scaled Full AND Subset Coefficient Plot
+tt <- (broom::tidy(Peri_allfishfullmod_scale, conf.int=TRUE)
+       %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
+       %>% separate(term,into=c("Functional_Group","term"),sep=":")
+       %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
+       %>% mutate(across(term, rename_term))
+       %>% filter(term!="(Intercept)")  
+       %>% mutate(across(term, ~reorder(factor(.), estimate)))
+)
+
+tt$model <- "Model 1"
+
+tt2 <- (broom::tidy(Peri_allfishfullmod_scale_sub, conf.int=TRUE)
+        %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
+        %>% separate(term,into=c("Functional_Group","term"),sep=":")
+        %>% mutate(across(Functional_Group,~str_remove(.,"FunctionalGroup")))
+        %>% mutate(across(term, rename_term))
+        %>% filter(term!="(Intercept)")  
+        %>% mutate(across(term, ~reorder(factor(.), estimate)))
+)
+
+tt2$model <- "Model 2"
+
+mod_combine <- rbind(tt,tt2)
+
+gg0 <- (ggplot(mod_combine, aes(estimate, term,group=model))
+        + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,colour=factor(model)))
+        + geom_vline(xintercept=0, lty=2) +
+          theme_bw() + xlab("Coefficient estimate") + ylab("") +
+          theme(legend.title = element_blank())
+)
+
+#SUMMARY...selected model output
+
+
+#SPECIES RICHNESS MODEL
+
+#NOT Scaled Full Model
+SpRich_mod1 <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
+                     Turb + AvgWaterDepth + Avg.PeriphytonCover +
+                     + Avg.PlantCover,Peri_all_dat_sub1,family=poisson)
+#diagnostics
+op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
+plot(SpRich_mod1)
+
+#Scaled Full Model
+SpRich_mod_scale <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
+                          Turb + AvgWaterDepth + Avg.PeriphytonCover +
+                          + Avg.PlantCover, Fish_Peri_dat_scale,family=poisson)
+#diagnostics
+plot(SpRich_mod_scale)
+par(op)
+
+#NOT Scaled Subset Model
+SpRich_mod2 <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
+                     Turb + AvgWaterDepth,Peri_all_dat_sub1,family=poisson)
+
+#Scaled Subset Model
+SpRich_mod2_scale <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
+                           Turb + AvgWaterDepth, Fish_Peri_dat_scale,family=poisson)
+
+#NOT Scaled Full and Subset Model Coefficient plot
+ov3 <- names(sort(abs(coef(SpRich_mod1)),decreasing=TRUE))
+ov3
+
+dwplot(list(SpRich_mod1,SpRich_mod2)) %>%
+  relabel_predictors(c(DO_B = "Dissolved oxygen",
+                       ChlA = "Chlorophyll-a",
+                       Sal_B = "Salinity",
+                       Avg.PlantCover = "% Plant Cover",
+                       Turb = "Turbidity",
+                       Avg.PeriphytonCover = "% Periphyton Cover",
+                       Temp_B = "Temperature",
+                       AvgWaterDepth = "Water depth")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.background = element_rect(colour="white"),
+        legend.title = element_blank()) 
+
+#NOT Scaled Full MOdel Coefficient Plot
+dwplot(SpRich_mod1) %>%
+  relabel_predictors(c(DO_B = "Dissolved oxygen",
+                       ChlA = "Chlorophyll-a",
+                       Sal_B = "Salinity",
+                       Avg.PlantCover = "% Plant Cover",
+                       Turb = "Turbidity",
+                       Avg.PeriphytonCover = "% Periphyton Cover",
+                       Temp_B = "Temperature",
+                       AvgWaterDepth = "Water depth")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.position = "none") 
+
+#Scaled Full and Subset Model Coefficient plot
+ov3 <- names(sort(abs(coef(SpRich_mod_scale)),decreasing=TRUE))
+ov3
+
+dwplot(list(SpRich_mod_scale,SpRich_mod2_scale)) %>%
+  relabel_predictors(c(Sal_B = "Salinity",
+                       Avg.PeriphytonCover = "% Periphyton Cover",
+                       Avg.PlantCover = "% Plant Cover",
+                       ChlA = "Chlorophyll-a",
+                       AvgWaterDepth = "Water depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Temp_B = "Temperature")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.background = element_rect(colour="white"),
+        legend.title = element_blank()) 
+
+#Scaled Full Coefficient plot
+dwplot(SpRich_mod1) %>%
+  relabel_predictors(c(Sal_B = "Salinity",
+                       Avg.PeriphytonCover = "% Periphyton Cover",
+                       Avg.PlantCover = "% Plant Cover",
+                       ChlA = "Chlorophyll-a",
+                       AvgWaterDepth = "Water depth",
+                       DO_B = "Dissolved oxygen",
+                       Turb = "Turbidity",
+                       Temp_B = "Temperature")) +
+  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
+  geom_vline(xintercept=0,lty=2) + 
+  theme(legend.position = "none") 
+
+#NOT Scaled Full and Sub ANOVA
+anova(SpRich_mod1,SpRich_mod2)
+
+#Scaled Full and Sub ANOVA
+anova(SpRich_mod_scale,SpRich_mod2_scale)
+
+#SUMMARY...selected model output

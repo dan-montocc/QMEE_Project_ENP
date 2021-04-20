@@ -1,6 +1,7 @@
 ##Hypothesis 1
-####Take 2....
 
+####Take 2....
+#load-in libraries...
 library(here)
 library(ggplot2)
 library(tidyverse)
@@ -56,9 +57,6 @@ summary(all_fish$Month == "May")
 ##since study area is Florida, seasons are not as pronounced as they are in north
 boxplot(residuals(fullfishmod) ~ all_fish_sub1$Year) #no specific Year stands out
 
-##looks good
-summary(fullfishmod)
-
 #Scaled Full Model
 all_fish_scale <- all_fish_sub1 %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
 fullfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
@@ -69,13 +67,12 @@ op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(fullfishmod_scaled)
 par(op)
 
-summary(fullfishmod_scaled)
 
 #coefficient plot
 library(dotwhisker)
 library(broom)
 
-ov <- names(sort(coef(fullfishmod_scaled),decreasing=TRUE))
+ov <- names(sort(abs((coef(fullfishmod_scaled))),decreasing=TRUE))
 ov
 
 #Scaled Full Model Coefficient plot
@@ -95,7 +92,8 @@ dwplot(fullfishmod_scaled) %>%
 #scaled
 subfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_scale,
                         na.action=na.exclude)
-#NOT scaled
+
+#NOT scaled Sub Model
 subfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_sub1,
                  na.action=na.exclude)
 
@@ -134,7 +132,7 @@ dwplot(list(fullfishmod,subfishmod)) %>%
 #NOT scaled Subset and Full Model ANOVA
 anova(fullfishmod,subfishmod)
 
-
+#SUMMARY...selected model output 
 
 #THERMAL GUILD MODEL
 
@@ -166,8 +164,6 @@ fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub2)
 plot(fishthermmod)
 par(op)
-
-summary(fishthermmod)
 
 #creating faceted coefficient plot for thermal guild data
 ## BMB's code
@@ -236,6 +232,7 @@ print(ggplot(tt, aes(estimate, term))
       theme_bw() + xlab("Coefficient estimate") + ylab("") + labs(color='Thermal Guild') 
     )
 
+#SUMMARY..selected model output
 
 
 ##SPECIES RICHNESS MODEL
@@ -257,8 +254,6 @@ op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(SpRich_mod1)
 par(op)
 
-summary(SpRich_mod1)
-
 #Scaled Full Model
 Rich_fish_scale <- all_fish_sub2 %>% mutate(across(where(is.numeric) & !SpeciesRichness, ~drop(scale(.))))
 
@@ -268,8 +263,6 @@ SpRich_mod_scale <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
 op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
 plot(SpRich_mod_scale)
 par(op)
-
-summary(SpRich_mod_scale)
 
 #NOT Scaled Subset Model
 SpRich_mod2 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
@@ -343,3 +336,5 @@ anova(SpRich_mod1,SpRich_mod2)
 
 #Scaled Full and Sub ANOVA
 anova(SpRich_mod_scale,SpRich_mod2_scale)
+
+#SUMMARY...selected model output
