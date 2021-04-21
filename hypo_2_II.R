@@ -72,21 +72,21 @@ library(lattice)
 library(car)
 
 #set four by four plotting of diagnostics
-op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
+op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
 
-plot(Perifullmod)  ## fitted vs residual
+plot(Perifullmod, main = "Residuals vs Fitted")  ## fitted vs residual
 ## scale-location
 plot(Perifullmod, sqrt(abs(resid(.))) ~ fitted(.),
-     type=c("p","smooth"), col.line="red")
+     type=c("p","smooth"), col.line="red", main = "Scale-Location")
 ## Q-Q plots
-qqmath(Perifullmod)
+qqmath(Perifullmod, main = "Normal Q-Q")
 
 ##leverage plot
 #code from rdrr.io
 ##https://rdrr.io/cran/car/man/infIndexPlot.html
 
 infIndexPlot(Perifullmod, vars=c("Cook"),
-             id=TRUE, grid=FALSE, main="")
+             id=TRUE, grid=FALSE, main="Cook's Distance")
 par(op)
 
 #obs 87 and 94 may be outliers, remove and retry
@@ -97,7 +97,7 @@ Perifullmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
                     + Avg.PlantCover + (1|Year),data = Peri_dat_scale2)
 
 infIndexPlot(Perifullmod, vars=c("Cook"),
-             id=TRUE, grid=FALSE, main="")
+             id=TRUE, grid=FALSE, main="Cook's Distance")
 #shifts to new obs, leave old obs in, leverage not that high
 Perifullmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
                       TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth

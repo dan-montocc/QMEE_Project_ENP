@@ -101,3 +101,12 @@ We made the second (subset) model with all the same variable, except temperature
 Finally, we compared the two models using an ANOVA and found that temperature and DO had little effect on fish biomass. 
 
 _(Megan Ridgway)_
+
+
+__PCA Analysis of Thermal and Functional Groups__
+
+_April 21, 2021_
+
+To further understand which variables may be driving differences in the thermal guilds and functional groups of fish species, we ran PCA biplot analyses of these  two datasets. Similar to our regressions, cold thermal guild species seemed to differ from the other guilds, based on depth and DO. Interestingly however, functional group clustering completely overlapped, indicating that none of the selected active variables effected the functional groups in different amounts/degrees. This may be due to the fact that species were assigned to functional groups based on their __main__ food source; however, many species were quite non-preferential in their feeding habits, and therefore ate species outside of their "group".
+
+_(Danielle Montocchio)_

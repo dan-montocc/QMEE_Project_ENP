@@ -81,7 +81,7 @@ Peri_fish_sep <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA +
                                                             Avg.PlantCover + Avg.PeriphytonCover +
                                                             Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
 #diagnostics
-op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
+op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
 plot(Peri_fish_sep)
 par(op)
 
@@ -89,7 +89,7 @@ par(op)
 Peri_fish_full <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B + Avg.PlantCover + Avg.PeriphytonCover +
                                       Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
 #diagnostics
-op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
+op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
 plot(Peri_fish_sep)
 par(op)
 
@@ -193,15 +193,15 @@ Peri_allfishfullmod_scale <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
                          Turb + AvgWaterDepth + Avg.PeriphytonCover +
                          + Avg.PlantCover,Fish_Peri_dat_scale)
 #diagnostics
-op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
-plot(Peri_allfishfullmod_scale)
+op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
+plot(Peri_allfishfullmod_scale, sub.caption = "")
 
 #NOT Scaled Full Model
 Peri_allfishfullmod <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
                             Turb + AvgWaterDepth + Avg.PeriphytonCover +
                             + Avg.PlantCover,Peri_all_dat_sub1)
 #diagnostics
-plot(Peri_allfishfullmod)
+plot(Peri_allfishfullmod, sub.caption = "")
 par(op)
 
 #Scaled Subset Model - missing plant and peri cover
@@ -286,15 +286,15 @@ SpRich_mod1 <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
                      Turb + AvgWaterDepth + Avg.PeriphytonCover +
                      + Avg.PlantCover,Peri_all_dat_sub1,family=poisson)
 #diagnostics
-op <- par(mar=c(2,2,2,2),mfrow=c(2,2))
-plot(SpRich_mod1)
+op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
+plot(SpRich_mod1, sub.caption = "")
 
 #Scaled Full Model
 SpRich_mod_scale <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
                           Turb + AvgWaterDepth + Avg.PeriphytonCover +
                           + Avg.PlantCover, Fish_Peri_dat_scale,family=poisson)
 #diagnostics
-plot(SpRich_mod_scale)
+plot(SpRich_mod_scale, sub.caption = "")
 par(op)
 
 #NOT Scaled Subset Model
