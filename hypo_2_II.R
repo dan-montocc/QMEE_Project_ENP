@@ -8,6 +8,12 @@ library(corrplot)
 library(dotwhisker)
 library(broom)
 
+#aesthetics load-in
+library(extrafont)
+windowsFonts(A = windowsFont("Times New Roman"))
+library(ggsci)
+
+
 #load in data and clean
 Peri_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_2/ENP_Peri_WQ_1995to2005_Join.csv"))
 Peri_dat <- Peri_dat[,-c(1)]
@@ -26,12 +32,19 @@ summary(Peri_dat_sub1)
 #code referenced from STHDA.com
 ##http://www.sthda.com/english/wiki/correlation-matrix-an-r-function-to-do-all-you-need
 source("http://www.sthda.com/upload/rquery_cormat.r")
-Peri_ysub <- Peri_dat_sub1[,c("Avg.PeriphytonCover","AvgPeriphytonVolume")]
-rquery.cormat(Peri_ysub)
+
+par(family = "A")
 
 Peri_xsub <- Peri_dat_sub1[,c("TEMP_B","DO_B","SAL_B", 
                               "NO3", "CHLA","TURB","TN","DIN","TP","SRP",
                               "TOC","AvgWaterDepth","Avg.PlantCover")]
+names(Peri_xsub)[names(Peri_xsub) == "TEMP_B"] <- "Temperature"
+names(Peri_xsub)[names(Peri_xsub) == "DO_B"] <- "DO"
+names(Peri_xsub)[names(Peri_xsub) == "TURB"] <- "Turbidity"
+names(Peri_xsub)[names(Peri_xsub) == "CHLA"] <- "Chlorophyll-a"
+names(Peri_xsub)[names(Peri_xsub) == "SAL_B"] <- "Salinity"
+names(Peri_xsub)[names(Peri_xsub) == "AvgWaterDepth"] <- "Depth"
+names(Peri_xsub)[names(Peri_xsub) == "Avg.PlantCover"] <- "Plant_Cover"
 rquery.cormat(Peri_xsub)
 
 
@@ -43,10 +56,14 @@ Perifullmod <- lm(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
                     TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth
                   + Avg.PlantCover,Peri_dat_sub1)
 
-boxplot(residuals(Perifullmod) ~ Peri_dat_sub1$Area) #area does not seem to effect the residuals disproportionately 
-boxplot(residuals(Perifullmod) ~ Peri_dat_sub1$Month)#pattern in month?
+par(family = "A", cex = 1.2, mfrow=c(1,3), las = 2, mar=c(6,4.5,2,2))
+boxplot(residuals(Perifullmod) ~ Peri_dat_sub1$Area, col = c("#E64B35FF", "#4DBBD5FF"),
+        ylab = "Residuals(Periphyton Model)", xlab = "") #area does not seem to effect the residuals disproportionately 
+boxplot(residuals(Perifullmod) ~ Peri_dat_sub1$Month, col = "#91D1C2FF",
+        ylab = "", xlab = "")#pattern in month?
 #observation in each month is low
-boxplot(residuals(Perifullmod) ~ Peri_dat_sub1$Year)
+boxplot(residuals(Perifullmod) ~ Peri_dat_sub1$Year, col = "#91D1C2FF",
+        ylab = "", xlab = "")
 summary(Peri_dat_sub1$Year) #add Year to model as random effect
 
 #NOT Scaled Full Model with Random Effects
@@ -70,39 +87,47 @@ Perifullmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
 #BB coding
 library(lattice)
 library(car)
+library(ggpubr)
 
-#set four by four plotting of diagnostics
-op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
+#create dataset ggplot can rad
+#pieced together from multiple sources
+#https://rpubs.com/therimalaya/43190 (especially helpful)
+PerifullmodF <- fortify.merMod(Perifullmod)
 
-plot(Perifullmod, main = "Residuals vs Fitted")  ## fitted vs residual
-## scale-location
-plot(Perifullmod, sqrt(abs(resid(.))) ~ fitted(.),
-     type=c("p","smooth"), col.line="red", main = "Scale-Location")
-## Q-Q plots
-qqmath(Perifullmod, main = "Normal Q-Q")
+#residuals plot
+residp <- ggplot(PerifullmodF, aes(.fitted,.resid)) + geom_point(colour="black", shape = 1) +
+  geom_hline(yintercept=0, col="red") + theme_bw() +
+  theme(text=element_text(family="A", size=12)) + xlab("Predicted values") +
+  ylab("Residuals")
+
+#scale location plot
+scalep <- ggplot(PerifullmodF, aes(.fitted,sqrt(abs(.scresid)))) + geom_point(colour="black", shape = 1) +
+  geom_smooth(method="loess", col= "red", se = FALSE) + theme_bw() +
+  theme(text=element_text(family="A", size=12)) + xlab("Fitted values") +
+  ylab(bquote(sqrt("|Standardized residuals|")))
+
+#QQ
+qqp <- ggplot(PerifullmodF, aes(sample = .scresid)) + stat_qq(shape = 1) + stat_qq_line(linetype = 2, col="black") +
+  theme_bw() + theme(text=element_text(family="A", size=12)) + xlab("Theoretical quantiles") +
+  ylab("Standardized residuals")
 
 ##leverage plot
-#code from rdrr.io
-##https://rdrr.io/cran/car/man/infIndexPlot.html
+#code adapted from https://stackoverflow.com/questions/48962406/add-cooks-distance-levels-to-ggplot2
+PerifullmodF$.cooksd <- cooks.distance(Perifullmod)
+PerifullmodF$.hat <- hatvalues(Perifullmod)
+cd_cont_pos <- function(leverage, level, model) {sqrt(level*length(coef(model))*(1-leverage)/leverage)}
+cd_cont_neg <- function(leverage, level, model) {-cd_cont_pos(leverage, level, model)}
+leverp <- ggplot(PerifullmodF, aes(.hat, .scresid)) + geom_point(shape = 1, na.rm=TRUE) +
+  stat_smooth(method="loess", na.rm=TRUE, se = FALSE, col = "red") +
+  theme_bw() + theme(text=element_text(family="A", size=12)) + xlab("Leverage") +
+  ylab("Standardized residuals") + geom_hline(yintercept = 0, linetype = 2) +
+  stat_function(fun = cd_cont_pos, args = list(level = 0.5, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
+  stat_function(fun = cd_cont_neg, args = list(level = 0.5, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
+  stat_function(fun = cd_cont_pos, args = list(level = 1, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
+  stat_function(fun = cd_cont_neg, args = list(level = 1, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
+  scale_y_continuous(limits = c(-2.5, 2.5)) + xlim(min(PerifullmodF$.hat),max(PerifullmodF$.hat))
 
-infIndexPlot(Perifullmod, vars=c("Cook"),
-             id=TRUE, grid=FALSE, main="Cook's Distance")
-par(op)
-
-#obs 87 and 94 may be outliers, remove and retry
-Peri_dat_scale2 <- Peri_dat_scale[-c(87,94),]
-
-Perifullmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
-                      TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth
-                    + Avg.PlantCover + (1|Year),data = Peri_dat_scale2)
-
-infIndexPlot(Perifullmod, vars=c("Cook"),
-             id=TRUE, grid=FALSE, main="Cook's Distance")
-#shifts to new obs, leave old obs in, leverage not that high
-Perifullmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
-                      TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth
-                    + Avg.PlantCover + (1|Year),data = Peri_dat_scale)
-
+ggarrange(residp, scalep, qqp, leverp, ncol = 2, nrow = 2)
 
 #Scaled Subset Model - Plant cover, DO and SRP removed
 Perisubmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA +
@@ -122,31 +147,30 @@ rename_term <- function(x) {
          %>% str_replace("DO_B","Dissolved oxygen")
          %>% str_replace("TURB","Turbidity")
          %>% str_replace("SAL_B","Salinity")
-         %>% str_replace("CHLA","Chlorophyll-A")
-         %>% str_replace("AvgWaterDepth","Water depth")
+         %>% str_replace("CHLA","Chlorophyll-a")
+         %>% str_replace("AvgWaterDepth","Depth")
          %>% str_replace("Avg.PlantCover","% Plant Cover")
          %>% str_replace("TEMP_B","Temperature")
          )
 }
 
 tt <- (broom::tidy(Perifullmod, conf.int=TRUE)
-       %>% mutate(across(term, rename_term))
-       %>% filter(term!="(Intercept)") 
-       %>% filter(term!="sd__(Intercept)")
-       %>% filter(term!="sd__Observation")
-       %>% mutate(across(term, ~reorder(abs(factor(.), estimate))))
-         
+        %>% mutate(across(term, rename_term))
+        %>% filter(term!="(Intercept)")
+        %>% filter(term!="sd__(Intercept)")
+        %>% filter(term!="sd__Observation")
+        %>% mutate(across(term, ~reorder(factor(.), abs(estimate))))
 )
+
 
 tt$model <- "Model 1"
 
 tt2 <- (broom::tidy(Perisubmod, conf.int=TRUE)
         %>% mutate(across(term, rename_term))
         %>% filter(term!="(Intercept)")
-        %>% filter(term!="(Intercept)") 
         %>% filter(term!="sd__(Intercept)")
         %>% filter(term!="sd__Observation")
-        %>% mutate(across(term, ~reorder(factor(.), estimate)))
+        %>% mutate(across(term, ~reorder(factor(.), abs(estimate))))
 )
 
 
@@ -158,19 +182,24 @@ gg0 <- (ggplot(mod_combine, aes(estimate, term,group=model))
         + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,colour=factor(model)))
         + geom_vline(xintercept=0, lty=2) +
           theme_bw() + xlab("Coefficient estimate") + ylab("") +
-          theme(legend.title = element_blank())
+          theme(legend.title = element_blank()) +
+          theme(text=element_text(family="A", size=12)) +
+          scale_color_npg()
 )
 
 print(gg0)
 
 #Scaled Coefficient Plot (Full Model ONLY)
-gg0 <- (ggplot(tt, aes(estimate, term,group=model))
+gg0 <- (ggplot(tt, aes(estimate, term))
         + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,colour="indianred"))
         + geom_vline(xintercept=0, lty=2) +
           theme_bw() + xlab("Coefficient estimate") + ylab("") +
-          theme(legend.position = "none")
+          theme(legend.position = "none") +
+          theme(text=element_text(family="A", size=12)) +
+          scale_color_npg()
 )
 
 print(gg0)
 
 #SUMMARY...selected model output
+summary(Perifullmod)

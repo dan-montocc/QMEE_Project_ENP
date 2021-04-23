@@ -7,6 +7,11 @@ library(FactoMineR)
 library(factoextra)
 library(tidyverse)
 
+#aesthetics load-in
+library(extrafont)
+loadfonts(device="win")       #Register fonts for Windows bitmap output
+windowsFonts(A = windowsFont("Times New Roman"))
+
 #THERMAL GUILD
 #read in thermal guild data
 fish_therm <- read.csv("Joined_Cleaned_Data/Hypothesis_1/FishThermGuild_Join_WQ_1996to2005.csv")
@@ -51,7 +56,8 @@ fviz_pca_biplot(therm.pca,
                 col.ind = fish_therm_PCA_sub$ThermalGuild, palette = "npg", 
                 addEllipses = TRUE, label = "var",
                 col.var = "black", repel = TRUE,
-                legend.title = "Thermal Guild") 
+                legend.title = "Thermal Guild",
+                font.family = "A") 
 
 fviz_pca_biplot(therm.pca, 
                 # Individuals
@@ -65,7 +71,8 @@ fviz_pca_biplot(therm.pca,
                 gradient.cols = "Dark2",
                 arrowsize = 0.75,
                 labelsize = 5,
-                legend.title = list(fill = "Thermal Guild", color = "Contribution")
+                legend.title = list(fill = "Thermal Guild", color = "Contribution"),
+                font.family = "A", title = ""
 )
 
 #FUNCTIONAL GROUP
@@ -105,8 +112,8 @@ fviz_pca_ind(func.pca,
              col.ind = fish_func_PCA_sub$FunctionalGroup, # color by groups
              palette = "npg",
              addEllipses = TRUE, # Concentration ellipses
-             legend.title = "Functional Group"
-)
+             legend.title = "Functional Group", title = ""
+) + theme(text=element_text(family="A", size=12))
 
 
 fviz_pca_biplot(func.pca, 
@@ -116,10 +123,8 @@ fviz_pca_biplot(func.pca,
                 pointshape = 21, pointsize = 2,
                 palette = "npg",
                 addEllipses = TRUE,
-                # Variables
-                col.var = "contrib",
-                gradient.cols = "Dark2",
-                arrowsize = 0.75,
-                labelsize = 5,
-                legend.title = list(fill = "Functional Group", color = "Contribution")
+                arrowsize = NULL,
+                labelsize = NULL,
+                legend.title = "Functional Group",
+                font.family = "A", title = ""
 )
