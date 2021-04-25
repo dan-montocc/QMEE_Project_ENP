@@ -5,7 +5,6 @@ __Hypothesis 1__
 _Full Model (scaled) with all fish data_
 
 ```{r}
-
 Call:
 lm(formula = logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + 
     DO_B + Turb, data = all_fish_scale, na.action = na.exclude)
@@ -46,10 +45,38 @@ Model 2: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 
-_Thermal Guild separated Model_
+_Full Model (NOT scaled) with all fish data_
 
 ```{r}
+Call:
+lm(formula = logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + 
+    DO_B + Turb, data = all_fish_sub1, na.action = na.exclude)
 
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.93566 -0.13590  0.00273  0.19784  0.92413 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)  
+(Intercept) -1.052827   1.144031  -0.920   0.3602  
+Depth        0.624799   0.343769   1.817   0.0729 .
+NH4         -0.106421   0.042302  -2.516   0.0139 *
+ChlA        -0.059200   0.038080  -1.555   0.1240  
+Sal_B       -0.009440   0.007028  -1.343   0.1831  
+Temp_B      -0.009908   0.014331  -0.691   0.4914  
+DO_B         0.066180   0.042601   1.553   0.1243  
+Turb         0.013928   0.013579   1.026   0.3082  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3781 on 79 degrees of freedom
+Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071 
+F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06
+```
+
+_Thermal Guild (scaled) separated Model_
+
+```{r}
 Call:
 lm(formula = logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + 
     ChlA + Sal_B + Temp_B + DO_B + Turb):ThermalGuild, data = fish_therm_scale)
@@ -91,7 +118,53 @@ Residual standard error: 0.4274 on 223 degrees of freedom
 Multiple R-squared:  0.6496,	Adjusted R-squared:  0.6118 
 F-statistic: 17.22 on 24 and 223 DF,  p-value: < 2.2e-16
 ```
-_Species Richness Model_
+
+_Thermal Guild (NOT scaled) separated Model_
+
+```{r}
+Call:
+lm(formula = logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + 
+    ChlA + Sal_B + Temp_B + DO_B + Turb):ThermalGuild, data = fish_therm_sub2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.42308 -0.20607 -0.01632  0.23323  1.48606 
+
+Coefficients:
+                               Estimate Std. Error t value Pr(>|t|)   
+ThermalGuildcool             -2.3070008  1.3095736  -1.762  0.07950 . 
+ThermalGuildcool/warm        -2.4929589  1.3095736  -1.904  0.05824 . 
+ThermalGuildwarm             -1.1215892  1.3028287  -0.861  0.39022   
+ThermalGuildcool:Depth        0.3787574  0.3824957   0.990  0.32314   
+ThermalGuildcool/warm:Depth   0.8698164  0.3824957   2.274  0.02391 * 
+ThermalGuildwarm:Depth        0.6480856  0.3819556   1.697  0.09114 . 
+ThermalGuildcool:NH4         -0.0191065  0.0297705  -0.642  0.52167   
+ThermalGuildcool/warm:NH4    -0.0483242  0.0297705  -1.623  0.10595   
+ThermalGuildwarm:NH4         -0.0410402  0.0297458  -1.380  0.16906   
+ThermalGuildcool:ChlA        -0.0064498  0.0431471  -0.149  0.88131   
+ThermalGuildcool/warm:ChlA   -0.0325573  0.0431471  -0.755  0.45131   
+ThermalGuildwarm:ChlA         0.0120534  0.0428338   0.281  0.77866   
+ThermalGuildcool:Sal_B       -0.0047748  0.0080317  -0.594  0.55278   
+ThermalGuildcool/warm:Sal_B  -0.0022735  0.0080317  -0.283  0.77739   
+ThermalGuildwarm:Sal_B       -0.0169715  0.0080263  -2.114  0.03558 * 
+ThermalGuildcool:Temp_B       0.0074191  0.0167152   0.444  0.65758   
+ThermalGuildcool/warm:Temp_B -0.0139789  0.0167152  -0.836  0.40388   
+ThermalGuildwarm:Temp_B      -0.0321423  0.0167061  -1.924  0.05563 . 
+ThermalGuildcool:DO_B         0.1394820  0.0512293   2.723  0.00699 **
+ThermalGuildcool/warm:DO_B    0.0847227  0.0512293   1.654  0.09958 . 
+ThermalGuildwarm:DO_B         0.0781536  0.0499228   1.565  0.11889   
+ThermalGuildcool:Turb         0.0002443  0.0157326   0.016  0.98763   
+ThermalGuildcool/warm:Turb    0.0112491  0.0157326   0.715  0.47534   
+ThermalGuildwarm:Turb         0.0078429  0.0156186   0.502  0.61606   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4274 on 223 degrees of freedom
+Multiple R-squared:  0.6496,	Adjusted R-squared:  0.6118 
+F-statistic: 17.22 on 24 and 223 DF,  p-value: < 2.2e-16
+```
+
+_Species Richness (scaled) Model_
 
 ```{r}
 Call:
@@ -123,6 +196,40 @@ AIC: 484.75
 
 Number of Fisher Scoring iterations: 4
 ```
+
+_Species Richness (NOT scaled) Model_
+
+```{r}
+Call:
+glm(formula = SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B + 
+    DO_B + Temp_B + Turb, family = poisson, data = all_fish_sub2)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-4.6817  -0.4612   0.0930   0.6894   1.6574  
+
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.2962178  0.8070284   4.084 4.42e-05 ***
+Depth       -0.1922647  0.2444736  -0.786   0.4316    
+NH4          0.0009230  0.0299149   0.031   0.9754    
+ChlA        -0.0005773  0.0268672  -0.021   0.9829    
+Sal_B       -0.0129301  0.0050714  -2.550   0.0108 *  
+DO_B         0.0031180  0.0296853   0.105   0.9163    
+Temp_B       0.0009588  0.0100481   0.095   0.9240    
+Turb         0.0025901  0.0094676   0.274   0.7844    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 91.713  on 86  degrees of freedom
+Residual deviance: 81.927  on 79  degrees of freedom
+AIC: 484.75
+
+Number of Fisher Scoring iterations: 4
+```
+
 _ANOVA: Full model comparison with "key" variables of interest missing (species richness)_
 
 ```{r}
@@ -136,9 +243,10 @@ Model 2: SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B + Turb
 2        81     81.941 -2 -0.013273
 ```
 
+
 __Hypothesis 2__
 
-_Full model with Year as random effect_
+_Full model (scaled) with Year as random effect_
 
 ```{r}
 Linear mixed model fit by REML ['lmerMod']
@@ -176,6 +284,8 @@ AvgWaterDepth    0.5319     2.6294   0.202
 Avg.PlantCover  -2.8348     1.9365  -1.464
 ```
 
+Note: Not scaled not provided due to fit warning from lmer() function
+
 _ANOVA: Full and subset model comparison_
 
 ```{r}
@@ -193,7 +303,7 @@ Perifullmod   16 1073.3 1118.0 -520.66   1041.3 4.2016  2     0.1224
 
 __Hypothesis 3__
 
-_Full Model (biomass)_
+_Full Biomass Model (scaled)_
 
 ```{r}
 Call:
@@ -223,6 +333,36 @@ Multiple R-squared:  0.3727,	Adjusted R-squared:  0.304
 F-statistic: 5.422 on 8 and 73 DF,  p-value: 2.287e-05
 ```
 
+_Full Biomass Model (NOT scaled)_
+
+```{r}
+Call:
+lm(formula = logBiomass ~ Temp_B + DO_B + Sal_B + ChlA + Turb + 
+    AvgWaterDepth + Avg.PeriphytonCover + +Avg.PlantCover, data = Peri_all_dat_sub1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.78335 -0.22887 -0.02811  0.21931  1.05536 
+
+Coefficients:
+                      Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          0.7484636  0.5578512   1.342  0.18386    
+Temp_B              -0.0163409  0.0149606  -1.092  0.27831    
+DO_B                 0.0566548  0.0419346   1.351  0.18086    
+Sal_B               -0.0245082  0.0069885  -3.507  0.00078 ***
+ChlA                 0.0113108  0.0326403   0.347  0.72994    
+Turb                -0.0019975  0.0129364  -0.154  0.87772    
+AvgWaterDepth       -0.0079837  0.0037018  -2.157  0.03432 *  
+Avg.PeriphytonCover  0.0007753  0.0025379   0.306  0.76085    
+Avg.PlantCover       0.0122911  0.0056185   2.188  0.03190 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3816 on 73 degrees of freedom
+Multiple R-squared:  0.3727,	Adjusted R-squared:  0.304 
+F-statistic: 5.422 on 8 and 73 DF,  p-value: 2.287e-05
+```
+
 _ANOVA: Full and subset model comparison (biomass)_
 
 ```{r}
@@ -238,7 +378,7 @@ Model 2: logBiomass ~ Temp_B + DO_B + Sal_B + ChlA + Turb + AvgWaterDepth
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 
-_Functional Group Model_
+_Functional Group Model (scaled)_
 
 ```{r}
 Call:
@@ -314,7 +454,83 @@ Multiple R-squared:  0.8204,	Adjusted R-squared:  0.792
 F-statistic: 28.85 on 54 and 341 DF,  p-value: < 2.2e-16
 ```
 
-_Full Model (species richness)_
+_Functional Group Model (NOT scaled)_
+
+```{r}
+Call:
+lm(formula = logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + 
+    ChlA + Sal_B + Avg.PlantCover + Avg.PeriphytonCover + Temp_B + 
+    DO_B + Turb):FunctionalGroup, data = Peri_fish_dat_sub1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.55360 -0.25663 -0.00361  0.27194  2.23732 
+
+Coefficients:
+                                                 Estimate Std. Error t value Pr(>|t|)  
+FunctionalGroupalgivore                         0.1887696  0.7815435   0.242   0.8093  
+FunctionalGroupdetrivore                        0.9577593  0.9464476   1.012   0.3123  
+FunctionalGroupinvertivore                      0.0752843  0.7573364   0.099   0.9209  
+FunctionalGroupomnivore                        -0.8680538  0.7573364  -1.146   0.2525  
+FunctionalGrouppiscivore                        0.2078322  0.8766168   0.237   0.8127  
+FunctionalGroupplanktivore                     -2.2567308  1.3913406  -1.622   0.1057  
+FunctionalGroupalgivore:AvgWaterDepth          -0.0107539  0.0054320  -1.980   0.0485 *
+FunctionalGroupdetrivore:AvgWaterDepth         -0.0076352  0.0063045  -1.211   0.2267  
+FunctionalGroupinvertivore:AvgWaterDepth       -0.0086422  0.0050249  -1.720   0.0864 .
+FunctionalGroupomnivore:AvgWaterDepth          -0.0050350  0.0050249  -1.002   0.3170  
+FunctionalGrouppiscivore:AvgWaterDepth         -0.0002981  0.0058635  -0.051   0.9595  
+FunctionalGroupplanktivore:AvgWaterDepth       -0.0019702  0.0088907  -0.222   0.8248  
+FunctionalGroupalgivore:ChlA                    0.1141980  0.0461933   2.472   0.0139 *
+FunctionalGroupdetrivore:ChlA                  -0.0116199  0.0473970  -0.245   0.8065  
+FunctionalGroupinvertivore:ChlA                 0.0495843  0.0451860   1.097   0.2733  
+FunctionalGroupomnivore:ChlA                    0.0259927  0.0451860   0.575   0.5655  
+FunctionalGrouppiscivore:ChlA                  -0.0196154  0.0487432  -0.402   0.6876  
+FunctionalGroupplanktivore:ChlA                 0.0314230  0.1240773   0.253   0.8002  
+FunctionalGroupalgivore:Sal_B                  -0.0225269  0.0101958  -2.209   0.0278 *
+FunctionalGroupdetrivore:Sal_B                 -0.0264728  0.0109012  -2.428   0.0157 *
+FunctionalGroupinvertivore:Sal_B               -0.0192223  0.0094978  -2.024   0.0438 *
+FunctionalGroupomnivore:Sal_B                   0.0023592  0.0094978   0.248   0.8040  
+FunctionalGrouppiscivore:Sal_B                 -0.0147009  0.0127783  -1.150   0.2508  
+FunctionalGroupplanktivore:Sal_B               -0.0102695  0.0173337  -0.592   0.5539  
+FunctionalGroupalgivore:Avg.PlantCover          0.0061987  0.0081258   0.763   0.4461  
+FunctionalGroupdetrivore:Avg.PlantCover         0.0043812  0.0085197   0.514   0.6074  
+FunctionalGroupinvertivore:Avg.PlantCover       0.0103163  0.0078574   1.313   0.1901  
+FunctionalGroupomnivore:Avg.PlantCover          0.0088797  0.0078574   1.130   0.2592  
+FunctionalGrouppiscivore:Avg.PlantCover         0.0111912  0.0092910   1.205   0.2292  
+FunctionalGroupplanktivore:Avg.PlantCover       0.0051322  0.0139143   0.369   0.7125  
+FunctionalGroupalgivore:Avg.PeriphytonCover    -0.0044975  0.0036703  -1.225   0.2213  
+FunctionalGroupdetrivore:Avg.PeriphytonCover    0.0051712  0.0040645   1.272   0.2041  
+FunctionalGroupinvertivore:Avg.PeriphytonCover -0.0004867  0.0034403  -0.141   0.8876  
+FunctionalGroupomnivore:Avg.PeriphytonCover     0.0011450  0.0034403   0.333   0.7395  
+FunctionalGrouppiscivore:Avg.PeriphytonCover    0.0093753  0.0045002   2.083   0.0380 *
+FunctionalGroupplanktivore:Avg.PeriphytonCover  0.0080209  0.0063585   1.261   0.2080  
+FunctionalGroupalgivore:Temp_B                 -0.0193214  0.0213654  -0.904   0.3665  
+FunctionalGroupdetrivore:Temp_B                -0.0414975  0.0222774  -1.863   0.0634 .
+FunctionalGroupinvertivore:Temp_B              -0.0120306  0.0202926  -0.593   0.5537  
+FunctionalGroupomnivore:Temp_B                 -0.0274861  0.0202926  -1.354   0.1765  
+FunctionalGrouppiscivore:Temp_B                -0.0534373  0.0234496  -2.279   0.0233 *
+FunctionalGroupplanktivore:Temp_B              -0.0070899  0.0276954  -0.256   0.7981  
+FunctionalGroupalgivore:DO_B                   -0.0382316  0.0608535  -0.628   0.5303  
+FunctionalGroupdetrivore:DO_B                  -0.0404741  0.0725432  -0.558   0.5773  
+FunctionalGroupinvertivore:DO_B                 0.0972844  0.0587217   1.657   0.0985 .
+FunctionalGroupomnivore:DO_B                    0.0696123  0.0587217   1.185   0.2367  
+FunctionalGrouppiscivore:DO_B                   0.0133635  0.0615248   0.217   0.8282  
+FunctionalGroupplanktivore:DO_B                 0.1001957  0.0989443   1.013   0.3119  
+FunctionalGroupalgivore:Turb                   -0.0211746  0.0194090  -1.091   0.2761  
+FunctionalGroupdetrivore:Turb                   0.0317571  0.0189904   1.672   0.0954 .
+FunctionalGroupinvertivore:Turb                -0.0115192  0.0176957  -0.651   0.5155  
+FunctionalGroupomnivore:Turb                    0.0068056  0.0176957   0.385   0.7008  
+FunctionalGrouppiscivore:Turb                  -0.0273992  0.0199710  -1.372   0.1710  
+FunctionalGroupplanktivore:Turb                 0.0194172  0.0472947   0.411   0.6817  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.5172 on 341 degrees of freedom
+Multiple R-squared:  0.8204,	Adjusted R-squared:  0.792 
+F-statistic: 28.85 on 54 and 341 DF,  p-value: < 2.2e-16
+```
+
+_Full Species Richness Model (scaled)_
 
 ```{r}
 Call:
@@ -337,6 +553,41 @@ Turb                 0.022834   0.035412   0.645   0.5190
 AvgWaterDepth        0.032897   0.039436   0.834   0.4042    
 Avg.PeriphytonCover  0.067038   0.033799   1.983   0.0473 *  
 Avg.PlantCover       0.064406   0.032936   1.955   0.0505 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 88.043  on 81  degrees of freedom
+Residual deviance: 65.147  on 73  degrees of freedom
+AIC: 447
+
+Number of Fisher Scoring iterations: 4
+```
+
+_Full Species Richness Model (NOT scaled)_
+
+```{r}
+Call:
+glm(formula = SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA + 
+    Turb + AvgWaterDepth + Avg.PeriphytonCover + +Avg.PlantCover, 
+    family = poisson, data = Peri_all_dat_sub1)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-4.2602  -0.5423   0.0472   0.5906   1.4776  
+
+Coefficients:
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)          2.238657   0.394754   5.671 1.42e-08 ***
+Temp_B               0.002552   0.010384   0.246   0.8059    
+DO_B                 0.023221   0.029372   0.791   0.4292    
+Sal_B               -0.007853   0.004956  -1.585   0.1130    
+ChlA                -0.021855   0.022778  -0.959   0.3373    
+Turb                 0.005669   0.008791   0.645   0.5190    
+AvgWaterDepth        0.002212   0.002651   0.834   0.4042    
+Avg.PeriphytonCover  0.003548   0.001789   1.983   0.0473 *  
+Avg.PlantCover       0.007432   0.003801   1.955   0.0505 .  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 

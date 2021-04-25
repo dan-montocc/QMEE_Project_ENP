@@ -104,7 +104,7 @@ Peri_fish_sep_scale <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + 
                                                             Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
 #diagnostics
 op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
-plot(Peri_fish_sep, caption = "", family ="A", sub.caption = "")
+plot(Peri_fish_sep_scale, caption = "", family ="A", sub.caption = "")
 par(op)
 
 #NOT Scaled Functional Group Full Model (simplified interpretation)
@@ -112,11 +112,11 @@ Peri_fish_full <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B + Avg.PlantCove
                                       Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
 
 #NOT scaled full model (separated)
-Peri_fish_sep_scale <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
+Peri_fish_sep <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
                                                                   Avg.PlantCover + Avg.PeriphytonCover +
                                                                   Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_dat_sub1)
 #Scaled Full Model Coefficient Plot
-tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
+tt <- (broom::tidy(Peri_fish_sep_scale, conf.int=TRUE)
     ## add "(Intercept)" to intercept terms
     %>% mutate(across(term,~ifelse(grepl("ivore$",.),paste(.,"(Intercept)",sep=":"), .)))
     ## split into guild + environmental covariate

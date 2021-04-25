@@ -98,7 +98,7 @@ PerifullmodF <- fortify.merMod(Perifullmod_scaled)
 residp <- ggplot(PerifullmodF, aes(.fitted,.resid)) + geom_point(colour="black", shape = 1) +
   geom_hline(yintercept=0, col="red") + theme_bw() +
   theme(text=element_text(family="A", size=12)) + xlab("Predicted values") +
-  ylab("Residuals") theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  ylab("Residuals") + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                                        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 #scale location plot
 scalep <- ggplot(PerifullmodF, aes(.fitted,sqrt(abs(.scresid)))) + geom_point(colour="black", shape = 1) +
@@ -116,7 +116,7 @@ qqp <- ggplot(PerifullmodF, aes(sample = .scresid)) + stat_qq(shape = 1) + stat_
 ##leverage plot
 #code adapted from https://stackoverflow.com/questions/48962406/add-cooks-distance-levels-to-ggplot2
 PerifullmodF$.cooksd <- cooks.distance(Perifullmod_scaled)
-PerifullmodF$.hat <- hatvalues(Perifullmod)
+PerifullmodF$.hat <- hatvalues(Perifullmod_scaled)
 cd_cont_pos <- function(leverage, level, model) {sqrt(level*length(coef(model))*(1-leverage)/leverage)}
 cd_cont_neg <- function(leverage, level, model) {-cd_cont_pos(leverage, level, model)}
 leverp <- ggplot(PerifullmodF, aes(.hat, .scresid)) + geom_point(shape = 1, na.rm=TRUE) +
