@@ -475,6 +475,21 @@ Multiple R-squared:  0.3727,	Adjusted R-squared:  0.304
 F-statistic: 5.422 on 8 and 73 DF,  p-value: 2.287e-05
 ```
 
+_Coefficient estimates upper and lower bounds (NOT scaled)_
+
+```{r}
+                           2.5 %       97.5 %
+(Intercept)         -0.363332151  1.860259430
+Temp_B              -0.046157351  0.013475566
+DO_B                -0.026920712  0.140230366
+Sal_B               -0.038436246 -0.010580099
+ChlA                -0.053741292  0.076362930
+Turb                -0.027779602  0.023784690
+AvgWaterDepth       -0.015361298 -0.000606097
+Avg.PeriphytonCover -0.004282607  0.005833266
+Avg.PlantCover       0.001093419  0.023488831
+```
+
 _ANOVA: Full and subset model comparison (biomass)_
 
 ```{r}
@@ -642,6 +657,66 @@ Multiple R-squared:  0.8204,	Adjusted R-squared:  0.792
 F-statistic: 28.85 on 54 and 341 DF,  p-value: < 2.2e-16
 ```
 
+_Coefficient estimates upper and lower bounds (NOT scaled)_
+
+```{r}
+                                                       2.5 %        97.5 %
+FunctionalGroupalgivore                        -1.3484836622  1.726023e+00
+FunctionalGroupdetrivore                       -0.9038511849  2.819370e+00
+FunctionalGroupinvertivore                     -1.4143549103  1.564924e+00
+FunctionalGroupomnivore                        -2.3576929865  6.215854e-01
+FunctionalGrouppiscivore                       -1.5164249199  1.932089e+00
+FunctionalGroupplanktivore                     -4.9934213799  4.799597e-01
+FunctionalGroupalgivore:AvgWaterDepth          -0.0214382926 -6.954004e-05
+FunctionalGroupdetrivore:AvgWaterDepth         -0.0200357642  4.765358e-03
+FunctionalGroupinvertivore:AvgWaterDepth       -0.0185257848  1.241447e-03
+FunctionalGroupomnivore:AvgWaterDepth          -0.0149186330  4.848599e-03
+FunctionalGrouppiscivore:AvgWaterDepth         -0.0118312636  1.123498e-02
+FunctionalGroupplanktivore:AvgWaterDepth       -0.0194576443  1.551728e-02
+FunctionalGroupalgivore:ChlA                    0.0233382053  2.050577e-01
+FunctionalGroupdetrivore:ChlA                  -0.1048472427  8.160753e-02
+FunctionalGroupinvertivore:ChlA                -0.0392941560  1.384627e-01
+FunctionalGroupomnivore:ChlA                   -0.0628857455  1.148712e-01
+FunctionalGrouppiscivore:ChlA                  -0.1154906090  7.625975e-02
+FunctionalGroupplanktivore:ChlA                -0.2126302823  2.754764e-01
+FunctionalGroupalgivore:Sal_B                  -0.0425815170 -2.472209e-03
+FunctionalGroupdetrivore:Sal_B                 -0.0479148870 -5.030799e-03
+FunctionalGroupinvertivore:Sal_B               -0.0379040134 -5.406672e-04
+FunctionalGroupomnivore:Sal_B                  -0.0163224415  2.104090e-02
+FunctionalGrouppiscivore:Sal_B                 -0.0398351250  1.043333e-02
+FunctionalGroupplanktivore:Sal_B               -0.0443639532  2.382505e-02
+FunctionalGroupalgivore:Avg.PlantCover         -0.0097842844  2.218173e-02
+FunctionalGroupdetrivore:Avg.PlantCover        -0.0123765787  2.113900e-02
+FunctionalGroupinvertivore:Avg.PlantCover      -0.0051388171  2.577149e-02
+FunctionalGroupomnivore:Avg.PlantCover         -0.0065754260  2.433488e-02
+FunctionalGrouppiscivore:Avg.PlantCover        -0.0070837454  2.946612e-02
+FunctionalGroupplanktivore:Avg.PlantCover      -0.0222364176  3.250083e-02
+FunctionalGroupalgivore:Avg.PeriphytonCover    -0.0117167060  2.721732e-03
+FunctionalGroupdetrivore:Avg.PeriphytonCover   -0.0028234031  1.316588e-02
+FunctionalGroupinvertivore:Avg.PeriphytonCover -0.0072536199  6.280166e-03
+FunctionalGroupomnivore:Avg.PeriphytonCover    -0.0056218904  7.911896e-03
+FunctionalGrouppiscivore:Avg.PeriphytonCover    0.0005235959  1.822694e-02
+FunctionalGroupplanktivore:Avg.PeriphytonCover -0.0044858127  2.052764e-02
+FunctionalGroupalgivore:Temp_B                 -0.0613459892  2.270312e-02
+FunctionalGroupdetrivore:Temp_B                -0.0853159708  2.321041e-03
+FunctionalGroupinvertivore:Temp_B              -0.0519449987  2.788380e-02
+FunctionalGroupomnivore:Temp_B                 -0.0674004981  1.242830e-02
+FunctionalGrouppiscivore:Temp_B                -0.0995613565 -7.313182e-03
+FunctionalGroupplanktivore:Temp_B              -0.0615653557  4.738550e-02
+FunctionalGroupalgivore:DO_B                   -0.1579270852  8.146392e-02
+FunctionalGroupdetrivore:DO_B                  -0.1831625478  1.022143e-01
+FunctionalGroupinvertivore:DO_B                -0.0182178436  2.127867e-01
+FunctionalGroupomnivore:DO_B                   -0.0458900283  1.851145e-01
+FunctionalGrouppiscivore:DO_B                  -0.1076523653  1.343794e-01
+FunctionalGroupplanktivore:DO_B                -0.0944221973  2.948137e-01
+FunctionalGroupalgivore:Turb                   -0.0593511190  1.700187e-02
+FunctionalGroupdetrivore:Turb                  -0.0055959672  6.911012e-02
+FunctionalGroupinvertivore:Turb                -0.0463256074  2.328719e-02
+FunctionalGroupomnivore:Turb                   -0.0280008064  4.161199e-02
+FunctionalGrouppiscivore:Turb                  -0.0666809416  1.188260e-02
+FunctionalGroupplanktivore:Turb                -0.0736088141  1.124433e-01
+```
+
 _Full Species Richness Model (scaled)_
 
 ```{r}
@@ -710,6 +785,21 @@ Residual deviance: 65.147  on 73  degrees of freedom
 AIC: 447
 
 Number of Fisher Scoring iterations: 4
+```
+
+_Coefficient estimates upper and lower bounds_
+
+```{r}
+                            2.5 %      97.5 %
+(Intercept)          1.463505e+00 3.011055006
+Temp_B              -1.784614e-02 0.022863761
+DO_B                -3.422511e-02 0.080929134
+Sal_B               -1.760029e-02 0.001828097
+ChlA                -6.731313e-02 0.022064052
+Turb                -1.195473e-02 0.022519712
+AvgWaterDepth       -2.973978e-03 0.007419798
+Avg.PeriphytonCover  3.784548e-05 0.007049896
+Avg.PlantCover      -1.002714e-04 0.014798214
 ```
 
 _ANOVA: Full and sub comparison (species richness)_

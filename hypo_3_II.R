@@ -144,6 +144,7 @@ print(ggplot(tt, aes(estimate, term))
 #SUMMARY...selected model output
 summary(Peri_fish_sep_scale)
 summary(Peri_fish_sep)
+confint(Peri_fish_sep)
 
 
 ##ALL Fish Model
@@ -226,6 +227,7 @@ dwplot(list(Peri_allfishfullmod_scale,Peri_allfishfullmod_scale_sub)) %>%
 #SUMMARY...selected model output
 summary(Peri_allfishfullmod_scale)
 summary(Peri_allfishfullmod)
+confint(Peri_allfishfullmod)
 
 #SPECIES RICHNESS MODEL
 
@@ -290,3 +292,4 @@ anova(SpRich_mod_scale,SpRich_mod2_scale)
 #SUMMARY...selected model output
 summary(SpRich_mod_scale)
 summary(SpRich_mod1)
+confint(SpRich_mod1)
