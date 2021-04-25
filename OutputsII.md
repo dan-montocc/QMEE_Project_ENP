@@ -31,20 +31,6 @@ Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071
 F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06
 ```
 
-_ANOVA: Full model comparison with "key" variables of interest missing (biomass)_
-
-```{r}
-Analysis of Variance Table
-
-Model 1: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + DO_B + Turb
-Model 2: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb
-  Res.Df    RSS Df Sum of Sq      F  Pr(>F)  
-1     79 11.293                              
-2     81 12.070 -2  -0.77729 2.7188 0.07213 .
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-```
-
 _Full Model (NOT scaled) with all fish data_
 
 ```{r}
@@ -72,6 +58,33 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Residual standard error: 0.3781 on 79 degrees of freedom
 Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071 
 F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06
+```
+
+_Coefficient estimates upper and lower bounds (NOT scaled)_
+
+```{r}
+                  2.5 %       97.5 %
+(Intercept) -3.32996328  1.224309144
+Depth       -0.05945600  1.309054427
+NH4         -0.19062053 -0.022221526
+ChlA        -0.13499586  0.016596120
+Sal_B       -0.02342956  0.004550191
+Temp_B      -0.03843388  0.018617446
+DO_B        -0.01861560  0.150975597
+Turb        -0.01310039  0.040956766
+```
+_ANOVA: Full model comparison with "key" variables of interest missing (biomass)_
+
+```{r}
+Analysis of Variance Table
+
+Model 1: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + DO_B + Turb
+Model 2: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb
+  Res.Df    RSS Df Sum of Sq      F  Pr(>F)  
+1     79 11.293                              
+2     81 12.070 -2  -0.77729 2.7188 0.07213 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 
 _Thermal Guild (scaled) separated Model_
@@ -164,6 +177,36 @@ Multiple R-squared:  0.6496,	Adjusted R-squared:  0.6118
 F-statistic: 17.22 on 24 and 223 DF,  p-value: < 2.2e-16
 ```
 
+_Coefficient estimates upper and lower bounds (NOT scaled)_
+
+```{r}
+                                   2.5 %        97.5 %
+ThermalGuildcool             -4.88772370  0.2737221751
+ThermalGuildcool/warm        -5.07368187  0.0877640019
+ThermalGuildwarm             -3.68902034  1.4458418734
+ThermalGuildcool:Depth       -0.37501129  1.1325260611
+ThermalGuildcool/warm:Depth   0.11604774  1.6235850919
+ThermalGuildwarm:Depth       -0.10461863  1.4007899093
+ThermalGuildcool:NH4         -0.07777396  0.0395609806
+ThermalGuildcool/warm:NH4    -0.10699163  0.0103433054
+ThermalGuildwarm:NH4         -0.09965908  0.0175785804
+ThermalGuildcool:ChlA        -0.09147809  0.0785784392
+ThermalGuildcool/warm:ChlA   -0.11758554  0.0524709823
+ThermalGuildwarm:ChlA        -0.07235738  0.0964641963
+ThermalGuildcool:Sal_B       -0.02060248  0.0110528828
+ThermalGuildcool/warm:Sal_B  -0.01810116  0.0135541974
+ThermalGuildwarm:Sal_B       -0.03278858 -0.0011543843
+ThermalGuildcool:Temp_B      -0.02552094  0.0403590640
+ThermalGuildcool/warm:Temp_B -0.04691891  0.0189610995
+ThermalGuildwarm:Temp_B      -0.06506436  0.0007797086
+ThermalGuildcool:DO_B         0.03852646  0.2404376004
+ThermalGuildcool/warm:DO_B   -0.01623289  0.1856782443
+ThermalGuildwarm:DO_B        -0.02022725  0.1765345055
+ThermalGuildcool:Turb        -0.03075925  0.0312477605
+ThermalGuildcool/warm:Turb   -0.01975439  0.0422526243
+ThermalGuildwarm:Turb        -0.02293600  0.0386218618
+```
+
 _Species Richness (scaled) Model_
 
 ```{r}
@@ -228,6 +271,21 @@ Residual deviance: 81.927  on 79  degrees of freedom
 AIC: 484.75
 
 Number of Fisher Scoring iterations: 4
+```
+
+_Coefficient estimates upper and lower bounds (NOT scaled)_
+
+```{r}
+                            2.5 %      97.5 %
+(Intercept)          1.463505e+00 3.011055006
+Temp_B              -1.784614e-02 0.022863761
+DO_B                -3.422511e-02 0.080929134
+Sal_B               -1.760029e-02 0.001828097
+ChlA                -6.731313e-02 0.022064052
+Turb                -1.195473e-02 0.022519712
+AvgWaterDepth       -2.973978e-03 0.007419798
+Avg.PeriphytonCover  3.784548e-05 0.007049896
+Avg.PlantCover      -1.002714e-04 0.014798214
 ```
 
 _ANOVA: Full model comparison with "key" variables of interest missing (species richness)_
