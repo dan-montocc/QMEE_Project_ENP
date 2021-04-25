@@ -241,7 +241,7 @@ plot(SpRich_mod1, sub.caption = "", caption = "")
 
 par(family = "A", cex = 1.2, mfrow=c(1,3), las = 2)
 boxplot(residuals(SpRich_mod1) ~ Peri_all_dat_sub1$Area, col = c("#E64B35FF", "#4DBBD5FF"),
-        ylab = "Residuals(All Fish Model)", xlab = "") #area does not seem to affect the residuals disproportionately 
+        ylab = "Residuals(Species Richness Model)", xlab = "") #area does not seem to affect the residuals disproportionately 
 boxplot(residuals(SpRich_mod1) ~ Peri_all_dat_sub1$Month, col = "#91D1C2FF",
         ylab = "", xlab = "")#March different
 summary(all_fish$Month == "March")# only one obs 
