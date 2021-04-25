@@ -381,6 +381,38 @@ AvgWaterDepth  -4.36782531  5.4181972
 Avg.PlantCover -6.44842950  0.8466749
 ```
 
+_nlme Package Summary Output_
+
+```{r}
+Linear mixed-effects model fit by REML
+  Data: Peri_dat_scale 
+       AIC      BIC    logLik
+  1027.026 1069.792 -497.5132
+
+Random effects:
+ Formula: ~1 | Year
+        (Intercept) Residual
+StdDev:    12.71405 17.52827
+
+Fixed effects:  Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA + TURB + TN +      DIN + TP + SRP + TOC + AvgWaterDepth + Avg.PlantCover + DO_B 
+                  Value Std.Error DF   t-value p-value
+(Intercept)    43.16600  4.342720 98  9.939853  0.0000
+TEMP_B          0.87369  2.158098 98  0.404845  0.6865
+SAL_B           5.51553  3.578983 98  1.541089  0.1265
+NO3             1.25215  2.730247 98  0.458620  0.6475
+CHLA           -3.40045  2.320869 98 -1.465164  0.1461
+TURB           -4.26391  2.339725 98 -1.822398  0.0714
+TN              4.07613  2.428936 98  1.678156  0.0965
+DIN            -2.76231  2.573017 98 -1.073567  0.2857
+TP              1.46787  2.046106 98  0.717398  0.4748
+SRP             3.71117  2.026957 98  1.830908  0.0702
+TOC            -0.44698  3.365420 98 -0.132816  0.8946
+AvgWaterDepth   0.53188  2.629422 98  0.202279  0.8401
+Avg.PlantCover -2.83478  1.936519 98 -1.463854  0.1464
+DO_B            2.95358  2.064254 98  1.430823  0.1557
+```
+
+
 __Hypothesis 3__
 
 _Full Biomass Model (scaled)_

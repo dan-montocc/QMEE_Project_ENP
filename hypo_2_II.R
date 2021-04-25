@@ -205,6 +205,11 @@ gg0 <- (ggplot(tt, aes(estimate, term))
 print(gg0)
 
 #SUMMARY...selected model output
-summary(Perifullmod)
+library(nlme)
+Peri_lmemod <- lme(Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA +
+                     TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth + Avg.PlantCover + DO_B,
+                   random = ~1|Year,data = Peri_dat_scale)
+anova(Peri_lmemod)
+summary(Peri_lmemod)
 summary(Perifullmod_scaled)
 confint.merMod(Perifullmod_scaled)
