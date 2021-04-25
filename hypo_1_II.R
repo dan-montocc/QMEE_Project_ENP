@@ -252,6 +252,18 @@ op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
 plot(SpRich_mod1, sub.caption = "")
 par(op)
 
+
+par(family = "A", cex = 1.2, mfrow=c(1,3), las = 2)
+boxplot(residuals(SpRich_mod1) ~ all_fish_sub2$Area, col = c("#E64B35FF", "#4DBBD5FF"),
+        ylab = "Residuals(All Fish Model)", xlab = "") #area does not seem to affect the residuals disproportionately 
+boxplot(residuals(SpRich_mod1) ~ all_fish_sub2$Month, col = "#91D1C2FF",
+        ylab = "", xlab = "")#March different
+summary(all_fish$Month == "March")# only one obs 
+summary(all_fish$Month == "May")
+##since study area is Florida, seasons are not as pronounced as they are in north
+boxplot(residuals(SpRich_mod1) ~ all_fish_sub2$Year, col = "#91D1C2FF",
+        ylab = "", xlab = "") #no specific Year stands out
+
 #Scaled Full Model
 Rich_fish_scale <- all_fish_sub2 %>% mutate(across(where(is.numeric) & !SpeciesRichness, ~drop(scale(.))))
 
