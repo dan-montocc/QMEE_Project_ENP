@@ -293,3 +293,4 @@ anova(SpRich_mod_scale,SpRich_mod2_scale)
 summary(SpRich_mod_scale)
 summary(SpRich_mod1)
 confint(SpRich_mod1)
+with(summary(SpRich_mod1), 1 - deviance/null.deviance) #McFadden's pseudo r-squared

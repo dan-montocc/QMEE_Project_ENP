@@ -271,21 +271,21 @@ Residual deviance: 81.927  on 79  degrees of freedom
 AIC: 484.75
 
 Number of Fisher Scoring iterations: 4
+
 ```
 
 _Coefficient estimates upper and lower bounds (NOT scaled)_
 
 ```{r}
-                            2.5 %      97.5 %
-(Intercept)          1.463505e+00 3.011055006
-Temp_B              -1.784614e-02 0.022863761
-DO_B                -3.422511e-02 0.080929134
-Sal_B               -1.760029e-02 0.001828097
-ChlA                -6.731313e-02 0.022064052
-Turb                -1.195473e-02 0.022519712
-AvgWaterDepth       -2.973978e-03 0.007419798
-Avg.PeriphytonCover  3.784548e-05 0.007049896
-Avg.PlantCover      -1.002714e-04 0.014798214
+                  2.5 %       97.5 %
+(Intercept)  1.71197514  4.875798970
+Depth       -0.67207221  0.286371624
+NH4         -0.05806973  0.059216153
+ChlA        -0.05407322  0.051328525
+Sal_B       -0.02293355 -0.003050598
+DO_B        -0.05504497  0.061343506
+Temp_B      -0.01876354  0.020628790
+Turb        -0.01641241  0.020725373
 ```
 
 _ANOVA: Full model comparison with "key" variables of interest missing (species richness)_
