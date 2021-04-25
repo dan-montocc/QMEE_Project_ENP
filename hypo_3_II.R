@@ -99,7 +99,7 @@ rename_term <- function(x) {
 Peri_fish_scale <- Peri_fish_dat_sub1 %>% mutate(across(where(is.numeric) & !logBiomass, ~drop(scale(.))))
 
 #Separated by Group model
-Peri_fish_sep <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
+Peri_fish_sep_scale <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
                                                             Avg.PlantCover + Avg.PeriphytonCover +
                                                             Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_scale)
 #diagnostics
@@ -111,6 +111,10 @@ par(op)
 Peri_fish_full <- lm (logBiomass ~ (AvgWaterDepth + ChlA + Sal_B + Avg.PlantCover + Avg.PeriphytonCover +
                                       Temp_B + DO_B + Turb)*FunctionalGroup, Peri_fish_dat_sub1)
 
+#NOT scaled full model (separated)
+Peri_fish_sep_scale <- lm (logBiomass ~ -1 + FunctionalGroup + (AvgWaterDepth + ChlA + Sal_B +
+                                                                  Avg.PlantCover + Avg.PeriphytonCover +
+                                                                  Temp_B + DO_B + Turb):FunctionalGroup, Peri_fish_dat_sub1)
 #Scaled Full Model Coefficient Plot
 tt <- (broom::tidy(Peri_fish_sep, conf.int=TRUE)
     ## add "(Intercept)" to intercept terms
@@ -138,6 +142,7 @@ print(ggplot(tt, aes(estimate, term))
 )
 
 #SUMMARY...selected model output
+summary(Peri_fish_sep_scale)
 summary(Peri_fish_sep)
 
 
@@ -180,13 +185,6 @@ par(op)
 Peri_allfishfullmod_scale_sub <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
                                   Turb + AvgWaterDepth,Fish_Peri_dat_scale)
 
-#NOT Scaled Subset Model
-Peri_allfishfullmod_sub <- lm(logBiomass ~ Temp_B + DO_B + Sal_B + ChlA +
-                            Turb + AvgWaterDepth,Peri_all_dat_sub1)
-
-#ANOVA of NOT Scaled Models (Full and Sub)
-anova(Peri_allfishfullmod,Peri_allfishfullmod_sub)
-
 #ANOVA of Scaled Models (Full and Sub)
 anova(Peri_allfishfullmod_scale,Peri_allfishfullmod_scale_sub)
 
@@ -227,6 +225,7 @@ dwplot(list(Peri_allfishfullmod_scale,Peri_allfishfullmod_scale_sub)) %>%
   scale_color_npg()
 #SUMMARY...selected model output
 summary(Peri_allfishfullmod_scale)
+summary(Peri_allfishfullmod)
 
 #SPECIES RICHNESS MODEL
 
@@ -246,45 +245,10 @@ SpRich_mod_scale <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
 plot(SpRich_mod_scale, sub.caption = "", caption = "")
 par(op)
 
-#NOT Scaled Subset Model
-SpRich_mod2 <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
-                     Turb + AvgWaterDepth,Peri_all_dat_sub1,family=poisson)
-
 #Scaled Subset Model
 SpRich_mod2_scale <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
                            Turb + AvgWaterDepth, Fish_Peri_dat_scale,family=poisson)
 
-#NOT Scaled Full and Subset Model Coefficient plot
-ov3 <- names(sort(abs(coef(SpRich_mod1)),decreasing=TRUE))
-ov3
-
-dwplot(list(SpRich_mod1,SpRich_mod2)) %>%
-  relabel_predictors(c(DO_B = "Dissolved oxygen",
-                       ChlA = "Chlorophyll-a",
-                       Sal_B = "Salinity",
-                       Avg.PlantCover = "% Plant Cover",
-                       Turb = "Turbidity",
-                       Avg.PeriphytonCover = "% Periphyton Cover",
-                       Temp_B = "Temperature",
-                       AvgWaterDepth = "Water depth")) +
-  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
-  geom_vline(xintercept=0,lty=2) + 
-  theme(legend.background = element_rect(colour="white"),
-        legend.title = element_blank()) 
-
-#NOT Scaled Full MOdel Coefficient Plot
-dwplot(SpRich_mod1) %>%
-  relabel_predictors(c(DO_B = "Dissolved oxygen",
-                       ChlA = "Chlorophyll-a",
-                       Sal_B = "Salinity",
-                       Avg.PlantCover = "% Plant Cover",
-                       Turb = "Turbidity",
-                       Avg.PeriphytonCover = "% Periphyton Cover",
-                       Temp_B = "Temperature",
-                       AvgWaterDepth = "Water depth")) +
-  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
-  geom_vline(xintercept=0,lty=2) + 
-  theme(legend.position = "none") 
 
 #Scaled Full and Subset Model Coefficient plot
 ov3 <- names(sort(abs(coef(SpRich_mod_scale)),decreasing=TRUE))
@@ -320,11 +284,9 @@ dwplot(SpRich_mod_scale) %>%
   theme(legend.position = "none") + theme(text=element_text(family="A", size=12)) +
   scale_color_npg()
 
-#NOT Scaled Full and Sub ANOVA
-anova(SpRich_mod1,SpRich_mod2)
-
 #Scaled Full and Sub ANOVA
 anova(SpRich_mod_scale,SpRich_mod2_scale)
 
 #SUMMARY...selected model output
 summary(SpRich_mod_scale)
+summary(SpRich_mod1)

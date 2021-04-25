@@ -78,7 +78,7 @@ Peri_dat_scale <- Peri_dat_sub1 %>% mutate(across(where(is.numeric) & !Avg.Perip
 
 #Scaled Full Model
 #try again to see if warning is resolved
-Perifullmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
+Perifullmod_scaled <- lmer(Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA +
                       TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth
                     + Avg.PlantCover + (1|Year),data = Peri_dat_scale)
 
@@ -89,31 +89,33 @@ library(lattice)
 library(car)
 library(ggpubr)
 
-#create dataset ggplot can rad
+#create dataset ggplot can read
 #pieced together from multiple sources
 #https://rpubs.com/therimalaya/43190 (especially helpful)
-PerifullmodF <- fortify.merMod(Perifullmod)
+PerifullmodF <- fortify.merMod(Perifullmod_scaled)
 
 #residuals plot
 residp <- ggplot(PerifullmodF, aes(.fitted,.resid)) + geom_point(colour="black", shape = 1) +
   geom_hline(yintercept=0, col="red") + theme_bw() +
   theme(text=element_text(family="A", size=12)) + xlab("Predicted values") +
-  ylab("Residuals")
-
+  ylab("Residuals") theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 #scale location plot
 scalep <- ggplot(PerifullmodF, aes(.fitted,sqrt(abs(.scresid)))) + geom_point(colour="black", shape = 1) +
   geom_smooth(method="loess", col= "red", se = FALSE) + theme_bw() +
   theme(text=element_text(family="A", size=12)) + xlab("Fitted values") +
-  ylab(bquote(sqrt("|Standardized residuals|")))
+  ylab(bquote(sqrt("|Standardized residuals|"))) + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                                                           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 #QQ
 qqp <- ggplot(PerifullmodF, aes(sample = .scresid)) + stat_qq(shape = 1) + stat_qq_line(linetype = 2, col="black") +
   theme_bw() + theme(text=element_text(family="A", size=12)) + xlab("Theoretical quantiles") +
-  ylab("Standardized residuals")
+  ylab("Standardized residuals") + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                                         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 ##leverage plot
 #code adapted from https://stackoverflow.com/questions/48962406/add-cooks-distance-levels-to-ggplot2
-PerifullmodF$.cooksd <- cooks.distance(Perifullmod)
+PerifullmodF$.cooksd <- cooks.distance(Perifullmod_scaled)
 PerifullmodF$.hat <- hatvalues(Perifullmod)
 cd_cont_pos <- function(leverage, level, model) {sqrt(level*length(coef(model))*(1-leverage)/leverage)}
 cd_cont_neg <- function(leverage, level, model) {-cd_cont_pos(leverage, level, model)}
@@ -125,7 +127,8 @@ leverp <- ggplot(PerifullmodF, aes(.hat, .scresid)) + geom_point(shape = 1, na.r
   stat_function(fun = cd_cont_neg, args = list(level = 0.5, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
   stat_function(fun = cd_cont_pos, args = list(level = 1, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
   stat_function(fun = cd_cont_neg, args = list(level = 1, model = Perifullmod), xlim = c(min(PerifullmodF$.hat),max(PerifullmodF$.hat)), lty = 2, colour = "red") +
-  scale_y_continuous(limits = c(-2.5, 2.5)) + xlim(min(PerifullmodF$.hat),max(PerifullmodF$.hat))
+  scale_y_continuous(limits = c(-2.5, 2.5)) + xlim(min(PerifullmodF$.hat),max(PerifullmodF$.hat)) + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                                                                                                         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 ggarrange(residp, scalep, qqp, leverp, ncol = 2, nrow = 2)
 
@@ -135,7 +138,7 @@ Perisubmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA +
                    + (1|Year),data = Peri_dat_scale)
 
 #ANOVA of Scaled Full and Subset Models
-anova(Perifullmod,Perisubmod)
+anova(Perifullmod_scaled,Perisubmod)
 
 #Scaled Coefficient Plot (Full and Subset)
 
@@ -203,3 +206,4 @@ print(gg0)
 
 #SUMMARY...selected model output
 summary(Perifullmod)
+summary(Perifullmod_scaled)

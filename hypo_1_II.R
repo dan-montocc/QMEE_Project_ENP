@@ -113,10 +113,6 @@ dwplot(fullfishmod_scaled) %>%
 subfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_scale,
                         na.action=na.exclude)
 
-#NOT scaled Sub Model
-subfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish_sub1,
-                 na.action=na.exclude)
-
 #Scaled Full and Subset Model Coefficient Plot
 dwplot(list(fullfishmod_scaled,subfishmod_scaled)) %>%
   relabel_predictors(c(Depth = "Depth",
@@ -135,26 +131,9 @@ dwplot(list(fullfishmod_scaled,subfishmod_scaled)) %>%
 #Scaled Models ANOVA
 anova(fullfishmod_scaled,subfishmod_scaled)
 
-#NOT Scaled Subset and Full Model Coefficient plot
-dwplot(list(fullfishmod,subfishmod)) %>%
-  relabel_predictors(c(Depth = "Depth",
-                       DO_B = "Dissolved oxygen",
-                       Turb = "Turbidity",
-                       Sal_B = "Salinity",
-                       Temp_B = "Temperature",
-                       ChlA = "Chlorophyll-a",
-                       NH4 = "NH4")) +
-  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
-  geom_vline(xintercept=0,lty=2) + 
-  theme(legend.justification = c(0, 0),
-        legend.background = element_rect(colour="grey80"),
-        legend.title = element_blank()) 
-
-#NOT scaled Subset and Full Model ANOVA
-anova(fullfishmod,subfishmod)
-
 #SUMMARY...selected model output 
 summary(fullfishmod_scaled)
+summary(fullfishmod)
 
 #THERMAL GUILD MODEL
 
@@ -215,6 +194,8 @@ fish_therm_scale <- fish_therm_sub2 %>% mutate(across(where(is.numeric) & !logBi
 ## you could probably also do this with 'effects' or 'emmeans' packages
 fishthermmod_sep <- lm (logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb):ThermalGuild, fish_therm_scale)
+fishthermmod_sep2 <- lm (logBiomass ~ -1 + ThermalGuild + (Depth + NH4 + ChlA + Sal_B +
+                                                            Temp_B + DO_B + Turb):ThermalGuild, fish_therm_sub2)
 
 op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2), family = "A")
 plot(fishthermmod_sep, sub.caption = "", caption = "")
@@ -236,13 +217,6 @@ tt1 <- (broom::tidy(fishthermmod_sep, conf.int=TRUE)
     %>% mutate(across(term, ~reorder(factor(.), abs(estimate))))
 )
 
-#gg0 <- (ggplot(tt, aes(estimate, term))
-    #+ geom_pointrange(aes(xmin=conf.low, xmax=conf.high))
-    #+ geom_vline(xintercept=0, lty=2)
-#)
-
-#print(gg0 + facet_wrap(~thermal_guild, labeller=label_both))
-
 #Guild Coefficient Plot
 print(ggplot(tt1, aes(estimate, term))
     + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,
@@ -255,7 +229,7 @@ print(ggplot(tt1, aes(estimate, term))
 
 #SUMMARY..selected model output
 summary(fishthermmod_sep)
-
+summary(fishthermmod_sep2)
 
 ##SPECIES RICHNESS MODEL
 
@@ -286,43 +260,10 @@ op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2), family = "A")
 plot(SpRich_mod_scale, sub.caption = "", caption = "")
 par(op)
 
-#NOT Scaled Subset Model
-SpRich_mod2 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
-                     Turb, all_fish_sub2,family=poisson)
-
 #Scaled Subset Model
 SpRich_mod2_scale <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
                      Turb, Rich_fish_scale,family=poisson)
 
-#NOT Scaled Full and Subset Model Coefficient plot
-library(dotwhisker)
-ov3 <- names(sort(abs(coef(SpRich_mod1)),decreasing=TRUE))
-ov3
-
-dwplot(list(SpRich_mod1,SpRich_mod2)) %>%
-  relabel_predictors(c(Depth = "Depth",
-                       Sal_B = "Salinity",
-                       DO_B = "Dissolved oxygen",
-                       Turb = "Turbidity",
-                       Temp_B = "Temperature",
-                       NH4 = "NH4",
-                       ChlA = "Chlorophyll-a")) +
-  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
-  geom_vline(xintercept=0,lty=2) + 
-  theme(legend.background = element_rect(colour="white"),
-        legend.title = element_blank()) 
-
-dwplot(SpRich_mod1) %>%
-  relabel_predictors(c(DO_B = "Dissolved oxygen",
-                       Turb = "Turbidity",
-                       Temp_B = "Temperature",
-                       NH4 = "NH4",
-                       "ChlA" = "Chlorophyll-a",
-                       Sal_B = "Salinity",
-                       Depth = "Depth")) +
-  theme_bw() + xlab("Coefficient estimate") + ylab("") + 
-  geom_vline(xintercept=0,lty=2) + 
-  theme(legend.position = "none") 
 
 #Scaled Full and Subset Model Coefficient plot
 ov3 <- names(sort(abs(coef(SpRich_mod_scale)),decreasing=TRUE))
@@ -355,11 +296,9 @@ dwplot(SpRich_mod_scale) %>%
   theme(legend.position = "none") + scale_color_npg() +
   theme(text=element_text(family="A", size=12))
 
-#NOT Scaled Full and Sub ANOVA
-anova(SpRich_mod1,SpRich_mod2)
-
 #Scaled Full and Sub ANOVA
 anova(SpRich_mod_scale,SpRich_mod2_scale)
 
 #SUMMARY...selected model output
 summary(SpRich_mod_scale)
+summary(SpRich_mod1)
