@@ -207,3 +207,4 @@ print(gg0)
 #SUMMARY...selected model output
 summary(Perifullmod)
 summary(Perifullmod_scaled)
+confint.merMod(Perifullmod_scaled)

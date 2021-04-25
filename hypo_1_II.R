@@ -134,6 +134,7 @@ anova(fullfishmod_scaled,subfishmod_scaled)
 #SUMMARY...selected model output 
 summary(fullfishmod_scaled)
 summary(fullfishmod)
+confint(fullfishmod, level = 0.95)
 
 #THERMAL GUILD MODEL
 
@@ -230,6 +231,7 @@ print(ggplot(tt1, aes(estimate, term))
 #SUMMARY..selected model output
 summary(fishthermmod_sep)
 summary(fishthermmod_sep2)
+confint(fishthermmod_sep2, level = 0.95)
 
 ##SPECIES RICHNESS MODEL
 
@@ -302,3 +304,4 @@ anova(SpRich_mod_scale,SpRich_mod2_scale)
 #SUMMARY...selected model output
 summary(SpRich_mod_scale)
 summary(SpRich_mod1)
+confint(SpRich_mod1, level = 0.95)
