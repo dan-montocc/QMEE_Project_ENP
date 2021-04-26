@@ -14,21 +14,7 @@ windowsFonts(A = windowsFont("Times New Roman"))
 
 #THERMAL GUILD
 #read in thermal guild data
-fish_therm <- read.csv("Joined_Cleaned_Data/Hypothesis_1/FishThermGuild_Join_WQ_1996to2005.csv")
-fish_therm <- fish_therm[,-c(1)]
-summary(fish_therm)
-fish_therm_sub1 <- filter(fish_therm, TotalBiomass != 0)
-fish_therm_sub1$logBiomass <- log10(fish_therm_sub1$TotalBiomass)
-fish_therm_sub1 <- filter(fish_therm_sub1, SRP > 0)
-fish_therm_sub1 <- filter(fish_therm_sub1, Sal_B > 0)
-fish_therm_sub1 <- filter(fish_therm_sub1, TOC > 0)
-fish_therm_sub1 <- fish_therm_sub1 %>% filter(!is.na(DO_B))
-summary(fish_therm_sub1)
-fish_therm_sub1$Area <- as.factor(fish_therm_sub1$Area)
-fish_therm_sub1$Month <- as.factor(fish_therm_sub1$Month)
-fish_therm_sub1$Year <- as.factor(fish_therm_sub1$Year)
-fish_therm_sub1$ThermalGuild <- as.factor(fish_therm_sub1$ThermalGuild)
-summary(fish_therm_sub1)
+fish_therm <- readRDS("Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
 
 #subset of active individuals (thermal guild) and active variables (explanatory)
 fish_therm_PCA_sub <- fish_therm_sub1[,c("ThermalGuild","Depth",
@@ -76,21 +62,7 @@ fviz_pca_biplot(therm.pca,
 )
 
 #FUNCTIONAL GROUP
-Peri_fish_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
-Peri_fish_dat <- Peri_fish_dat[,-c(1)]
-summary(Peri_fish_dat)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat, Avg.PeriphytonCover != 0)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, SRP > 0)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, Sal_B > 0)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, TOC > 0)
-Peri_fish_dat_sub1 <- Peri_fish_dat_sub1 %>% filter(!is.na(DO_B))
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, TotalBiomass > 0)
-Peri_fish_dat_sub1$logBiomass <- log10(Peri_fish_dat_sub1$TotalBiomass)
-Peri_fish_dat_sub1$Area <- as.factor(Peri_fish_dat_sub1$Area)
-Peri_fish_dat_sub1$Month <- as.factor(Peri_fish_dat_sub1$Month)
-Peri_fish_dat_sub1$Year <- as.factor(Peri_fish_dat_sub1$Year)
-Peri_fish_dat_sub1$FunctionalGroup <- as.factor(Peri_fish_dat_sub1$FunctionalGroup)
-summary(Peri_fish_dat_sub1)
+Peri_fish_dat <- readRDS("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_Join.rds")
 
 #subset of active individuals (functional group) and active variables (explanatory)
 fish_func_PCA_sub <- Peri_fish_dat_sub1[,c("FunctionalGroup","AvgWaterDepth",

@@ -14,19 +14,8 @@ windowsFonts(A = windowsFont("Times New Roman"))
 library(ggsci)
 
 
-#load in data and clean
-Peri_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_2/ENP_Peri_WQ_1995to2005_Join.csv"))
-Peri_dat <- Peri_dat[,-c(1)]
-summary(Peri_dat)
-Peri_dat_sub1 <- filter(Peri_dat, Avg.PeriphytonCover != 0)
-Peri_dat_sub1 <- filter(Peri_dat_sub1, SRP > 0)
-Peri_dat_sub1 <- filter(Peri_dat_sub1, SAL_B > 0)
-Peri_dat_sub1 <- filter(Peri_dat_sub1, TOC > 0)
-Peri_dat_sub1 <- Peri_dat_sub1 %>% filter(!is.na(DO_B))
-Peri_dat_sub1$Area <- as.factor(Peri_dat_sub1$Area)
-Peri_dat_sub1$Month <- as.factor(Peri_dat_sub1$Month)
-Peri_dat_sub1$Year <- as.factor(Peri_dat_sub1$Year)
-summary(Peri_dat_sub1)
+#load in data
+Peri_dat_sub1 <- readRDS("Joined_Cleaned_Data/Hypothesis_2/Peri_WQ_AggregatedData.rds")
 
 #evaluate collinearity of predictor variables with correlation matrix
 #code referenced from STHDA.com

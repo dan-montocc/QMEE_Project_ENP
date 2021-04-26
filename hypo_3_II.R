@@ -14,22 +14,8 @@ library(extrafont)
 windowsFonts(A = windowsFont("Times New Roman"))
 library(ggsci)
 
-#load in data and cleaning
-Peri_fish_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
-Peri_fish_dat <- Peri_fish_dat[,-c(1)]
-summary(Peri_fish_dat)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat, Avg.PeriphytonCover != 0)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, SRP > 0)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, Sal_B > 0)
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, TOC > 0)
-Peri_fish_dat_sub1 <- Peri_fish_dat_sub1 %>% filter(!is.na(DO_B))
-Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, TotalBiomass > 0)
-Peri_fish_dat_sub1$logBiomass <- log10(Peri_fish_dat_sub1$TotalBiomass)
-Peri_fish_dat_sub1$Area <- as.factor(Peri_fish_dat_sub1$Area)
-Peri_fish_dat_sub1$Month <- as.factor(Peri_fish_dat_sub1$Month)
-Peri_fish_dat_sub1$Year <- as.factor(Peri_fish_dat_sub1$Year)
-Peri_fish_dat_sub1$FunctionalGroup <- as.factor(Peri_fish_dat_sub1$FunctionalGroup)
-summary(Peri_fish_dat_sub1)
+#load in data
+Peri_fish_dat_sub1 <- readRDS("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_Join.rds")
 
 
 #evaluate collinearity of predictor variables with correlation matrix
@@ -149,20 +135,8 @@ confint(Peri_fish_sep)
 
 ##ALL Fish Model
 
-#load-in and cleaning...
-Peri_all_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishRichness_1995to2005_Join.csv"))
-Peri_all_dat <- Peri_all_dat[,-c(1)]
-summary(Peri_all_dat)
-Peri_all_dat_sub1 <- filter(Peri_all_dat, Avg.PeriphytonCover != 0)
-Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, SRP > 0)
-Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, Sal_B > 0)
-Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, TOC > 0)
-Peri_all_dat_sub1 <- Peri_all_dat_sub1 %>% filter(!is.na(DO_B))
-Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, TotalBiomass > 0)
-Peri_all_dat_sub1$logBiomass <- log10(Peri_all_dat_sub1$TotalBiomass)
-Peri_all_dat_sub1$Area <- as.factor(Peri_all_dat_sub1$Area)
-Peri_all_dat_sub1$Month <- as.factor(Peri_all_dat_sub1$Month)
-Peri_all_dat_sub1$Year <- as.factor(Peri_all_dat_sub1$Year)
+#load-in
+Peri_all_dat_sub1 <- readRDS("Joined_Cleaned_Data/Hypothesis_3/Peri_AllFish.rds")
 
 #Scaled Full Model
 Fish_Peri_dat_scale <- Peri_all_dat_sub1 %>% mutate(across(where(is.numeric) & !logBiomass & !SpeciesRichness, ~drop(scale(.))))

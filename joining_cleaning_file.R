@@ -241,3 +241,54 @@ fish_therm_sub1$Year <- as.factor(fish_therm_sub1$Year)
 fish_therm_sub1$ThermalGuild <- as.factor(fish_therm_sub1$ThermalGuild)
 summary(fish_therm_sub1)
 saveRDS(fish_therm, file = "Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
+
+
+#Hypothesis 2 Data
+
+Peri_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_2/ENP_Peri_WQ_1995to2005_Join.csv"))
+summary(Peri_dat)
+Peri_dat_sub1 <- filter(Peri_dat, Avg.PeriphytonCover != 0)
+Peri_dat_sub1 <- filter(Peri_dat_sub1, SRP > 0)
+Peri_dat_sub1 <- filter(Peri_dat_sub1, SAL_B > 0)
+Peri_dat_sub1 <- filter(Peri_dat_sub1, TOC > 0)
+Peri_dat_sub1 <- Peri_dat_sub1 %>% filter(!is.na(DO_B))
+Peri_dat_sub1$Area <- as.factor(Peri_dat_sub1$Area)
+Peri_dat_sub1$Month <- as.factor(Peri_dat_sub1$Month)
+Peri_dat_sub1$Year <- as.factor(Peri_dat_sub1$Year)
+summary(Peri_dat_sub1)
+saveRDS(Peri_dat_sub1, file = "Joined_Cleaned_Data/Hypothesis_2/Peri_WQ_AggregatedData.rds")
+
+
+#Hypothesis 3 Data
+
+#ALL FISH
+Peri_all_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishRichness_1995to2005_Join.csv"))
+summary(Peri_all_dat)
+Peri_all_dat_sub1 <- filter(Peri_all_dat, Avg.PeriphytonCover != 0)
+Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, SRP > 0)
+Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, Sal_B > 0)
+Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, TOC > 0)
+Peri_all_dat_sub1 <- Peri_all_dat_sub1 %>% filter(!is.na(DO_B))
+Peri_all_dat_sub1 <- filter(Peri_all_dat_sub1, TotalBiomass > 0)
+Peri_all_dat_sub1$logBiomass <- log10(Peri_all_dat_sub1$TotalBiomass)
+Peri_all_dat_sub1$Area <- as.factor(Peri_all_dat_sub1$Area)
+Peri_all_dat_sub1$Month <- as.factor(Peri_all_dat_sub1$Month)
+Peri_all_dat_sub1$Year <- as.factor(Peri_all_dat_sub1$Year)
+saveRDS(Peri_all_dat_sub1, file = "Joined_Cleaned_Data/Hypothesis_3/Peri_AllFish.rds")
+
+#FUNCTIONAL GROUP
+Peri_fish_dat <- read.csv(here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_1995to2005_Join.csv"))
+summary(Peri_fish_dat)
+Peri_fish_dat_sub1 <- filter(Peri_fish_dat, Avg.PeriphytonCover != 0)
+Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, SRP > 0)
+Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, Sal_B > 0)
+Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, TOC > 0)
+Peri_fish_dat_sub1 <- Peri_fish_dat_sub1 %>% filter(!is.na(DO_B))
+Peri_fish_dat_sub1 <- filter(Peri_fish_dat_sub1, TotalBiomass > 0)
+Peri_fish_dat_sub1$logBiomass <- log10(Peri_fish_dat_sub1$TotalBiomass)
+Peri_fish_dat_sub1$Area <- as.factor(Peri_fish_dat_sub1$Area)
+Peri_fish_dat_sub1$Month <- as.factor(Peri_fish_dat_sub1$Month)
+Peri_fish_dat_sub1$Year <- as.factor(Peri_fish_dat_sub1$Year)
+Peri_fish_dat_sub1$FunctionalGroup <- as.factor(Peri_fish_dat_sub1$FunctionalGroup)
+summary(Peri_fish_dat_sub1)
+saveRDS(Peri_fish_dat_sub1, file = "Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_Join.rds")
