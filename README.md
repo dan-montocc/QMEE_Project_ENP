@@ -17,23 +17,26 @@ __Data Description:__ Data ranges from the years of 1996 to 2005 for various abi
 
 __Data Collection Methods Files:__ Found in repo folder named 'field_and_lab_protocols' (unfortunately these documents are only available in PDF file format).
 
-__Biological Questions:__ We have three main areas of interest in which we would like to evaluate the effect of abiotic conditions on fish or periphyton abundance. Firstly, we would like to explore what impact water temperature and dissolved oxygen (DO) has on fish biomass, and fish diversity, both as a net impact and/or guild-specific impact? Secondly, we would like to determine whether average plant cover and DO impacts periphyton density? Thirdly, does periphyton and plant coverage impact fish biomass, and/or composition of fish functional groups (i.e.: benthivore, predator, piscivore, herbivore, etc...)?
+__Biological Questions:__ 
+
+We have three main areas of interest in which we would like to evaluate the effect of abiotic conditions on fish or periphyton abundance. Firstly, we would like to explore what impact water temperature and dissolved oxygen (DO) has on fish biomass, and fish diversity, both as a net impact and/or guild-specific impact? Secondly, we would like to determine whether average plant cover and DO impacts periphyton density? Thirdly, does periphyton and plant coverage impact fish biomass, and/or composition of fish functional groups (i.e.: benthivore, predator, piscivore, herbivore, etc...)?
 
 __Hypotheses:__
 
-_Temperature and DO effects on fish_
+_Hypothesis 1 - Temperature and DO effects on fish_
 
 With regards to water temperature and DO, we predict that as water temperatures increase, and DO decreases, fish net biomass should decrease, as well as the overall fish diversity should decrease. This is because, higher temperatures and lower DO tends to decrease the carrying capacity of an aquatic environment to support a larger fish community. In terms of diversity, overall fish species diversity should decrease with increasing temperatures and decreased DO, as more sensitive species would no longer be able to inhabit the area, and only hypoxic-resistant species would remain (Farwell et al., 2006).
 
-_Plant coverage, TP, and DO impact on periphyton_
+_Hypothesis 2 - Plant coverage, TP, and DO impact on periphyton_
 
 Periphyton is a critical food resource for many fish species, particularly herbivorous and omnivorous species. Periphyton coverage has been found to be linked to nutrient loading (particularly TP) and other water quality parameters, such as DO (Kannavillil and Kurissery, 2013). Periphyton also requires a hard substrate to attach to and grow, such as rocks, logs, and aquatic plants. We predict that as plant coverage/density increases, periphyton coverage should also increase. With regards to water quality parameters, we predict that as TP increases, and as DO decreases, periphyton coverage should increase.
 
-_Periphyton coverage and its impact on fish_
+_Hypothesis 3 - Periphyton coverage and its impact on fish_
 
 Since many fish species eat periphyton, we predict that as periphyton coverage increases, so too should net fish biomass (van Dam et al., 2002). This is because we predict that increasing amounts of periphyton provides more food, particularly for species that are herbivorous and omnivorous in nature. Therefore, changes in periphyton coverage is predicted to have a stronger effect on these groups of fish species, more so than piscivore or apex carnivore species. We do however predict some effect of periphyton coverage on piscivore and carnivore fish species, due to a bottom-up effect through the food web.
 
 __Proposed Statistics and General Thoughts about the Data:__
+
 We likely will be testing these hypotheses by using methods such as linear regressions (or generalized linear regression models) and/or ANOVA analyses. 
 
 To address potential confounding variables we will likely need to plot and explore the data points of the variables across temporal and/or spatial scales. That is, compare sites to one another, to see if certain sites may be outliers due to their location and/or proximity to an external factor that may influence the environment (e.g. proximity to a road). We will also need to compare the months sample points were collected in, to see whether seasonal variability is having a significant effect on the variables, particularly temperature, plant growth, and fish species presence. In dealing with a potential temporal factor of influence, we may have to include it as a factor in our model, or further filter our data to a specific sampling month (unsure of which is more appropriate at this point of time).
