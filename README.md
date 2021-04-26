@@ -3,7 +3,9 @@ QMEE group project repository. Group members are Megan Ridgway and Danielle Mont
 
 __Project Title:__ _The effects of abiotic and biotic factors on periphyton and fish communities in Everglades National Park, Florida, USA_
 
-__Datasets:__ 'ENP_FishData_1996to2000.csv'; 'ENP_FishData_2000to2005.csv'; 'ENP_FPOData.csv'; 'ENP_HabitatData.csv'; 'ENP_Temp_Sal_DO_Data.csv'; 'ENP_pH_TP_OM_Data.csv'
+__Raw Datasets:__ `ENP_FishData_1996to2000.csv`; `ENP_FishData_2000to2005.csv`; `ENP_HabitatData.csv`; `ENP_WQ_1996to2005.csv`
+
+__Processed Datasets:__ `AllFish_AggregatedData.rds`; `Fish_ThermalGuild_AggregatedData.rds`; `Peri_WQ_AggregatedData.rds`; `Peri_AllFish.rds`; `Peri_WQ_fishFuncGrp_Join.rds` (found in `Joined_Cleaned_Data` folder under their respective Hypothesis sub-folder)
 
 __Data Source:__ Florida Coastal Everglades Long Term Ecological Research Network Data Repository
 
@@ -11,11 +13,11 @@ __Data Link:__ https://fcelter.fiu.edu/data/index.html
 
 __Metadata File:__ 'METADATA.md'
 
-__Data Description:__ Data ranges from the years of 1996 to 2008 for various abiotic and biotic variables collected in Shark River Slough, Everglades National Park (ENP) in the southern tip of Florida's coast. Specifically, we have chosen data that contains species presence/absence for fish, plants, amphibians, and macroinvertebrates, as well as their abundance, and biomass where applicable. Habitat data consists of plant cover, plant height, and periphyton cover. Environmental variables consist of water temperature, water depth, salinity, pH, dissolved oxygen (DO), total phosphorus (TP) concentrations in sediment and water. Further details can be found in the metadata file, 'METADATA.md'.
+__Data Description:__ Data ranges from the years of 1996 to 2005 for various abiotic and biotic variables collected in Shark River Slough and Taylor Slough, Everglades National Park (ENP) in the southern tip of Florida's coast. Specifically, we have chosen data that contains species presence/absence for fish, as well as their abundance, and biomass where applicable. Habitat data consists of plant cover, plant height, and periphyton cover. Environmental variables consist of water temperature, water depth, salinity, pH, dissolved oxygen (DO), and various nutrient concentrations in the water column and sediment. Further details can be found in the metadata file, 'METADATA.md'.
 
 __Data Collection Methods Files:__ Found in repo folder named 'field_and_lab_protocols' (unfortunately these documents are only available in PDF file format).
 
-__Biological Questions:__ We have three main areas of interest in which we would like to evaluate the effect of abiotic conditions on fish and/or plant species and diversity. Firstly, we would like to explore what impact water temperature and dissolved oxygen (DO) has on fish biomass, and fish diversity, both as a net impact and/or species specific impact? Secondly, we would like to determine whether average periphyton cover impacts plant diversity and/or density? Additionally, whether plant coverage, TP in sedmient, and DO impacts average periphyton coverage? Thirdly, does periphyton coverage impact fish biomass, and/or composition of fish functional groups (i.e.: benthivore, predator, piscivore, herbivore, etc...)?
+__Biological Questions:__ We have three main areas of interest in which we would like to evaluate the effect of abiotic conditions on fish or periphyton abundance. Firstly, we would like to explore what impact water temperature and dissolved oxygen (DO) has on fish biomass, and fish diversity, both as a net impact and/or guild-specific impact? Secondly, we would like to determine whether average plant cover and DO impacts periphyton density? Thirdly, does periphyton and plant coverage impact fish biomass, and/or composition of fish functional groups (i.e.: benthivore, predator, piscivore, herbivore, etc...)?
 
 __Hypotheses:__
 
@@ -36,18 +38,9 @@ We likely will be testing these hypotheses by using methods such as linear regre
 
 To address potential confounding variables we will likely need to plot and explore the data points of the variables across temporal and/or spatial scales. That is, compare sites to one another, to see if certain sites may be outliers due to their location and/or proximity to an external factor that may influence the environment (e.g. proximity to a road). We will also need to compare the months sample points were collected in, to see whether seasonal variability is having a significant effect on the variables, particularly temperature, plant growth, and fish species presence. In dealing with a potential temporal factor of influence, we may have to include it as a factor in our model, or further filter our data to a specific sampling month (unsure of which is more appropriate at this point of time).
 
-__Proposed Initial Steps in Data Processing:__
+__Data Analysis Files:__ `hypo_1_II.R` (Hypothesis 1); `hypo_2_II.R` (Hypothesis 2); `hypo_3_II.R` (Hypothesis 3)
 
- * Create journal.md (Completed)
- * Data cleaning
- * Creation of fish species trophic functional group reference file
- * Model creation for diagnostic plotting and assessment
-
-__Questions:__
-
- * What are thresholds we can set for model diagnostic and fit before evaluating the data? 
-    * i.e. interpretation of diagnostics to be considered a reasonable model, etc...
-    * do not want to bias this after model creation
+__Plotting Outputs:__ `Plots_Graphs` folder for graphs; `OutputsII.md` for model summaries
 
 __References:__
 
