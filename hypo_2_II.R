@@ -146,7 +146,7 @@ rename_term <- function(x) {
          )
 }
 
-tt <- (broom::tidy(Perifullmod, conf.int=TRUE)
+tt <- (broom::tidy(Perifullmod_scaled, conf.int=TRUE)
         %>% mutate(across(term, rename_term))
         %>% filter(term!="(Intercept)")
         %>% filter(term!="sd__(Intercept)")
@@ -171,7 +171,7 @@ tt2$model <- "Model 2"
 mod_combine <- rbind(tt,tt2)
 
 gg0 <- (ggplot(mod_combine, aes(estimate, term,group=model))
-        + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,colour=factor(model)))
+        + geom_pointrange(aes(xmin=conf.low, xmax=conf.high,colour=factor(model)), position=position_dodge(width=0.5))
         + geom_vline(xintercept=0, lty=2) +
           theme_bw() + xlab("Coefficient estimate") + ylab("") +
           theme(legend.title = element_blank()) +

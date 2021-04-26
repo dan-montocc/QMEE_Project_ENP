@@ -239,8 +239,9 @@ fish_therm_sub1$Area <- as.factor(fish_therm_sub1$Area)
 fish_therm_sub1$Month <- as.factor(fish_therm_sub1$Month)
 fish_therm_sub1$Year <- as.factor(fish_therm_sub1$Year)
 fish_therm_sub1$ThermalGuild <- as.factor(fish_therm_sub1$ThermalGuild)
+fish_therm_sub1$logBiomass <- log10(fish_therm_sub1$TotalBiomass)
 summary(fish_therm_sub1)
-saveRDS(fish_therm, file = "Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
+saveRDS(fish_therm_sub1, file = "Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
 
 
 #Hypothesis 2 Data

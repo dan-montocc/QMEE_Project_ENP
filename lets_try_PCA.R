@@ -9,12 +9,11 @@ library(tidyverse)
 
 #aesthetics load-in
 library(extrafont)
-loadfonts(device="win")       #Register fonts for Windows bitmap output
 windowsFonts(A = windowsFont("Times New Roman"))
 
 #THERMAL GUILD
 #read in thermal guild data
-fish_therm <- readRDS("Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
+fish_therm_sub1 <- readRDS("Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
 
 #subset of active individuals (thermal guild) and active variables (explanatory)
 fish_therm_PCA_sub <- fish_therm_sub1[,c("ThermalGuild","Depth",
@@ -62,7 +61,7 @@ fviz_pca_biplot(therm.pca,
 )
 
 #FUNCTIONAL GROUP
-Peri_fish_dat <- readRDS("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_Join.rds")
+Peri_fish_dat_sub1 <- readRDS("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishFuncGrp_Join.rds")
 
 #subset of active individuals (functional group) and active variables (explanatory)
 fish_func_PCA_sub <- Peri_fish_dat_sub1[,c("FunctionalGroup","AvgWaterDepth",
@@ -86,17 +85,3 @@ fviz_pca_ind(func.pca,
              addEllipses = TRUE, # Concentration ellipses
              legend.title = "Functional Group", title = ""
 ) + theme(text=element_text(family="A", size=12))
-
-
-fviz_pca_biplot(func.pca, 
-                # Individuals
-                geom.ind = "point",
-                fill.ind = fish_func_PCA_sub$FunctionalGroup, col.ind = "black",
-                pointshape = 21, pointsize = 2,
-                palette = "npg",
-                addEllipses = TRUE,
-                arrowsize = NULL,
-                labelsize = NULL,
-                legend.title = "Functional Group",
-                font.family = "A", title = ""
-)

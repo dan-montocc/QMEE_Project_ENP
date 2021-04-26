@@ -138,12 +138,12 @@ confint(fullfishmod, level = 0.95)
 #Full Model
 #build full model with thermal guild interaction
 fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
-                      Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub1)
+                      Temp_B + DO_B + Turb)*ThermalGuild, fish_therm)
 op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
 plot(fishthermmod, sub.caption = "")
 
 #remove obs with leverage of 1 = 4, 101, 235, 240
-fish_therm_sub2 <- fish_therm_sub1[-c(4,101,235,240),]
+fish_therm_sub2 <- fish_therm[-c(4,101,235,240),]
 fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
                                     Temp_B + DO_B + Turb)*ThermalGuild, fish_therm_sub2)
 plot(fishthermmod, sub.caption = "")
@@ -285,7 +285,8 @@ dwplot(SpRich_mod_scale) %>%
 
 #Scaled Full and Sub ANOVA
 anova(SpRich_mod_scale,SpRich_mod2_scale)
-
+p <- 1 - pchisq(0.4741,2)
+p
 #SUMMARY...selected model output
 summary(SpRich_mod_scale)
 summary(SpRich_mod1)

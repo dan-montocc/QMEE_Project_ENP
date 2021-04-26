@@ -218,8 +218,8 @@ boxplot(residuals(SpRich_mod1) ~ Peri_all_dat_sub1$Area, col = c("#E64B35FF", "#
         ylab = "Residuals(Species Richness Model)", xlab = "") #area does not seem to affect the residuals disproportionately 
 boxplot(residuals(SpRich_mod1) ~ Peri_all_dat_sub1$Month, col = "#91D1C2FF",
         ylab = "", xlab = "")#March different
-summary(all_fish$Month == "March")# only one obs 
-summary(all_fish$Month == "May")
+summary(Peri_all_dat_sub1$Month == "March")# only one obs 
+summary(Peri_all_dat_sub1$Month == "May")
 ##since study area is Florida, seasons are not as pronounced as they are in north
 boxplot(residuals(SpRich_mod1) ~ Peri_all_dat_sub1$Year, col = "#91D1C2FF",
         ylab = "", xlab = "") #no specific Year stands out
@@ -229,6 +229,7 @@ SpRich_mod_scale <- glm(SpeciesRichness ~ Temp_B + DO_B + Sal_B + ChlA +
                           Turb + AvgWaterDepth + Avg.PeriphytonCover
                           + Avg.PlantCover, Fish_Peri_dat_scale,family=poisson)
 #diagnostics
+op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2), family = "A")
 plot(SpRich_mod_scale, sub.caption = "", caption = "")
 par(op)
 
@@ -273,6 +274,8 @@ dwplot(SpRich_mod_scale) %>%
 
 #Scaled Full and Sub ANOVA
 anova(SpRich_mod_scale,SpRich_mod2_scale)
+p <- 1 - pchisq(12.166,2)
+p
 
 #SUMMARY...selected model output
 summary(SpRich_mod_scale)
