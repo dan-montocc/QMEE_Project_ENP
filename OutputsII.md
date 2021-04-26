@@ -11,24 +11,24 @@ lm(formula = logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B +
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--0.93566 -0.13590  0.00273  0.19784  0.92413 
+-0.99480 -0.14214  0.01001  0.16031  0.97051 
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)  
-(Intercept)  0.10646    0.04053   2.627   0.0104 *
-Depth        0.15630    0.08599   1.817   0.0729 .
-NH4         -0.13479    0.05358  -2.516   0.0139 *
-ChlA        -0.08670    0.05577  -1.555   0.1240  
-Sal_B       -0.08808    0.06558  -1.343   0.1831  
-Temp_B      -0.03516    0.05086  -0.691   0.4914  
-DO_B         0.08230    0.05298   1.553   0.1243  
-Turb         0.05099    0.04971   1.026   0.3082  
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  0.11395    0.04126   2.761  0.00725 **
+Depth        0.14856    0.08650   1.718  0.09007 . 
+NH4         -0.11853    0.05461  -2.170  0.03319 * 
+ChlA        -0.07232    0.05742  -1.259  0.21182   
+Sal_B       -0.10023    0.06619  -1.514  0.13420   
+Temp_B      -0.04676    0.05130  -0.911  0.36503   
+DO_B         0.10171    0.05288   1.923  0.05829 . 
+Turb         0.04786    0.05086   0.941  0.34977   
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.3781 on 79 degrees of freedom
-Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071 
-F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06
+Residual standard error: 0.3737 on 74 degrees of freedom
+Multiple R-squared:  0.3839,	Adjusted R-squared:  0.3256 
+F-statistic: 6.586 on 7 and 74 DF,  p-value: 4.717e-06
 ```
 
 _Full Model (NOT scaled) with all fish data_
@@ -40,49 +40,49 @@ lm(formula = logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B +
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--0.93566 -0.13590  0.00273  0.19784  0.92413 
+-0.99480 -0.14214  0.01001  0.16031  0.97051 
 
 Coefficients:
              Estimate Std. Error t value Pr(>|t|)  
-(Intercept) -1.052827   1.144031  -0.920   0.3602  
-Depth        0.624799   0.343769   1.817   0.0729 .
-NH4         -0.106421   0.042302  -2.516   0.0139 *
-ChlA        -0.059200   0.038080  -1.555   0.1240  
-Sal_B       -0.009440   0.007028  -1.343   0.1831  
-Temp_B      -0.009908   0.014331  -0.691   0.4914  
-DO_B         0.066180   0.042601   1.553   0.1243  
-Turb         0.013928   0.013579   1.026   0.3082  
+(Intercept) -0.999362   1.162748  -0.859   0.3928  
+Depth        0.592688   0.345084   1.718   0.0901 .
+NH4         -0.095398   0.043956  -2.170   0.0332 *
+ChlA        -0.048370   0.038405  -1.259   0.2118  
+Sal_B       -0.010764   0.007108  -1.514   0.1342  
+Temp_B      -0.013419   0.014723  -0.911   0.3650  
+DO_B         0.084109   0.043732   1.923   0.0583 .
+Turb         0.012868   0.013675   0.941   0.3498  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.3781 on 79 degrees of freedom
-Multiple R-squared:  0.3635,	Adjusted R-squared:  0.3071 
-F-statistic: 6.445 on 7 and 79 DF,  p-value: 5.19e-06
+Residual standard error: 0.3737 on 74 degrees of freedom
+Multiple R-squared:  0.3839,	Adjusted R-squared:  0.3256 
+F-statistic: 6.586 on 7 and 74 DF,  p-value: 4.717e-06
 ```
 
 _Coefficient estimates upper and lower bounds (NOT scaled)_
 
 ```{r}
-                  2.5 %       97.5 %
-(Intercept) -3.32996328  1.224309144
-Depth       -0.05945600  1.309054427
-NH4         -0.19062053 -0.022221526
-ChlA        -0.13499586  0.016596120
-Sal_B       -0.02342956  0.004550191
-Temp_B      -0.03843388  0.018617446
-DO_B        -0.01861560  0.150975597
-Turb        -0.01310039  0.040956766
+                      2.5 %       97.5 %
+(Intercept) -3.316187864  1.317463281
+Depth       -0.094907211  1.280282499
+NH4         -0.182981182 -0.007814144
+ChlA        -0.124894491  0.028153662
+Sal_B       -0.024926048  0.003398823
+Temp_B      -0.042754309  0.015917141
+DO_B        -0.003029432  0.171246646
+Turb        -0.014379980  0.040116471
 ```
 _ANOVA: Full model comparison with "key" variables of interest missing (biomass)_
 
 ```{r}
-Analysis of Variance Table
+AAnalysis of Variance Table
 
 Model 1: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Temp_B + DO_B + Turb
 Model 2: logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb
   Res.Df    RSS Df Sum of Sq      F  Pr(>F)  
-1     79 11.293                              
-2     81 12.070 -2  -0.77729 2.7188 0.07213 .
+1     74 10.332                              
+2     76 11.505 -2   -1.1726 4.1991 0.01873 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -216,26 +216,26 @@ glm(formula = SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
--4.6817  -0.4612   0.0930   0.6894   1.6574  
+-4.8171  -0.4957   0.0461   0.6957   1.6036  
 
 Coefficients:
-              Estimate Std. Error z value Pr(>|z|)    
-(Intercept)  2.6415688  0.0286761  92.117   <2e-16 ***
-Depth       -0.0480956  0.0611558  -0.786   0.4316    
-NH4          0.0011690  0.0378893   0.031   0.9754    
-ChlA        -0.0008455  0.0393499  -0.021   0.9829    
-Sal_B       -0.1206535  0.0473222  -2.550   0.0108 *  
-DO_B         0.0038772  0.0369141   0.105   0.9163    
-Temp_B       0.0034024  0.0356581   0.095   0.9240    
-Turb         0.0094821  0.0346597   0.274   0.7844    
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  2.643539   0.029344  90.089  < 2e-16 ***
+Depth       -0.061137   0.060318  -1.014  0.31078    
+NH4         -0.013241   0.039024  -0.339  0.73437    
+ChlA        -0.001299   0.040726  -0.032  0.97455    
+Sal_B       -0.131524   0.047543  -2.766  0.00567 ** 
+DO_B         0.024998   0.037034   0.675  0.49967    
+Temp_B       0.008126   0.035818   0.227  0.82053    
+Turb         0.003184   0.038652   0.082  0.93434    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for poisson family taken to be 1)
 
-    Null deviance: 91.713  on 86  degrees of freedom
-Residual deviance: 81.927  on 79  degrees of freedom
-AIC: 484.75
+    Null deviance: 88.831  on 82  degrees of freedom
+Residual deviance: 77.393  on 75  degrees of freedom
+AIC: 462.58
 
 Number of Fisher Scoring iterations: 4
 ```
@@ -245,47 +245,46 @@ _Species Richness (NOT scaled) Model_
 ```{r}
 Call:
 glm(formula = SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B + 
-    DO_B + Temp_B + Turb, family = poisson, data = all_fish_sub2)
+    DO_B + Temp_B + Turb, family = poisson, data = all_fish)
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
--4.6817  -0.4612   0.0930   0.6894   1.6574  
+-4.8171  -0.4957   0.0461   0.6957   1.6036  
 
 Coefficients:
               Estimate Std. Error z value Pr(>|z|)    
-(Intercept)  3.2962178  0.8070284   4.084 4.42e-05 ***
-Depth       -0.1922647  0.2444736  -0.786   0.4316    
-NH4          0.0009230  0.0299149   0.031   0.9754    
-ChlA        -0.0005773  0.0268672  -0.021   0.9829    
-Sal_B       -0.0129301  0.0050714  -2.550   0.0108 *  
-DO_B         0.0031180  0.0296853   0.105   0.9163    
-Temp_B       0.0009588  0.0100481   0.095   0.9240    
-Turb         0.0025901  0.0094676   0.274   0.7844    
+(Intercept)  3.3293177  0.8120776   4.100 4.14e-05 ***
+Depth       -0.2440029  0.2407344  -1.014  0.31078    
+NH4         -0.0063798  0.0188021  -0.339  0.73437    
+ChlA        -0.0008556  0.0268169  -0.032  0.97455    
+Sal_B       -0.0142092  0.0051363  -2.766  0.00567 ** 
+DO_B         0.0207480  0.0307373   0.675  0.49967    
+Temp_B       0.0023417  0.0103219   0.227  0.82053    
+Turb         0.0007953  0.0096534   0.082  0.93434    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for poisson family taken to be 1)
 
-    Null deviance: 91.713  on 86  degrees of freedom
-Residual deviance: 81.927  on 79  degrees of freedom
-AIC: 484.75
+    Null deviance: 88.831  on 82  degrees of freedom
+Residual deviance: 77.393  on 75  degrees of freedom
+AIC: 462.58
 
 Number of Fisher Scoring iterations: 4
-
 ```
 
 _Coefficient estimates upper and lower bounds (NOT scaled)_
 
 ```{r}
-                  2.5 %       97.5 %
-(Intercept)  1.71197514  4.875798970
-Depth       -0.67207221  0.286371624
-NH4         -0.05806973  0.059216153
-ChlA        -0.05407322  0.051328525
-Sal_B       -0.02293355 -0.003050598
-DO_B        -0.05504497  0.061343506
-Temp_B      -0.01876354  0.020628790
-Turb        -0.01641241  0.020725373
+                   2.5 %       97.5 %
+(Intercept)  1.73610172  4.919732481
+Depth       -0.71669799  0.227099297
+NH4         -0.04427677  0.029586770
+ChlA        -0.05420180  0.051014644
+Sal_B       -0.02434298 -0.004205325
+DO_B        -0.03948296  0.081030150
+Temp_B      -0.01794454  0.022521376
+Turb        -0.01858621  0.019271729
 ```
 
 _ANOVA: Full model comparison with "key" variables of interest missing (species richness)_
@@ -296,9 +295,9 @@ Analysis of Deviance Table
 Model 1: SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B + DO_B + Temp_B + 
     Turb
 Model 2: SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B + Turb
-  Resid. Df Resid. Dev Df  Deviance
-1        79     81.927             
-2        81     81.941 -2 -0.013273
+  Resid. Df Resid. Dev Df Deviance
+1        75     77.393            
+2        77     77.867 -2  -0.4741
 ```
 
 

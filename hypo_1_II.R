@@ -14,10 +14,8 @@ windowsFonts(A = windowsFont("Times New Roman"))
 library(ggsci)
 
 #load in data
-all_fish <- read.csv(here("Joined_Cleaned_Data/Hypothesis_1/ALL_FishJoinWQ_1996to2005.csv"))
-all_fish <- all_fish[,-c(1)]
-fish_therm <- read.csv("Joined_Cleaned_Data/Hypothesis_1/FishThermGuild_Join_WQ_1996to2005.csv")
-fish_therm <- fish_therm[,-c(1)]
+all_fish <- readRDS("Joined_Cleaned_Data/Hypothesis_1/AllFish_AggregatedData.rds")
+fish_therm <- readRDS("Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
 
 #check for variable redundancy in explanatory variables
 #response variables = TotalBiomass, SpeciesRichness
@@ -44,7 +42,6 @@ rquery.cormat(all_fish_xsub)
 
 #ALL FISH MODEL
 ##Full Model
-all_fish$logBiomass <- log10(all_fish$TotalBiomass)
 fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                       Temp_B + DO_B + Turb, all_fish)
 
@@ -52,9 +49,9 @@ fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
 op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2), family = "A")
 plot(fullfishmod, sub.caption = "", caption = "", family ="A")
 
-#79 and 80 obs have high leverage
+#74 obs has high leverage
 ##removed
-all_fish_sub1 <- all_fish[-c(79,80),]
+all_fish_sub1 <- all_fish[-c(74),]
 
 fullfishmod <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B +
                       Temp_B + DO_B + Turb, all_fish_sub1,
@@ -98,9 +95,9 @@ ov
 dwplot(fullfishmod_scaled) %>%
   relabel_predictors(c(Depth = "Depth",
                        NH4 = "NH4",
+                       DO_B = "Dissolved oxygen",
                        Sal_B = "Salinity",
                        ChlA = "Chlorophyll-a",
-                       DO_B = "Dissolved oxygen",
                        Turb = "Turbidity",
                        Temp_B = "Temperature")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + theme(legend.position = "none") +
@@ -117,9 +114,9 @@ subfishmod_scaled <- lm(logBiomass ~ Depth + NH4 + ChlA + Sal_B + Turb, all_fish
 dwplot(list(fullfishmod_scaled,subfishmod_scaled)) %>%
   relabel_predictors(c(Depth = "Depth",
                        NH4 = "NH4",
+                       DO_B = "Dissolved oxygen",
                        Sal_B = "Salinity",
                        ChlA = "Chlorophyll-a",
-                       DO_B = "Dissolved oxygen",
                        Turb = "Turbidity",
                        Temp_B = "Temperature")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + 
@@ -136,23 +133,8 @@ summary(fullfishmod_scaled)
 summary(fullfishmod)
 confint(fullfishmod, level = 0.95)
 
+
 #THERMAL GUILD MODEL
-
-#data cleaning
-summary(fish_therm)
-fish_therm_sub1 <- filter(fish_therm, TotalBiomass != 0)
-fish_therm_sub1$logBiomass <- log10(fish_therm_sub1$TotalBiomass)
-fish_therm_sub1 <- filter(fish_therm_sub1, SRP > 0)
-fish_therm_sub1 <- filter(fish_therm_sub1, Sal_B > 0)
-fish_therm_sub1 <- filter(fish_therm_sub1, TOC > 0)
-fish_therm_sub1 <- fish_therm_sub1 %>% filter(!is.na(DO_B))
-summary(fish_therm_sub1)
-fish_therm_sub1$Area <- as.factor(fish_therm_sub1$Area)
-fish_therm_sub1$Month <- as.factor(fish_therm_sub1$Month)
-fish_therm_sub1$Year <- as.factor(fish_therm_sub1$Year)
-fish_therm_sub1$ThermalGuild <- as.factor(fish_therm_sub1$ThermalGuild)
-summary(fish_therm_sub1)
-
 #Full Model
 #build full model with thermal guild interaction
 fishthermmod <- lm (logBiomass ~ (Depth + NH4 + ChlA + Sal_B +
@@ -233,8 +215,8 @@ summary(fishthermmod_sep)
 summary(fishthermmod_sep2)
 confint(fishthermmod_sep2, level = 0.95)
 
-##SPECIES RICHNESS MODEL
 
+##SPECIES RICHNESS MODEL
 #NOT Scaled Full Model
 SpRich_mod1 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
                      DO_B + Temp_B + Turb, all_fish,family=poisson)
@@ -243,29 +225,20 @@ op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2), family = "A")
 plot(SpRich_mod1, sub.caption = "", caption = "")
 par(op)
 
-#remove obs 80 and 79
-all_fish_sub2 <- all_fish[-c(79,80),]
-SpRich_mod1 <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
-                     DO_B + Temp_B + Turb, all_fish_sub2,family=poisson)
-
-op <- par(mar=c(4.5,4.5,2,2),mfrow=c(2,2))
-plot(SpRich_mod1, sub.caption = "")
-par(op)
-
-
+#boxplots
 par(family = "A", cex = 1.2, mfrow=c(1,3), las = 2)
-boxplot(residuals(SpRich_mod1) ~ all_fish_sub2$Area, col = c("#E64B35FF", "#4DBBD5FF"),
+boxplot(residuals(SpRich_mod1) ~ all_fish$Area, col = c("#E64B35FF", "#4DBBD5FF"),
         ylab = "Residuals(Species Richness Model)", xlab = "") #area does not seem to affect the residuals disproportionately 
-boxplot(residuals(SpRich_mod1) ~ all_fish_sub2$Month, col = "#91D1C2FF",
+boxplot(residuals(SpRich_mod1) ~ all_fish$Month, col = "#91D1C2FF",
         ylab = "", xlab = "")#March different
 summary(all_fish$Month == "March")# only one obs 
 summary(all_fish$Month == "May")
 ##since study area is Florida, seasons are not as pronounced as they are in north
-boxplot(residuals(SpRich_mod1) ~ all_fish_sub2$Year, col = "#91D1C2FF",
+boxplot(residuals(SpRich_mod1) ~ all_fish$Year, col = "#91D1C2FF",
         ylab = "", xlab = "") #no specific Year stands out
 
 #Scaled Full Model
-Rich_fish_scale <- all_fish_sub2 %>% mutate(across(where(is.numeric) & !SpeciesRichness, ~drop(scale(.))))
+Rich_fish_scale <- all_fish %>% mutate(across(where(is.numeric) & !SpeciesRichness, ~drop(scale(.))))
 
 SpRich_mod_scale <- glm(SpeciesRichness ~ Depth + NH4 + ChlA + Sal_B +
                      DO_B + Temp_B + Turb, Rich_fish_scale,family=poisson)
@@ -286,10 +259,10 @@ ov3
 dwplot(list(SpRich_mod_scale,SpRich_mod2_scale)) %>%
   relabel_predictors(c(Sal_B = "Salinity",
                        Depth = "Depth",
-                       Turb = "Turbidity",
                        DO_B = "Dissolved oxygen",
-                       Temp_B = "Temperature",
                        NH4 = "NH4",
+                       Temp_B = "Temperature",
+                       Turb = "Turbidity",
                        ChlA = "Chlorophyll-a")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + 
   geom_vline(xintercept=0,lty=2) + 
@@ -300,10 +273,10 @@ dwplot(list(SpRich_mod_scale,SpRich_mod2_scale)) %>%
 dwplot(SpRich_mod_scale) %>%
   relabel_predictors(c(Sal_B = "Salinity",
                        Depth = "Depth",
-                       Turb = "Turbidity",
                        DO_B = "Dissolved oxygen",
-                       Temp_B = "Temperature",
                        NH4 = "NH4",
+                       Temp_B = "Temperature",
+                       Turb = "Turbidity",
                        ChlA = "Chlorophyll-a")) +
   theme_bw() + xlab("Coefficient estimate") + ylab("") + 
   geom_vline(xintercept=0,lty=2) + 

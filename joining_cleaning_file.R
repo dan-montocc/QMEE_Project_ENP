@@ -207,3 +207,37 @@ ALL_fish_Peri_richness <- merge(ALL_fish_Peri,fish_SpeciesRichness)
 ALL_fish_Peri_richness <- ALL_fish_Peri_richness %>% rename(SpeciesRichness = n) #rename added column
 
 write.csv(ALL_fish_Peri_richness, file = here("Joined_Cleaned_Data/Hypothesis_3/Peri_WQ_FishRichness_1995to2005_Join.csv"))
+
+
+
+###final r data creation for hypotheses testing
+
+#Hypothesis 1 Data
+#ALL FISH
+
+all_fish <- read.csv(here("Joined_Cleaned_Data/Hypothesis_1/ALL_FishJoinWQ_1996to2005.csv"))
+all_fish <- filter(all_fish, TotalBiomass != 0)
+all_fish$logBiomass <- log10(all_fish$TotalBiomass)
+all_fish <- filter(all_fish, SRP > 0)
+all_fish <- filter(all_fish, Sal_B > 0)
+all_fish <- filter(all_fish, TOC > 0)
+all_fish <- all_fish %>% filter(!is.na(DO_B))
+summary(all_fish)
+saveRDS(all_fish, file = "Joined_Cleaned_Data/Hypothesis_1/AllFish_AggregatedData.rds")
+
+#THERMAL GUILD
+fish_therm <- read.csv("Joined_Cleaned_Data/Hypothesis_1/FishThermGuild_Join_WQ_1996to2005.csv")
+summary(fish_therm)
+fish_therm_sub1 <- filter(fish_therm, TotalBiomass != 0)
+fish_therm_sub1$logBiomass <- log10(fish_therm_sub1$TotalBiomass)
+fish_therm_sub1 <- filter(fish_therm_sub1, SRP > 0)
+fish_therm_sub1 <- filter(fish_therm_sub1, Sal_B > 0)
+fish_therm_sub1 <- filter(fish_therm_sub1, TOC > 0)
+fish_therm_sub1 <- fish_therm_sub1 %>% filter(!is.na(DO_B))
+summary(fish_therm_sub1)
+fish_therm_sub1$Area <- as.factor(fish_therm_sub1$Area)
+fish_therm_sub1$Month <- as.factor(fish_therm_sub1$Month)
+fish_therm_sub1$Year <- as.factor(fish_therm_sub1$Year)
+fish_therm_sub1$ThermalGuild <- as.factor(fish_therm_sub1$ThermalGuild)
+summary(fish_therm_sub1)
+saveRDS(fish_therm, file = "Joined_Cleaned_Data/Hypothesis_1/Fish_ThermalGuild_AggregatedData.rds")
