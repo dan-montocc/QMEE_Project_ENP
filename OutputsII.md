@@ -346,16 +346,18 @@ Note: Not scaled not provided due to fit warning from lmer() function
 _ANOVA: Full and subset model comparison_
 
 ```{r}
-Data: Peri_dat_scale
+DData: Peri_dat_scale
 Models:
 Perisubmod: Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA + TURB + TN + 
-Perisubmod:     DIN + TP + SRP + TOC + AvgWaterDepth + (1 | Year)
-Perifullmod: Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA + TURB + 
-Perifullmod:     TN + DIN + TP + SRP + TOC + AvgWaterDepth + Avg.PlantCover + 
-Perifullmod:     (1 | Year)
-            npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
-Perisubmod    14 1073.5 1112.7 -522.76   1045.5                     
-Perifullmod   16 1073.3 1118.0 -520.66   1041.3 4.2016  2     0.1224
+Perisubmod:     DIN + TOC + AvgWaterDepth + (1 | Year)
+Perifullmod_scaled: Avg.PeriphytonCover ~ TEMP_B + DO_B + SAL_B + NO3 + CHLA + TURB + 
+Perifullmod_scaled:     TN + DIN + TP + SRP + TOC + AvgWaterDepth + Avg.PlantCover + 
+Perifullmod_scaled:     (1 | Year)
+                   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)  
+Perisubmod           12 1073.9 1107.5 -524.96   1049.9                       
+Perifullmod_scaled   16 1073.3 1118.0 -520.66   1041.3 8.5926  4    0.07213 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 
 _Coefficient estimates upper and lower bounds (scaled)_

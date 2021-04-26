@@ -27,9 +27,9 @@ _Hypothesis 1 - Temperature and DO effects on fish_
 
 With regards to water temperature and DO, we predict that as water temperatures increase, and DO decreases, fish net biomass should decrease, as well as the overall fish diversity should decrease. This is because, higher temperatures and lower DO tends to decrease the carrying capacity of an aquatic environment to support a larger fish community. In terms of diversity, overall fish species diversity should decrease with increasing temperatures and decreased DO, as more sensitive species would no longer be able to inhabit the area, and only hypoxic-resistant species would remain (Farwell et al., 2006).
 
-_Hypothesis 2 - Plant coverage, TP, and DO impact on periphyton_
+_Hypothesis 2 - Plant coverage, TP, SRP, and DO impact on periphyton_
 
-Periphyton is a critical food resource for many fish species, particularly herbivorous and omnivorous species. Periphyton coverage has been found to be linked to nutrient loading (particularly TP) and other water quality parameters, such as DO (Kannavillil and Kurissery, 2013). Periphyton also requires a hard substrate to attach to and grow, such as rocks, logs, and aquatic plants. We predict that as plant coverage/density increases, periphyton coverage should also increase. With regards to water quality parameters, we predict that as TP increases, and as DO decreases, periphyton coverage should increase.
+Periphyton is a critical food resource for many fish species, particularly herbivorous and omnivorous species. Periphyton coverage has been found to be linked to nutrient loading (particularly TP) and other water quality parameters, such as DO (Kannavillil and Kurissery, 2013). Periphyton also requires a hard substrate to attach to and grow, such as rocks, logs, and aquatic plants. We predict that as plant coverage/density increases, periphyton coverage should also increase. With regards to water quality parameters, we predict that as TP or SRP increases, and as DO decreases, periphyton coverage should increase.
 
 _Hypothesis 3 - Periphyton coverage and its impact on fish_
 

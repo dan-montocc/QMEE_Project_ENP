@@ -123,7 +123,7 @@ ggarrange(residp, scalep, qqp, leverp, ncol = 2, nrow = 2)
 
 #Scaled Subset Model - Plant cover, DO and SRP removed
 Perisubmod <- lmer(Avg.PeriphytonCover ~ TEMP_B + SAL_B + NO3 + CHLA +
-                      TURB + TN + DIN + TP + SRP + TOC + AvgWaterDepth
+                      TURB + TN + DIN + TOC + AvgWaterDepth
                    + (1|Year),data = Peri_dat_scale)
 
 #ANOVA of Scaled Full and Subset Models
