@@ -1,0 +1,14 @@
+Keeping collinear variables can make analysis more complicated, but it's generally WORSE to throw out predictors just because they are collinear with others. It can lead to over-confidence and sometimes mis-attribution.
+
+Selecting categorical variables based on univariate analyses is unreliable, and can "poison" the model (lead to over-confidence).
+
+Throwing out the variables area, month and year seems problematic: certainly we would expect fish measurements that share these to share other characteristics.
+
+In general, we don't recommend checking raw values of the response variable for normality.
+
+I am not sure why you removed variables from the full models in groups. It's more common to remove them one at a time, to attach a variable-level P value to each variable – this is typically only done when a variable has more than one parameter associated. You _definitely_ don't need to look at the model with the most important variables removed for other reasons beside comparison.
+
+I wasn't able to figure out what your PCA analysis was doing.
+
+Are you sure about the direction of all of your effects? e.g., DO affects periphyton cover and never the other way around? Sorry if this is one of the things you already explained to me ☺
+
